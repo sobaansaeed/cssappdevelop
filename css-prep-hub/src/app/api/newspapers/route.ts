@@ -23,9 +23,20 @@ export interface Newspaper {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(_request: NextRequest) {
   try {
+    // Check all required environment variables
+    const notionApiKey = process.env.NOTION_API_KEY;
     const databaseId = process.env.NOTION_DATABASE_ID;
     
+    if (!notionApiKey) {
+      console.error('NOTION_API_KEY is missing');
+      return NextResponse.json(
+        { error: 'NOTION_API_KEY not configured' },
+        { status: 500 }
+      );
+    }
+    
     if (!databaseId) {
+      console.error('NOTION_DATABASE_ID is missing');
       return NextResponse.json(
         { error: 'NOTION_DATABASE_ID not configured' },
         { status: 500 }
