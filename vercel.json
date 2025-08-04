@@ -1,0 +1,30 @@
+{
+  "buildCommand": "cd css-prep-hub && npm run build",
+  "outputDirectory": "css-prep-hub/.next",
+  "framework": "nextjs",
+  "installCommand": "cd css-prep-hub && npm install",
+  "functions": {
+    "css-prep-hub/src/app/api/**/*.ts": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ]
+} 

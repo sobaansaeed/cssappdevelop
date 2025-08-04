@@ -1,43 +1,130 @@
 import { NextResponse } from 'next/server';
+import { Client } from '@notionhq/client';
+
+interface DatabaseValidation {
+  accessible: boolean;
+  properties?: string[];
+  requiredProperties?: string[];
+  missingProperties?: string[];
+  error?: string;
+}
 
 export async function GET() {
   try {
+    // Check environment variables
+    const notionApiKey = process.env.NOTION_API_KEY;
     const newspaperDbId = process.env.NOTION_DATABASE_ID;
     const editorialDbId = process.env.NOTION_EDITORIAL_DATABASE_ID;
-    
-    // Validate database ID format (32 characters with hyphens)
-    const isValidFormat = (id: string) => {
-      if (!id) return false;
-      // Remove hyphens and check if it's 32 characters
-      const cleanId = id.replace(/-/g, '');
-      return cleanId.length === 32 && /^[a-zA-Z0-9]+$/.test(cleanId);
-    };
 
     const validation = {
-      newspaperDb: {
-        id: newspaperDbId ? `${newspaperDbId.substring(0, 8)}...` : 'Not set',
-        isValid: isValidFormat(newspaperDbId || ''),
-        length: newspaperDbId?.length || 0
+      environment: {
+        notionApiKey: {
+          exists: !!notionApiKey,
+          valid: notionApiKey?.startsWith('secret_') || false,
+          preview: notionApiKey ? `${notionApiKey.substring(0, 10)}...` : 'Not set'
+        },
+        newspaperDbId: {
+          exists: !!newspaperDbId,
+          valid: newspaperDbId ? /^[a-zA-Z0-9]{32}$/.test(newspaperDbId.replace(/-/g, '')) : false,
+          value: newspaperDbId || 'Not set'
+        },
+        editorialDbId: {
+          exists: !!editorialDbId,
+          valid: editorialDbId ? /^[a-zA-Z0-9]{32}$/.test(editorialDbId.replace(/-/g, '')) : false,
+          value: editorialDbId || 'Not set'
+        }
       },
-      editorialDb: {
-        id: editorialDbId ? `${editorialDbId.substring(0, 8)}...` : 'Not set',
-        isValid: isValidFormat(editorialDbId || ''),
-        length: editorialDbId?.length || 0
+      databases: {
+        newspapers: null as DatabaseValidation | null,
+        editorials: null as DatabaseValidation | null
       }
     };
 
+    // If we have valid credentials, test database connections
+    if (validation.environment.notionApiKey.exists && validation.environment.notionApiKey.valid) {
+      const notion = new Client({ auth: notionApiKey });
+
+      // Test Newspapers Database
+      if (validation.environment.newspaperDbId.exists && validation.environment.newspaperDbId.valid && newspaperDbId) {
+        try {
+          const newspaperResponse = await notion.databases.retrieve({
+            database_id: newspaperDbId
+          });
+          
+          validation.databases.newspapers = {
+            accessible: true,
+            properties: Object.keys(newspaperResponse.properties),
+            requiredProperties: ['Name', 'Date', 'Files & media'],
+            missingProperties: ['Name', 'Date', 'Files & media'].filter(
+              prop => !Object.keys(newspaperResponse.properties).includes(prop)
+            )
+          };
+        } catch (error) {
+          validation.databases.newspapers = {
+            accessible: false,
+            error: error instanceof Error ? error.message : 'Unknown error'
+          };
+        }
+      }
+
+      // Test Editorials Database
+      if (validation.environment.editorialDbId.exists && validation.environment.editorialDbId.valid && editorialDbId) {
+        try {
+          const editorialResponse = await notion.databases.retrieve({
+            database_id: editorialDbId
+          });
+          
+          validation.databases.editorials = {
+            accessible: true,
+            properties: Object.keys(editorialResponse.properties),
+            requiredProperties: ['Title', 'Author Name', 'Newspaper', 'Date', 'Files & media'],
+            missingProperties: ['Title', 'Author Name', 'Newspaper', 'Date', 'Files & media'].filter(
+              prop => !Object.keys(editorialResponse.properties).includes(prop)
+            )
+          };
+        } catch (error) {
+          validation.databases.editorials = {
+            accessible: false,
+            error: error instanceof Error ? error.message : 'Unknown error'
+          };
+        }
+      }
+    }
+
+    // Summary
+    const summary = {
+      allEnvironmentVariablesSet: validation.environment.notionApiKey.exists && 
+                                  validation.environment.newspaperDbId.exists && 
+                                  validation.environment.editorialDbId.exists,
+      allEnvironmentVariablesValid: validation.environment.notionApiKey.valid && 
+                                    validation.environment.newspaperDbId.valid && 
+                                    validation.environment.editorialDbId.valid,
+      newspapersDatabaseReady: validation.databases.newspapers?.accessible && 
+                               (validation.databases.newspapers?.missingProperties?.length ?? 0) === 0,
+      editorialsDatabaseReady: validation.databases.editorials?.accessible && 
+                               (validation.databases.editorials?.missingProperties?.length ?? 0) === 0
+    };
+
     return NextResponse.json({
-      message: 'Database ID Validation',
+      message: 'Database Validation Results',
+      timestamp: new Date().toISOString(),
       validation,
-      expectedFormat: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (32 characters total)',
-      timestamp: new Date().toISOString()
+      summary,
+      recommendations: {
+        ifNotionApiKeyMissing: 'Add NOTION_API_KEY to Vercel environment variables',
+        ifNotionApiKeyInvalid: 'API key should start with "secret_"',
+        ifDbIdMissing: 'Add database IDs to Vercel environment variables',
+        ifDbIdInvalid: 'Database ID should be 32 characters (remove hyphens)',
+        ifDatabaseInaccessible: 'Check Notion integration permissions',
+        ifPropertiesMissing: 'Add missing properties to your Notion database'
+      }
     });
 
   } catch (error) {
-    console.error('Error validating database IDs:', error);
+    console.error('Error in database validation:', error);
     return NextResponse.json(
       { 
-        error: 'Failed to validate database IDs',
+        error: 'Database validation failed',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
