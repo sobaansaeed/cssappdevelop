@@ -1,0 +1,50 @@
+{
+  "pastPapers": [
+    {
+      "id": "1754403507428",
+      "subjectId": "economics",
+      "subjectName": "Economics",
+      "subjectType": "optional",
+      "subjectGroup": "group1",
+      "year": "2023",
+      "title": "CSS Economics Past Paper 2023",
+      "fileUrl": "/pdfs/past-papers/optional/group1/economics-2023.pdf",
+      "uploadDate": "2025-08-05",
+      "description": "CSS Economics Past Paper for the year 2023"
+    },
+    {
+      "id": "1754403388554",
+      "subjectId": "english-essay",
+      "subjectName": "English Essay",
+      "subjectType": "compulsory",
+      "year": "2024",
+      "title": "CSS English Essay Past Paper 2024",
+      "fileUrl": "/pdfs/past-papers/compulsory/english-essay-2024.pdf",
+      "uploadDate": "2025-08-05",
+      "description": "CSS English Essay Past Paper for the year 2024"
+    },
+    {
+      "id": "2",
+      "subjectId": "english-essay",
+      "subjectName": "English Essay",
+      "subjectType": "compulsory",
+      "year": "2023",
+      "title": "CSS English Essay Past Paper 2023",
+      "fileUrl": "/pdfs/past-papers/compulsory/english-essay-2023.pdf",
+      "uploadDate": "2024-08-05",
+      "description": "CSS English Essay Past Paper for the year 2023"
+    },
+    {
+      "id": "3",
+      "subjectId": "economics",
+      "subjectName": "Economics",
+      "subjectType": "optional",
+      "subjectGroup": "group1",
+      "year": "2024",
+      "title": "CSS Economics Past Paper 2024",
+      "fileUrl": "/pdfs/past-papers/optional/group1/economics-2024.pdf",
+      "uploadDate": "2024-08-05",
+      "description": "CSS Economics Past Paper for the year 2024"
+    }
+  ]
+}

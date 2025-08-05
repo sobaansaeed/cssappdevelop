@@ -1,0 +1,391 @@
+{
+  "compulsory": [
+    {
+      "id": "english-essay",
+      "name": "English Essay",
+      "type": "compulsory",
+      "code": "CE-1"
+    },
+    {
+      "id": "english-precis",
+      "name": "English (Precis and Composition)",
+      "type": "compulsory",
+      "code": "CE-2"
+    },
+    {
+      "id": "general-science",
+      "name": "General Science & Ability",
+      "type": "compulsory",
+      "code": "CE-3"
+    },
+    {
+      "id": "current-affairs",
+      "name": "Current Affairs",
+      "type": "compulsory",
+      "code": "CE-4"
+    },
+    {
+      "id": "pakistan-affairs",
+      "name": "Pakistan Affairs",
+      "type": "compulsory",
+      "code": "CE-5"
+    },
+    {
+      "id": "islamic-studies",
+      "name": "Islamic Studies",
+      "type": "compulsory",
+      "code": "CE-6"
+    },
+    {
+      "id": "comparative-religions",
+      "name": "Comparative Study of Major Religions (For Non Muslims)",
+      "type": "compulsory",
+      "code": "CE-7"
+    }
+  ],
+  "optional": {
+    "group1": {
+      "name": "Group 1",
+      "subjects": [
+        {
+          "id": "accountancy-auditing",
+          "name": "Accountancy & Auditing",
+          "type": "optional",
+          "group": "group1",
+          "code": "OG1-1"
+        },
+        {
+          "id": "economics",
+          "name": "Economics",
+          "type": "optional",
+          "group": "group1",
+          "code": "OG1-2"
+        },
+        {
+          "id": "computer-science",
+          "name": "Computer Science",
+          "type": "optional",
+          "group": "group1",
+          "code": "OG1-3"
+        },
+        {
+          "id": "international-relations",
+          "name": "International Relations",
+          "type": "optional",
+          "group": "group1",
+          "code": "OG1-4"
+        }
+      ]
+    },
+    "group2": {
+      "name": "Group 2",
+      "subjects": [
+        {
+          "id": "physics",
+          "name": "Physics",
+          "type": "optional",
+          "group": "group2",
+          "code": "OG2-1"
+        },
+        {
+          "id": "chemistry",
+          "name": "Chemistry",
+          "type": "optional",
+          "group": "group2",
+          "code": "OG2-2"
+        },
+        {
+          "id": "applied-mathematics",
+          "name": "Applied Mathematics",
+          "type": "optional",
+          "group": "group2",
+          "code": "OG2-3"
+        },
+        {
+          "id": "pure-mathematics",
+          "name": "Pure Mathematics",
+          "type": "optional",
+          "group": "group2",
+          "code": "OG2-4"
+        },
+        {
+          "id": "statistics",
+          "name": "Statistics",
+          "type": "optional",
+          "group": "group2",
+          "code": "OG2-5"
+        },
+        {
+          "id": "geology",
+          "name": "Geology",
+          "type": "optional",
+          "group": "group2",
+          "code": "OG2-6"
+        }
+      ]
+    },
+    "group3": {
+      "name": "Group 3",
+      "subjects": [
+        {
+          "id": "business-administration",
+          "name": "Business Administration",
+          "type": "optional",
+          "group": "group3",
+          "code": "OG3-1"
+        },
+        {
+          "id": "public-administration",
+          "name": "Public Administration",
+          "type": "optional",
+          "group": "group3",
+          "code": "OG3-2"
+        },
+        {
+          "id": "governance-policies",
+          "name": "Governance & Public Policies",
+          "type": "optional",
+          "group": "group3",
+          "code": "OG3-3"
+        },
+        {
+          "id": "town-planning",
+          "name": "Town Planning & Urban Management",
+          "type": "optional",
+          "group": "group3",
+          "code": "OG3-4"
+        }
+      ]
+    },
+    "group4": {
+      "name": "Group 4",
+      "subjects": [
+        {
+          "id": "history-pakistan-india",
+          "name": "History of Pakistan & India",
+          "type": "optional",
+          "group": "group4",
+          "code": "OG4-1"
+        },
+        {
+          "id": "islamic-history-culture",
+          "name": "Islamic History & Culture",
+          "type": "optional",
+          "group": "group4",
+          "code": "OG4-2"
+        },
+        {
+          "id": "british-history",
+          "name": "British History",
+          "type": "optional",
+          "group": "group4",
+          "code": "OG4-3"
+        },
+        {
+          "id": "european-history",
+          "name": "European History",
+          "type": "optional",
+          "group": "group4",
+          "code": "OG4-4"
+        },
+        {
+          "id": "history-usa",
+          "name": "History of USA",
+          "type": "optional",
+          "group": "group4",
+          "code": "OG4-5"
+        }
+      ]
+    },
+    "group5": {
+      "name": "Group 5",
+      "subjects": [
+        {
+          "id": "gender-studies",
+          "name": "Gender Studies",
+          "type": "optional",
+          "group": "group5",
+          "code": "OG5-1"
+        },
+        {
+          "id": "environmental-sciences",
+          "name": "Environmental Sciences",
+          "type": "optional",
+          "group": "group5",
+          "code": "OG5-2"
+        },
+        {
+          "id": "agriculture-forestry",
+          "name": "Agriculture & Forestry",
+          "type": "optional",
+          "group": "group5",
+          "code": "OG5-3"
+        },
+        {
+          "id": "botany",
+          "name": "Botany",
+          "type": "optional",
+          "group": "group5",
+          "code": "OG5-4"
+        },
+        {
+          "id": "zoology",
+          "name": "Zoology",
+          "type": "optional",
+          "group": "group5",
+          "code": "OG5-5"
+        },
+        {
+          "id": "english-literature",
+          "name": "English Literature",
+          "type": "optional",
+          "group": "group5",
+          "code": "OG5-6"
+        },
+        {
+          "id": "urdu-literature",
+          "name": "Urdu Literature",
+          "type": "optional",
+          "group": "group5",
+          "code": "OG5-7"
+        }
+      ]
+    },
+    "group6": {
+      "name": "Group 6",
+      "subjects": [
+        {
+          "id": "law",
+          "name": "Law",
+          "type": "optional",
+          "group": "group6",
+          "code": "OG6-1"
+        },
+        {
+          "id": "constitutional-law",
+          "name": "Constitutional Law",
+          "type": "optional",
+          "group": "group6",
+          "code": "OG6-2"
+        },
+        {
+          "id": "international-law",
+          "name": "International Law",
+          "type": "optional",
+          "group": "group6",
+          "code": "OG6-3"
+        },
+        {
+          "id": "muslim-law-jurisprudence",
+          "name": "Muslim Law & Jurisprudence",
+          "type": "optional",
+          "group": "group6",
+          "code": "OG6-4"
+        },
+        {
+          "id": "mercantile-law",
+          "name": "Mercantile Law",
+          "type": "optional",
+          "group": "group6",
+          "code": "OG6-5"
+        },
+        {
+          "id": "criminology",
+          "name": "Criminology",
+          "type": "optional",
+          "group": "group6",
+          "code": "OG6-6"
+        },
+        {
+          "id": "philosophy",
+          "name": "Philosophy",
+          "type": "optional",
+          "group": "group6",
+          "code": "OG6-7"
+        }
+      ]
+    },
+    "group7": {
+      "name": "Group 7",
+      "subjects": [
+        {
+          "id": "journalism-mass-communication",
+          "name": "Journalism & Mass Communication",
+          "type": "optional",
+          "group": "group7",
+          "code": "OG7-1"
+        },
+        {
+          "id": "psychology",
+          "name": "Psychology",
+          "type": "optional",
+          "group": "group7",
+          "code": "OG7-2"
+        },
+        {
+          "id": "geography",
+          "name": "Geography",
+          "type": "optional",
+          "group": "group7",
+          "code": "OG7-3"
+        },
+        {
+          "id": "sociology",
+          "name": "Sociology",
+          "type": "optional",
+          "group": "group7",
+          "code": "OG7-4"
+        },
+        {
+          "id": "anthropology",
+          "name": "Anthropology",
+          "type": "optional",
+          "group": "group7",
+          "code": "OG7-5"
+        },
+        {
+          "id": "punjabi",
+          "name": "Punjabi",
+          "type": "optional",
+          "group": "group7",
+          "code": "OG7-6"
+        },
+        {
+          "id": "sindhi",
+          "name": "Sindhi",
+          "type": "optional",
+          "group": "group7",
+          "code": "OG7-7"
+        },
+        {
+          "id": "pashto",
+          "name": "Pashto",
+          "type": "optional",
+          "group": "group7",
+          "code": "OG7-8"
+        },
+        {
+          "id": "balochi",
+          "name": "Balochi",
+          "type": "optional",
+          "group": "group7",
+          "code": "OG7-9"
+        },
+        {
+          "id": "persian",
+          "name": "Persian",
+          "type": "optional",
+          "group": "group7",
+          "code": "OG7-10"
+        },
+        {
+          "id": "arabic",
+          "name": "Arabic",
+          "type": "optional",
+          "group": "group7",
+          "code": "OG7-11"
+        }
+      ]
+    }
+  }
+} 
