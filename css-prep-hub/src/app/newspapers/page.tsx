@@ -68,7 +68,13 @@ const NewspapersPage: React.FC = () => {
     const fetchEditorials = async () => {
       try {
         setEditorialsLoading(true);
-        const response = await fetch('/api/editorials');
+        // Try alternative API first, fallback to original if needed
+        let response = await fetch('/api/editorials-alt');
+        
+        if (!response.ok) {
+          // Fallback to original API
+          response = await fetch('/api/editorials');
+        }
         
         if (!response.ok) {
           throw new Error(`Failed to fetch editorials: ${response.statusText}`);
