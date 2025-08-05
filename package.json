@@ -1,0 +1,14 @@
+{
+  "name": "cssappdevelop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CSS Prep Hub - Manual PDF System",
+  "scripts": {
+    "build": "cd css-prep-hub && npm run build",
+    "dev": "cd css-prep-hub && npm run dev",
+    "start": "cd css-prep-hub && npm run start"
+  },
+  "workspaces": [
+    "css-prep-hub"
+  ]
+} 

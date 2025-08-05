@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd css-prep-hub && npm run build",
+  "buildCommand": "cd css-prep-hub && npm install && npm run build",
   "outputDirectory": "css-prep-hub/.next",
   "framework": "nextjs",
   "installCommand": "cd css-prep-hub && npm install",
