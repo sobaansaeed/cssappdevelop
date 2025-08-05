@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { BookOpen, FileText, Users, Award, Search, Filter, ChevronRight } from 'lucide-react';
+import { BookOpen, FileText, Users, Award, Search, ChevronRight } from 'lucide-react';
 
 interface Subject {
   id: string;

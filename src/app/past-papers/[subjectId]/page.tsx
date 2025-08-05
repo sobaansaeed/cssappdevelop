@@ -34,13 +34,6 @@ export default function SubjectPastPapersPage() {
   const [loading, setLoading] = useState(true);
   const [selectedYear, setSelectedYear] = useState<string>('all');
 
-  useEffect(() => {
-    if (subjectId) {
-      fetchSubjectData();
-      fetchPastPapers();
-    }
-  }, [subjectId, fetchSubjectData, fetchPastPapers]);
-
   const fetchSubjectData = useCallback(async () => {
     try {
       const response = await fetch('/api/subjects');
@@ -69,6 +62,13 @@ export default function SubjectPastPapersPage() {
       setLoading(false);
     }
   }, [subjectId]);
+
+  useEffect(() => {
+    if (subjectId) {
+      fetchSubjectData();
+      fetchPastPapers();
+    }
+  }, [subjectId, fetchSubjectData, fetchPastPapers]);
 
   const getAvailableYears = () => {
     const years = pastPapers.map(paper => paper.year);

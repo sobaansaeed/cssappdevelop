@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Users, Trophy, Percent, Bell, Download, CheckCircle, AlertCircle, Circle, ChevronRight, MapPin, FileText, Award } from 'lucide-react';
+import { Calendar, Clock, Users, Trophy, Percent, Bell, Download, CheckCircle, AlertCircle, Circle, FileText, Award } from 'lucide-react';
 
 interface TimelineEvent {
   id: string;
@@ -345,7 +345,7 @@ const TimelinePage: React.FC = () => {
         <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-6 lg:p-8 mb-12 text-white">
           <div className="text-center mb-6">
             <h2 className="text-2xl lg:text-3xl font-bold mb-2">Registration Deadline Countdown</h2>
-            <p className="text-orange-100">Don't miss the registration deadline!</p>
+            <p className="text-orange-100">Don&apos;t miss the registration deadline!</p>
           </div>
           <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
             <div className="text-center">
@@ -441,7 +441,7 @@ const TimelinePage: React.FC = () => {
             <div className="absolute left-6 lg:left-8 top-0 bottom-0 w-0.5 bg-gray-200"></div>
             
             <div className="space-y-8">
-              {filteredEvents.map((event, index) => (
+              {filteredEvents.map((event) => (
                 <div key={event.id} className="relative">
                   {/* Timeline Dot */}
                   <div className={`absolute left-6 lg:left-8 top-6 w-4 h-4 rounded-full border-4 border-white shadow-lg transform -translate-x-2 ${

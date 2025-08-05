@@ -46,13 +46,10 @@ export default function PastPapersPage() {
   const [subjectsData, setSubjectsData] = useState<SubjectsData | null>(null);
   const [pastPapers, setPastPapers] = useState<PastPaper[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
+
   const [selectedType, setSelectedType] = useState<'compulsory' | 'optional' | 'all'>('all');
 
-  useEffect(() => {
-    fetchSubjects();
-    fetchPastPapers();
-  }, [fetchSubjects, fetchPastPapers]);
+
 
   const fetchSubjects = useCallback(async () => {
     try {
@@ -75,6 +72,11 @@ export default function PastPapersPage() {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    fetchSubjects();
+    fetchPastPapers();
+  }, [fetchSubjects, fetchPastPapers]);
 
   const getPastPapersForSubject = (subjectId: string) => {
     return pastPapers.filter(paper => paper.subjectId === subjectId);

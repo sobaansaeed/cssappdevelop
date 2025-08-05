@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { BookOpen, ChevronLeft, FileText, Clock, Award, Users, Calendar } from 'lucide-react';
+import { BookOpen, ChevronLeft, FileText, Clock, Award, Users } from 'lucide-react';
 
 interface Subject {
   id: string;
@@ -41,14 +41,9 @@ export default function SubjectSyllabusPage() {
   const [syllabus, setSyllabus] = useState<DetailedSyllabus | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (subjectId) {
-      fetchSubjectData();
-      generateSyllabus();
-    }
-  }, [subjectId]);
 
-  const fetchSubjectData = async () => {
+
+  const fetchSubjectData = useCallback(async () => {
     try {
       const response = await fetch('/api/subjects');
       const data = await response.json();
@@ -63,9 +58,9 @@ export default function SubjectSyllabusPage() {
     } catch (error) {
       console.error('Error fetching subject data:', error);
     }
-  };
+  }, [subjectId]);
 
-  const generateSyllabus = () => {
+  const generateSyllabus = useCallback(() => {
     // Generate detailed syllabus based on subject ID
     const syllabusData: { [key: string]: DetailedSyllabus } = {
       'english-essay': {
@@ -532,7 +527,14 @@ export default function SubjectSyllabusPage() {
       setSyllabus(subjectSyllabus);
     }
     setLoading(false);
-  };
+  }, [subjectId]);
+
+  useEffect(() => {
+    if (subjectId) {
+      fetchSubjectData();
+      generateSyllabus();
+    }
+  }, [subjectId, fetchSubjectData, generateSyllabus]);
 
   if (loading) {
     return (
