@@ -37,7 +37,13 @@ const NewspapersPage: React.FC = () => {
     const fetchNewspapers = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/newspapers');
+        // Try alternative API first, fallback to original if needed
+        let response = await fetch('/api/newspapers-alt');
+        
+        if (!response.ok) {
+          // Fallback to original API
+          response = await fetch('/api/newspapers');
+        }
         
         if (!response.ok) {
           throw new Error(`Failed to fetch newspapers: ${response.statusText}`);

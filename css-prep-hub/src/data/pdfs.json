@@ -1,0 +1,25 @@
+{
+  "pdfs": [
+    {
+      "id": "1",
+      "title": "Sample Newspaper 1",
+      "date": "2024-01-15",
+      "fileUrl": "/pdfs/newspapers/sample-newspaper-1.pdf",
+      "category": "newspapers"
+    },
+    {
+      "id": "2",
+      "title": "Sample Editorial 1",
+      "date": "2024-01-10",
+      "fileUrl": "/pdfs/editorials/sample-editorial-1.pdf",
+      "category": "editorials"
+    },
+    {
+      "id": "3",
+      "title": "Sample Newspaper 2",
+      "date": "2024-01-20",
+      "fileUrl": "/pdfs/newspapers/sample-newspaper-2.pdf",
+      "category": "newspapers"
+    }
+  ]
+} 
