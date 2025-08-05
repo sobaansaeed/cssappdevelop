@@ -51,7 +51,7 @@ function getPdfFiles(directory) {
 }
 
 // Main function to add PDF
-function addPdf(title, date, filePath, category) {
+function addPdf(title, date, filePath, category, authorName = null, newspaper = null) {
   const pdfsData = readPdfsJson();
   
   const newPdf = {
@@ -62,6 +62,12 @@ function addPdf(title, date, filePath, category) {
     category: category
   };
   
+  // Add editorial-specific fields if provided
+  if (category === 'editorials') {
+    if (authorName) newPdf.authorName = authorName;
+    if (newspaper) newPdf.newspaper = newspaper;
+  }
+  
   // Add to beginning of array (newest first)
   pdfsData.pdfs.unshift(newPdf);
   
@@ -71,6 +77,8 @@ function addPdf(title, date, filePath, category) {
   console.log(`   Title: ${title}`);
   console.log(`   Date: ${date}`);
   console.log(`   Category: ${category}`);
+  if (authorName) console.log(`   Author: ${authorName}`);
+  if (newspaper) console.log(`   Newspaper: ${newspaper}`);
   console.log(`   File: ${filePath}`);
 }
 
@@ -84,6 +92,8 @@ function listPdfs() {
   pdfsData.pdfs.forEach((pdf, index) => {
     console.log(`${index + 1}. ${pdf.title}`);
     console.log(`   Date: ${pdf.date} | Category: ${pdf.category}`);
+    if (pdf.authorName) console.log(`   Author: ${pdf.authorName}`);
+    if (pdf.newspaper) console.log(`   Newspaper: ${pdf.newspaper}`);
     console.log(`   File: ${pdf.fileUrl}\n`);
   });
 }
@@ -147,6 +157,25 @@ function main() {
       addPdf(quickTitle, quickDate, quickFilePath, quickCategory);
       break;
       
+    case 'add-editorial':
+      if (args.length < 6) {
+        console.log('❌ Usage: node add-pdf.js add-editorial "Title" "Date" "Author" "Newspaper" "filename.pdf"');
+        console.log('   Example: node add-pdf.js add-editorial "August 5 Editorial" "2024-08-05" "John Doe" "Dawn" "editorial.pdf"');
+        return;
+      }
+      
+      // Use a more robust argument parsing
+      const editorialArgs = args.slice(2); // Remove 'node', 'add-pdf.js', 'add-editorial'
+      const editorialTitle = editorialArgs[0];
+      const editorialDate = editorialArgs[1];
+      const editorialAuthor = editorialArgs[2];
+      const editorialNewspaper = editorialArgs[3];
+      const editorialFilename = editorialArgs[4];
+      const editorialFilePath = `/pdfs/editorials/${editorialFilename}`;
+      
+      addPdf(editorialTitle, editorialDate, editorialFilePath, 'editorials', editorialAuthor, editorialNewspaper);
+      break;
+      
     default:
       console.log('📄 PDF Management Tool');
       console.log('=====================');
@@ -154,6 +183,7 @@ function main() {
       console.log('Commands:');
       console.log('  add <title> <date> <filePath> <category>  - Add PDF with full details');
       console.log('  quick-add <title> <date> <category>       - Quick add with auto-generated file path');
+      console.log('  add-editorial <title> <date> <author> <newspaper> <filename> - Add editorial with author and newspaper');
       console.log('  list                                      - List all current PDFs');
       console.log('  scan                                      - Scan directories for PDF files');
       console.log('');

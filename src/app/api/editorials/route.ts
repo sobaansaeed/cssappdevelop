@@ -7,6 +7,8 @@ interface PDFFile {
   date: string;
   fileUrl: string;
   category: 'newspapers' | 'editorials';
+  authorName?: string;
+  newspaper?: string;
 }
 
 export interface Editorial {
@@ -26,8 +28,8 @@ export async function GET(_request: NextRequest) {
       .map(pdf => ({
         id: pdf.id,
         title: pdf.title,
-        authorName: 'Author Name', // You can add this to the JSON data
-        newspaper: 'Newspaper Name', // You can add this to the JSON data
+        authorName: pdf.authorName || 'Author Name',
+        newspaper: pdf.newspaper || 'Newspaper Name',
         date: pdf.date,
         fileUrl: pdf.fileUrl
       }))

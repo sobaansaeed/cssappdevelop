@@ -12,7 +12,9 @@
       "title": "July 31 Dawn Editorial And Opinion Summary",
       "date": "2024-07-31",
       "fileUrl": "/pdfs/editorials/July 31 Dawn Editorial And Opinion Summary.pdf",
-      "category": "editorials"
+      "category": "editorials",
+      "authorName": "Editorial Team",
+      "newspaper": "Dawn"
     },
     {
       "id": "3",
@@ -22,4 +24,4 @@
       "category": "newspapers"
     }
   ]
-} 
+}
