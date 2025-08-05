@@ -2,7 +2,7 @@
 
 ## 📁 **Complete Folder Structure Created**
 
-✅ **51 subject folders** have been created for organizing CSS past papers:
+✅ **52 subject folders** have been created for organizing CSS past papers:
 
 ### **📚 Compulsory Subjects (7 folders)**
 - `public/past-papers/compulsory/english-essay/`
@@ -13,8 +13,8 @@
 - `public/past-papers/compulsory/islamic-studies/`
 - `public/past-papers/compulsory/comparative-religions/`
 
-### **🎓 Optional Subjects (44 folders in 7 groups)**
-- **Group 1**: Accountancy, Economics, Computer Science, International Relations
+### **🎓 Optional Subjects (45 folders in 7 groups)**
+- **Group 1**: Accountancy, Economics, Computer Science, International Relations, Political Science
 - **Group 2**: Physics, Chemistry, Applied Mathematics, Pure Mathematics, Statistics, Geology
 - **Group 3**: Business Administration, Public Administration, Governance, Town Planning
 - **Group 4**: History subjects (Pakistan & India, Islamic, British, European, USA)
@@ -94,9 +94,9 @@ Check that past papers appear on the website:
 
 ## 📊 **Folder Statistics**
 
-- **Total Folders Created**: 51
+- **Total Folders Created**: 52
 - **Compulsory Subjects**: 7 folders
-- **Optional Subjects**: 44 folders (organized in 7 groups)
+- **Optional Subjects**: 45 folders (organized in 7 groups)
 - **Ready for**: Multiple years of past papers per subject
 
 ---

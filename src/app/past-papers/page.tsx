@@ -36,6 +36,7 @@ interface PastPaper {
   subjectType: 'compulsory' | 'optional';
   subjectGroup?: string;
   year: string;
+  paperNumber?: string | null;
   title: string;
   fileUrl: string;
   uploadDate: string;

@@ -48,6 +48,7 @@ function scanPastPapersFolder() {
 
       files.forEach(file => {
         const year = extractYearFromFilename(file);
+        const paperNumber = extractPaperNumber(file);
         const title = generateTitleFromFilename(file, subjectFolder);
         
         newPastPapers.push({
@@ -56,10 +57,11 @@ function scanPastPapersFolder() {
           subjectName: getSubjectName(subjectFolder),
           subjectType: 'compulsory',
           year: year,
+          paperNumber: paperNumber,
           title: title,
           fileUrl: `/past-papers/compulsory/${subjectFolder}/${file}`,
           uploadDate: new Date().toISOString().split('T')[0],
-          description: `CSS ${year} Past Paper - ${getSubjectName(subjectFolder)}`
+          description: `CSS ${year} Past Paper - ${getSubjectName(subjectFolder)}${paperNumber ? ` (Paper ${paperNumber})` : ''}`
         });
       });
     });
@@ -85,6 +87,7 @@ function scanPastPapersFolder() {
 
         files.forEach(file => {
           const year = extractYearFromFilename(file);
+          const paperNumber = extractPaperNumber(file);
           const title = generateTitleFromFilename(file, subjectFolder);
           
           newPastPapers.push({
@@ -94,10 +97,11 @@ function scanPastPapersFolder() {
             subjectType: 'optional',
             subjectGroup: group,
             year: year,
+            paperNumber: paperNumber,
             title: title,
             fileUrl: `/past-papers/optional/${group}/${subjectFolder}/${file}`,
             uploadDate: new Date().toISOString().split('T')[0],
-            description: `CSS ${year} Past Paper - ${getSubjectName(subjectFolder)}`
+            description: `CSS ${year} Past Paper - ${getSubjectName(subjectFolder)}${paperNumber ? ` (Paper ${paperNumber})` : ''}`
           });
         });
       });
@@ -113,12 +117,37 @@ function extractYearFromFilename(filename) {
   return yearMatch ? yearMatch[1] : new Date().getFullYear().toString();
 }
 
+function extractPaperNumber(filename) {
+  // Try to extract paper number from filename (e.g., "accountancy-auditing-paper1-2025.pdf" -> "1")
+  const paperMatch = filename.match(/paper(\d+)/i);
+  return paperMatch ? paperMatch[1] : null;
+}
+
 function generateTitleFromFilename(filename, subjectFolder) {
   // Remove .pdf extension and convert to title case
   const name = filename.replace(/\.pdf$/i, '');
-  return name.split('-').map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
-  ).join(' ');
+  
+  // Handle paper numbers in the title
+  const parts = name.split('-');
+  const titleParts = [];
+  
+  for (let i = 0; i < parts.length; i++) {
+    const part = parts[i];
+    if (part.toLowerCase() === 'paper' && i + 1 < parts.length) {
+      // Skip 'paper' and add 'Paper X' format
+      const paperNum = parts[i + 1];
+      titleParts.push(`Paper ${paperNum}`);
+      i++; // Skip the next part since we've handled it
+    } else if (part.match(/^\d{4}$/)) {
+      // Skip year numbers
+      continue;
+    } else {
+      // Convert to title case
+      titleParts.push(part.charAt(0).toUpperCase() + part.slice(1));
+    }
+  }
+  
+  return titleParts.join(' ');
 }
 
 function getSubjectName(subjectId) {
@@ -138,6 +167,7 @@ function getSubjectName(subjectId) {
     'economics': 'Economics',
     'computer-science': 'Computer Science',
     'international-relations': 'International Relations',
+    'political-science': 'Political Science',
     'physics': 'Physics',
     'chemistry': 'Chemistry',
     'applied-mathematics': 'Applied Mathematics',
@@ -208,7 +238,7 @@ function main() {
   newPastPapers.forEach((paper, index) => {
     console.log(`${index + 1}. ${paper.title}`);
     console.log(`   Subject: ${paper.subjectName} (${paper.subjectType})`);
-    console.log(`   Year: ${paper.year}`);
+    console.log(`   Year: ${paper.year}${paper.paperNumber ? ` - Paper ${paper.paperNumber}` : ''}`);
     console.log(`   File: ${paper.fileUrl}\n`);
   });
 

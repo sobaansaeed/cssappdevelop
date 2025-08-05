@@ -74,6 +74,13 @@
           "type": "optional",
           "group": "group1",
           "code": "OG1-4"
+        },
+        {
+          "id": "political-science",
+          "name": "Political Science",
+          "type": "optional",
+          "group": "group1",
+          "code": "OG1-5"
         }
       ]
     },

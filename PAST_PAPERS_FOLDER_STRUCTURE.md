@@ -20,8 +20,8 @@ public/past-papers/
 │   ├── islamic-studies/
 │   └── comparative-religions/
 │
-└── optional/                      # 44 Optional Subjects (7 Groups)
-    ├── group1/                    # 4 Subjects
+└── optional/                      # 45 Optional Subjects (7 Groups)
+    ├── group1/                    # 5 Subjects
     ├── group2/                    # 6 Subjects
     ├── group3/                    # 4 Subjects
     ├── group4/                    # 5 Subjects
@@ -48,7 +48,7 @@ public/past-papers/
 
 ---
 
-## 🎓 **Optional Subjects (44) - Organized by Groups**
+## 🎓 **Optional Subjects (45) - Organized by Groups**
 
 ### **📂 Group 1: `public/past-papers/optional/group1/`**
 
@@ -58,6 +58,7 @@ public/past-papers/
 | Economics | `economics/` | OG1-2 |
 | Computer Science | `computer-science/` | OG1-3 |
 | International Relations | `international-relations/` | OG1-4 |
+| Political Science | `political-science/` | OG1-5 |
 
 ### **📂 Group 2: `public/past-papers/optional/group2/`**
 
@@ -155,11 +156,11 @@ public/past-papers/
 
 ### **📊 Folder Statistics**
 
-- **Total Subjects**: 51
+- **Total Subjects**: 52
 - **Compulsory Subjects**: 7
-- **Optional Subjects**: 44
+- **Optional Subjects**: 45
 - **Optional Groups**: 7
-- **Total Folders Created**: 51
+- **Total Folders Created**: 52
 
 ### **🔗 URL Structure**
 
@@ -217,4 +218,4 @@ The folder structure is now complete and ready for:
 - ✅ **Website Display**: Files will be accessible through the past papers pages
 - ✅ **Year-wise Organization**: Multiple years can be stored for each subject
 
-**Total folders created: 51 subject folders** 📁 
+**Total folders created: 52 subject folders** 📁 
