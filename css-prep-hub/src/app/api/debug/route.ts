@@ -2,58 +2,39 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    // Check all environment variables
-    const notionApiKey = process.env.NOTION_API_KEY;
-    const newspaperDbId = process.env.NOTION_DATABASE_ID;
-    const editorialDbId = process.env.NOTION_EDITORIAL_DATABASE_ID;
-    
-    // Detailed analysis
-    const analysis = {
-      notionApiKey: {
-        exists: !!notionApiKey,
-        length: notionApiKey?.length || 0,
-        startsWithSecret: notionApiKey?.startsWith('secret_') || false,
-        preview: notionApiKey ? `${notionApiKey.substring(0, 10)}...` : 'Not set'
+    // Check system status
+    const systemStatus = {
+      pdfSystem: {
+        status: 'active',
+        description: 'Manual PDF hosting system'
       },
-      newspaperDbId: {
-        exists: !!newspaperDbId,
-        length: newspaperDbId?.length || 0,
-        isValidFormat: newspaperDbId ? /^[a-zA-Z0-9]{32}$/.test(newspaperDbId.replace(/-/g, '')) : false,
-        value: newspaperDbId || 'Not set'
+      apis: {
+        newspapers: '/api/newspapers',
+        editorials: '/api/editorials',
+        pdfs: '/api/pdfs',
+        health: '/api/health'
       },
-      editorialDbId: {
-        exists: !!editorialDbId,
-        length: editorialDbId?.length || 0,
-        isValidFormat: editorialDbId ? /^[a-zA-Z0-9]{32}$/.test(editorialDbId.replace(/-/g, '')) : false,
-        value: editorialDbId || 'Not set'
+      directories: {
+        newspapers: 'public/pdfs/newspapers/',
+        editorials: 'public/pdfs/editorials/'
       }
     };
 
-    // Check if all required variables are set
-    const allSet = analysis.notionApiKey.exists && 
-                   analysis.newspaperDbId.exists && 
-                   analysis.editorialDbId.exists;
-
-    // Check if all variables are in correct format
-    const allValid = analysis.notionApiKey.startsWithSecret && 
-                     analysis.newspaperDbId.isValidFormat && 
-                     analysis.editorialDbId.isValidFormat;
-
     return NextResponse.json({
-      message: 'Comprehensive Environment Debug',
+      message: 'System Debug Information',
       timestamp: new Date().toISOString(),
       environment: process.env.NODE_ENV,
-      analysis,
+      system: systemStatus,
       summary: {
-        allVariablesSet: allSet,
-        allVariablesValid: allValid,
-        readyToConnect: allSet && allValid
+        systemType: 'Manual PDF Hosting',
+        noExternalDependencies: true,
+        readyToUse: true
       },
       recommendations: {
-        ifNotionApiKeyMissing: 'Get from https://www.notion.so/my-integrations',
-        ifNotionApiKeyInvalid: 'Should start with "secret_"',
-        ifDbIdMissing: 'Copy from Notion database URL',
-        ifDbIdInvalid: 'Should be 32 characters (remove hyphens)'
+        addPDFs: 'Upload PDFs to public/pdfs/ directories',
+        updateJSON: 'Edit src/data/pdfs.json to add metadata',
+        useAdmin: 'Visit /admin for web-based management',
+        useScript: 'Use add-pdf.js script for command-line management'
       }
     });
 

@@ -1,75 +1,62 @@
-# Vercel API Troubleshooting Guide
+# Vercel Deployment Troubleshooting Guide
 
 ## Common Issues and Solutions
 
-### 1. Environment Variables Not Loading
+### 1. PDF Files Not Loading
 
-**Problem**: API routes return 500 errors with "environment variable not configured" messages.
-
-**Solutions**:
-- Go to Vercel Dashboard → Your Project → Settings → Environment Variables
-- Add these variables for ALL environments (Production, Preview, Development):
-  ```
-  NOTION_API_KEY=secret_your_key_here
-  NOTION_DATABASE_ID=your_database_id_here
-  NOTION_EDITORIAL_DATABASE_ID=your_editorial_db_id_here
-  ```
-- **Important**: After adding variables, redeploy your application
-- Check that your Notion API key starts with `secret_`
-
-### 2. CORS Issues
-
-**Problem**: API calls from frontend fail with CORS errors.
+**Problem**: PDFs don't appear on the website or return 404 errors.
 
 **Solutions**:
-- The updated `next.config.ts` and `vercel.json` now include proper CORS headers
-- If still having issues, check browser console for specific CORS errors
+- Check that PDF files are in the correct directories: `public/pdfs/newspapers/` or `public/pdfs/editorials/`
+- Verify the file paths in `src/data/pdfs.json` match the actual file locations
+- Ensure PDF files are committed and pushed to GitHub
+- Check that Vercel deployment completed successfully
 
-### 3. API Routes Not Found (404)
+### 2. JSON Syntax Errors
 
-**Problem**: API endpoints return 404 errors.
+**Problem**: Build fails due to invalid JSON in `src/data/pdfs.json`.
 
 **Solutions**:
-- Ensure your API routes are in the correct location: `src/app/api/`
-- Check that route files are named `route.ts` (not `api.ts`)
+- Use a JSON validator to check syntax
+- Ensure all required fields are present: `id`, `title`, `date`, `fileUrl`, `category`
+- Check for missing commas, brackets, or quotes
+- Verify the JSON structure matches the expected format
+
+### 3. API Routes Not Working
+
+**Problem**: API endpoints return errors or don't load data.
+
+**Solutions**:
+- Check that all API route files are in the correct location: `src/app/api/`
 - Verify the build process completes successfully
-- Check Vercel function logs for deployment errors
+- Test the health endpoint: `/api/health`
+- Check Vercel function logs for specific error messages
 
-### 4. Notion API Connection Issues
+### 4. Admin Interface Issues
 
-**Problem**: API returns errors when connecting to Notion.
-
-**Solutions**:
-- Verify your Notion integration has access to the databases
-- Check that database IDs are correct (32 characters, no hyphens)
-- Ensure database properties match expected names:
-  - Newspapers: `Name`, `Date`, `Files & media`
-  - Editorials: `Title`, `Author Name`, `Newspaper`, `Date`, `Files & media`
-
-### 5. Runtime Errors
-
-**Problem**: API functions timeout or crash.
+**Problem**: Admin interface at `/admin` doesn't work properly.
 
 **Solutions**:
-- Check Vercel function logs in the dashboard
-- Ensure `@notionhq/client` is in dependencies (not devDependencies)
-- Verify Node.js runtime is set to 18.x in `vercel.json`
+- Ensure the admin page component is properly built
+- Check that the admin interface can access the PDFs API
+- Verify that the JSON data is being read correctly
 
 ## Debugging Steps
 
-### Step 1: Test Environment Variables
-Visit: `https://your-app.vercel.app/api/test-env`
+### Step 1: Test System Health
+Visit: `https://your-app.vercel.app/api/health`
 
-This will show you which environment variables are missing or incorrectly formatted.
+This will confirm that the basic system is working.
 
-### Step 2: Comprehensive Debug
+### Step 2: Check System Information
 Visit: `https://your-app.vercel.app/api/debug`
 
-This provides detailed analysis of your environment setup and recommendations.
+This provides detailed information about your system setup.
 
 ### Step 3: Test Individual APIs
 - Newspapers: `https://your-app.vercel.app/api/newspapers`
 - Editorials: `https://your-app.vercel.app/api/editorials`
+- All PDFs: `https://your-app.vercel.app/api/pdfs`
 
 ### Step 4: Check Vercel Logs
 1. Go to Vercel Dashboard → Your Project → Functions
@@ -78,13 +65,13 @@ This provides detailed analysis of your environment setup and recommendations.
 
 ## Deployment Checklist
 
-- [ ] Environment variables added to Vercel dashboard
-- [ ] Environment variables set for all environments (Production, Preview, Development)
-- [ ] Application redeployed after adding environment variables
-- [ ] Build process completes successfully
+- [ ] PDF files uploaded to correct directories
+- [ ] JSON metadata updated in `src/data/pdfs.json`
+- [ ] All changes committed and pushed to GitHub
+- [ ] Vercel deployment completed successfully
 - [ ] API routes accessible via direct URL
-- [ ] Notion integration has database access
-- [ ] Database IDs are correct and in proper format
+- [ ] PDFs appear on website pages
+- [ ] Admin interface working at `/admin`
 
 ## Quick Fix Commands
 
@@ -92,14 +79,65 @@ If you need to force a redeploy:
 ```bash
 # In your local project directory
 git add .
-git commit -m "Fix API configuration"
+git commit -m "Fix PDF system configuration"
 git push origin main
 ```
+
+## Common JSON Format Issues
+
+### Correct Format
+```json
+{
+  "pdfs": [
+    {
+      "id": "unique-id",
+      "title": "PDF Title",
+      "date": "2024-08-05",
+      "fileUrl": "/pdfs/newspapers/filename.pdf",
+      "category": "newspapers"
+    }
+  ]
+}
+```
+
+### Common Mistakes
+- Missing commas between objects
+- Incorrect file paths (should start with `/pdfs/`)
+- Wrong category values (use "newspapers" or "editorials" only)
+- Invalid date format (use YYYY-MM-DD)
+
+## File Management Best Practices
+
+### Directory Structure
+```
+public/pdfs/
+├── newspapers/
+│   ├── August 5 Dawn.pdf
+│   └── August 5 The News.pdf
+└── editorials/
+    ├── August 5 Dawn Editorial.pdf
+    └── August 5 The News Editorial.pdf
+```
+
+### File Naming
+- Use descriptive names: `August 5 Dawn Editorial.pdf`
+- Avoid special characters in filenames
+- Keep names consistent with JSON metadata
 
 ## Still Having Issues?
 
 1. Check the Vercel function logs for specific error messages
-2. Test the `/api/debug` endpoint to see environment variable status
-3. Verify your Notion integration settings
-4. Ensure all database properties exist and are named correctly
-5. Check that your Notion API key is valid and not expired 
+2. Test the `/api/debug` endpoint to see system status
+3. Verify all file paths and JSON syntax
+4. Ensure all PDF files exist in the correct directories
+5. Check that the build process completes without errors
+
+## System Benefits
+
+✅ **No external dependencies** - Works without any third-party services
+✅ **No API limits** - Unlimited PDF uploads
+✅ **Full control** - Your data, your rules
+✅ **Easy maintenance** - Simple file-based system
+✅ **Immediate deployment** - No complex configuration required
+
+The manual PDF system is designed to be simple and reliable. Most issues can be resolved by checking file paths and JSON syntax. 

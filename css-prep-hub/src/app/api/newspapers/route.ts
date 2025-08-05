@@ -1,17 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Client } from '@notionhq/client';
+import pdfData from '../../../data/pdfs.json';
 
-// Type definitions for Notion API
-interface NotionTextContent {
-  plain_text: string;
+interface PDFFile {
+  id: string;
+  title: string;
+  date: string;
+  fileUrl: string;
+  category: 'newspapers' | 'editorials';
 }
-
-
-
-// Initialize Notion client
-const notion = new Client({
-  auth: process.env.NOTION_API_KEY,
-});
 
 export interface Newspaper {
   id: string;
@@ -20,93 +16,18 @@ export interface Newspaper {
   fileUrl: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(_request: NextRequest) {
   try {
-    // Check all required environment variables
-    const notionApiKey = process.env.NOTION_API_KEY;
-    const databaseId = process.env.NOTION_DATABASE_ID;
-    
-    if (!notionApiKey) {
-      console.error('NOTION_API_KEY is missing');
-      return NextResponse.json(
-        { error: 'NOTION_API_KEY not configured' },
-        { status: 500 }
-      );
-    }
-    
-    if (!databaseId) {
-      console.error('NOTION_DATABASE_ID is missing');
-      return NextResponse.json(
-        { error: 'NOTION_DATABASE_ID not configured' },
-        { status: 500 }
-      );
-    }
-
-    // Query the Notion database
-    const response = await notion.databases.query({
-      database_id: databaseId,
-      sorts: [
-        {
-          property: 'Date',
-          direction: 'descending', // newest first
-        },
-      ],
-    });
-
-    // Transform the data
-    const newspapers: Newspaper[] = response.results
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .map((page: any) => {
-        // Extract properties
-        const titleProperty = page.properties.Name;
-        const dateProperty = page.properties.Date;
-        const fileProperty = page.properties['Files & media'];
-
-        // Get title (from Name property)
-        let title = '';
-        if (titleProperty) {
-          if (titleProperty.title && titleProperty.title.length > 0) {
-            // Handle Title property type
-            title = titleProperty.title[0].plain_text;
-          } else if (titleProperty.rich_text && titleProperty.rich_text.length > 0) {
-            // Handle Rich Text property type
-            title = titleProperty.rich_text[0].plain_text;
-          } else if (titleProperty.type === 'title' && titleProperty.title) {
-            // Handle Title property
-            title = titleProperty.title.map((t: NotionTextContent) => t.plain_text).join('');
-          }
-        }
-
-        // Get date
-        let date = '';
-        if (dateProperty && dateProperty.date && dateProperty.date.start) {
-          date = dateProperty.date.start;
-        }
-
-        // Get file URL
-        let fileUrl = '';
-        if (fileProperty && fileProperty.files && fileProperty.files.length > 0) {
-          const file = fileProperty.files[0];
-          if (file.type === 'file') {
-            fileUrl = file.file.url;
-          } else if (file.type === 'external') {
-            fileUrl = file.external.url;
-          }
-        }
-
-        // Only return newspapers that have all required fields
-        if (title && date && fileUrl) {
-          return {
-            id: page.id,
-            title,
-            date,
-            fileUrl,
-          };
-        }
-        return null;
-      })
-      .filter(Boolean) as Newspaper[]; // Remove null entries
+    // Filter only newspapers from the PDF data
+    const newspapers: Newspaper[] = (pdfData.pdfs as PDFFile[])
+      .filter(pdf => pdf.category === 'newspapers')
+      .map(pdf => ({
+        id: pdf.id,
+        title: pdf.title,
+        date: pdf.date,
+        fileUrl: pdf.fileUrl
+      }))
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     return NextResponse.json({
       newspapers,
@@ -114,7 +35,7 @@ export async function GET(_request: NextRequest) {
     });
 
   } catch (error) {
-    console.error('Error fetching newspapers from Notion:', error);
+    console.error('Error fetching newspapers:', error);
     return NextResponse.json(
       { 
         error: 'Failed to fetch newspapers',
@@ -126,7 +47,6 @@ export async function GET(_request: NextRequest) {
 }
 
 // Optional: Add CORS headers if needed
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function OPTIONS(_request: NextRequest) {
   return new NextResponse(null, {
     status: 200,
@@ -136,4 +56,4 @@ export async function OPTIONS(_request: NextRequest) {
       'Access-Control-Allow-Headers': 'Content-Type',
     },
   });
-}
+} 

@@ -1,58 +1,122 @@
-# Environment Variables Setup
+# Environment Setup - Manual PDF System
 
-## Required Environment Variables
+## Overview
 
-Your application needs these environment variables to work with Notion API:
+This application uses a simple manual PDF hosting system with no external dependencies. PDFs are stored locally and managed through JSON metadata.
 
-### 1. NOTION_API_KEY
-- Get from: https://www.notion.so/my-integrations
-- Create a new integration or use existing one
-- Copy the "Internal Integration Token"
+## System Architecture
 
-### 2. NOTION_DATABASE_ID
-- Open your newspapers database in Notion
-- Copy the database ID from the URL: `https://notion.so/workspace/[DATABASE_ID]?v=...`
+### PDF Storage
+- **Location**: `public/pdfs/` directory
+- **Newspapers**: `public/pdfs/newspapers/`
+- **Editorials**: `public/pdfs/editorials/`
 
-### 3. NOTION_EDITORIAL_DATABASE_ID
-- Open your editorials database in Notion
-- Copy the database ID from the URL: `https://notion.so/workspace/[DATABASE_ID]?v=...`
+### Metadata Management
+- **File**: `src/data/pdfs.json`
+- **Format**: JSON with PDF information
+- **Updates**: Manual or through admin interface
 
 ## Local Development
 
-Create a `.env.local` file in the `css-prep-hub` directory:
+No special environment variables are required. The system works out of the box.
 
+### Optional Environment Variables
 ```env
-NOTION_API_KEY=secret_your_notion_api_key_here
-NOTION_DATABASE_ID=your_newspaper_database_id_here
-NOTION_EDITORIAL_DATABASE_ID=your_editorial_database_id_here
+# For development only (optional)
+NODE_ENV=development
 ```
 
-## Vercel Deployment
+## Deployment
 
-Add these same environment variables in your Vercel dashboard:
-1. Go to Project Settings → Environment Variables
-2. Add each variable with Production, Preview, and Development environments selected
-3. Redeploy your application
+### Vercel Deployment
+1. Push code to GitHub
+2. Vercel automatically deploys
+3. No environment variables needed
+4. PDFs are served from public directory
 
-## Database Setup
+## API Endpoints
 
-Make sure your Notion databases have these properties:
+### Available APIs
+- `/api/newspapers` - Get newspapers from JSON data
+- `/api/editorials` - Get editorials from JSON data
+- `/api/pdfs` - Get all PDFs with filtering
+- `/api/health` - Health check
+- `/api/debug` - System information
 
-### Newspapers Database:
-- Name (Title)
-- Date (Date)
-- Files & media (Files)
+## Management Tools
 
-### Editorials Database:
-- Title (Title)
-- Author Name (Text)
-- Newspaper (Select or Text)
-- Date (Date)
-- Files & media (Files)
+### 1. Manual Management
+- Upload PDFs to `public/pdfs/` directories
+- Edit `src/data/pdfs.json` to add metadata
+- Deploy changes
+
+### 2. Admin Interface
+- Visit `/admin` on your website
+- Web-based PDF management
+- Add, edit, and delete PDF entries
+
+### 3. Command Line Script
+```bash
+# Add PDF
+node add-pdf.js quick-add "Title" "2024-08-05" "newspapers"
+
+# List PDFs
+node add-pdf.js list
+
+# Scan directories
+node add-pdf.js scan
+```
+
+## File Structure
+
+```
+public/pdfs/
+├── newspapers/
+│   ├── newspaper1.pdf
+│   └── newspaper2.pdf
+└── editorials/
+    ├── editorial1.pdf
+    └── editorial2.pdf
+
+src/data/
+└── pdfs.json  # PDF metadata
+```
+
+## JSON Format
+
+```json
+{
+  "pdfs": [
+    {
+      "id": "unique-id",
+      "title": "PDF Title",
+      "date": "2024-08-05",
+      "fileUrl": "/pdfs/category/filename.pdf",
+      "category": "newspapers" or "editorials"
+    }
+  ]
+}
+```
 
 ## Troubleshooting
 
-If you still get errors:
-1. Check that your Notion integration has access to the databases
-2. Verify database IDs are correct
-3. Ensure all required properties exist in your databases 
+### Common Issues
+1. **PDF not appearing**: Check JSON syntax and file paths
+2. **Build errors**: Verify JSON is valid
+3. **PDF not loading**: Check file exists in public directory
+
+### Debug Tools
+- `/api/health` - Basic health check
+- `/api/debug` - System information
+- `/admin` - Web-based management
+
+## Benefits
+
+✅ **No external dependencies**
+✅ **No API limits**
+✅ **Full control over data**
+✅ **Easy to maintain**
+✅ **Works immediately**
+✅ **No configuration required**
+
+This system is simple, reliable, and perfect for managing PDFs without external services. 

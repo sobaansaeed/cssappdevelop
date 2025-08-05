@@ -37,13 +37,7 @@ const NewspapersPage: React.FC = () => {
     const fetchNewspapers = async () => {
       try {
         setLoading(true);
-        // Try alternative API first, fallback to original if needed
-        let response = await fetch('/api/newspapers-alt');
-        
-        if (!response.ok) {
-          // Fallback to original API
-          response = await fetch('/api/newspapers');
-        }
+        const response = await fetch('/api/newspapers');
         
         if (!response.ok) {
           throw new Error(`Failed to fetch newspapers: ${response.statusText}`);
@@ -68,13 +62,7 @@ const NewspapersPage: React.FC = () => {
     const fetchEditorials = async () => {
       try {
         setEditorialsLoading(true);
-        // Try alternative API first, fallback to original if needed
-        let response = await fetch('/api/editorials-alt');
-        
-        if (!response.ok) {
-          // Fallback to original API
-          response = await fetch('/api/editorials');
-        }
+        const response = await fetch('/api/editorials');
         
         if (!response.ok) {
           throw new Error(`Failed to fetch editorials: ${response.statusText}`);
