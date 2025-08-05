@@ -16,24 +16,37 @@ Fixed all TypeScript/ESLint warnings that were preventing successful deployment 
   - `src/app/api/subjects/route.ts`
 
 ### **2. Unused Import Warnings**
-- **Issue**: `subjectsData` imported but never used in past-papers route
-- **Solution**: Removed unused import statement
-- **File Fixed**: `src/app/api/past-papers/route.ts`
+- **Issue**: `NextRequest` imported but never used in API routes
+- **Solution**: Removed unused import statements
+- **Files Fixed**: 
+  - `src/app/api/editorials/route.ts`
+  - `src/app/api/newspapers/route.ts`
+  - `src/app/api/subjects/route.ts`
+  - `src/app/api/past-papers/route.ts` (subjectsData import)
 
 ### **3. Unused Function Warning**
 - **Issue**: `fileExists` function defined but never used in PDFs route
 - **Solution**: Removed unused function and its related imports
 - **File Fixed**: `src/app/api/pdfs/route.ts`
 
+### **4. React Hook Dependency Warnings**
+- **Issue**: `useEffect` missing dependencies in React components
+- **Solution**: Added `useCallback` to functions and included them in dependency arrays
+- **Files Fixed**:
+  - `src/app/past-papers/[subjectId]/page.tsx`
+  - `src/app/past-papers/page.tsx`
+
 ## 🔧 **Specific Changes Made**
 
 ### **src/app/api/editorials/route.ts**
 ```typescript
 // Before
+import { NextRequest, NextResponse } from 'next/server';
 export async function GET(_request: NextRequest) {
 export async function OPTIONS(_request: NextRequest) {
 
 // After
+import { NextResponse } from 'next/server';
 export async function GET() {
 export async function OPTIONS() {
 ```
@@ -41,10 +54,12 @@ export async function OPTIONS() {
 ### **src/app/api/newspapers/route.ts**
 ```typescript
 // Before
+import { NextRequest, NextResponse } from 'next/server';
 export async function GET(_request: NextRequest) {
 export async function OPTIONS(_request: NextRequest) {
 
 // After
+import { NextResponse } from 'next/server';
 export async function GET() {
 export async function OPTIONS() {
 ```
@@ -77,12 +92,68 @@ function fileExists(filePath: string): boolean {
 ### **src/app/api/subjects/route.ts**
 ```typescript
 // Before
+import { NextRequest, NextResponse } from 'next/server';
 export async function GET(_request: NextRequest) {
 export async function OPTIONS(_request: NextRequest) {
 
 // After
+import { NextResponse } from 'next/server';
 export async function GET() {
 export async function OPTIONS() {
+```
+
+### **src/app/past-papers/[subjectId]/page.tsx**
+```typescript
+// Before
+import { useState, useEffect } from 'react';
+
+useEffect(() => {
+  if (subjectId) {
+    fetchSubjectData();
+    fetchPastPapers();
+  }
+}, [subjectId]);
+
+const fetchSubjectData = async () => { ... };
+const fetchPastPapers = async () => { ... };
+
+// After
+import { useState, useEffect, useCallback } from 'react';
+
+useEffect(() => {
+  if (subjectId) {
+    fetchSubjectData();
+    fetchPastPapers();
+  }
+}, [subjectId, fetchSubjectData, fetchPastPapers]);
+
+const fetchSubjectData = useCallback(async () => { ... }, [subjectId]);
+const fetchPastPapers = useCallback(async () => { ... }, [subjectId]);
+```
+
+### **src/app/past-papers/page.tsx**
+```typescript
+// Before
+import { useState, useEffect } from 'react';
+
+useEffect(() => {
+  fetchSubjects();
+  fetchPastPapers();
+}, []);
+
+const fetchSubjects = async () => { ... };
+const fetchPastPapers = async () => { ... };
+
+// After
+import { useState, useEffect, useCallback } from 'react';
+
+useEffect(() => {
+  fetchSubjects();
+  fetchPastPapers();
+}, [fetchSubjects, fetchPastPapers]);
+
+const fetchSubjects = useCallback(async () => { ... }, []);
+const fetchPastPapers = useCallback(async () => { ... }, []);
 ```
 
 ## ✅ **Verification**

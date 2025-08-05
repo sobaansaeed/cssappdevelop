@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
@@ -39,9 +39,9 @@ export default function SubjectPastPapersPage() {
       fetchSubjectData();
       fetchPastPapers();
     }
-  }, [subjectId]);
+  }, [subjectId, fetchSubjectData, fetchPastPapers]);
 
-  const fetchSubjectData = async () => {
+  const fetchSubjectData = useCallback(async () => {
     try {
       const response = await fetch('/api/subjects');
       const data = await response.json();
@@ -56,9 +56,9 @@ export default function SubjectPastPapersPage() {
     } catch (error) {
       console.error('Error fetching subject data:', error);
     }
-  };
+  }, [subjectId]);
 
-  const fetchPastPapers = async () => {
+  const fetchPastPapers = useCallback(async () => {
     try {
       const response = await fetch(`/api/past-papers?subjectId=${subjectId}`);
       const data = await response.json();
@@ -68,7 +68,7 @@ export default function SubjectPastPapersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [subjectId]);
 
   const getAvailableYears = () => {
     const years = pastPapers.map(paper => paper.year);

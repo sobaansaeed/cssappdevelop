@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 
 interface Subject {
@@ -52,9 +52,9 @@ export default function PastPapersPage() {
   useEffect(() => {
     fetchSubjects();
     fetchPastPapers();
-  }, []);
+  }, [fetchSubjects, fetchPastPapers]);
 
-  const fetchSubjects = async () => {
+  const fetchSubjects = useCallback(async () => {
     try {
       const response = await fetch('/api/subjects');
       const data = await response.json();
@@ -62,9 +62,9 @@ export default function PastPapersPage() {
     } catch (error) {
       console.error('Error fetching subjects:', error);
     }
-  };
+  }, []);
 
-  const fetchPastPapers = async () => {
+  const fetchPastPapers = useCallback(async () => {
     try {
       const response = await fetch('/api/past-papers');
       const data = await response.json();
@@ -74,7 +74,7 @@ export default function PastPapersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const getPastPapersForSubject = (subjectId: string) => {
     return pastPapers.filter(paper => paper.subjectId === subjectId);
