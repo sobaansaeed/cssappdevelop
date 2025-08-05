@@ -20,7 +20,7 @@ export interface Editorial {
   fileUrl: string;
 }
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     // Filter only editorials from the PDF data
     const editorials: Editorial[] = (pdfData.pdfs as PDFFile[])
@@ -53,7 +53,7 @@ export async function GET(_request: NextRequest) {
 }
 
 // Optional: Add CORS headers if needed
-export async function OPTIONS(_request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {

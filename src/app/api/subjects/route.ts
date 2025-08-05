@@ -17,7 +17,7 @@ export interface SubjectResponse {
   code: string;
 }
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     const compulsory: SubjectResponse[] = subjectsData.compulsory as Subject[];
     
@@ -56,7 +56,7 @@ export async function GET(_request: NextRequest) {
   }
 }
 
-export async function OPTIONS(_request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {

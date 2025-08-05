@@ -83,7 +83,7 @@ export default function SyllabusPage() {
     const syllabusMap: { [key: string]: string } = {
       'english-essay': 'Candidates write one or more essays in English with wide choice of topics. Evaluation focuses on comprehensive research-based knowledge, articulation, expression, and technical essay writing style.',
       'english-precis': 'Precis Writing (20) + Reading Comprehension (20) + Grammar & Vocabulary (20) + Sentence Correction (10) + Grouping of Words (10) + Pairs of Words (10) + Translation (10). Tests précis, comprehension, grammar, vocabulary, and translation skills.',
-      'general-science': 'Basic concepts of physics, chemistry, biology, environmental science, and scientific methodology.',
+      'general-science': 'Part-I (General Science - 60 Marks): Physical Sciences, Biological Sciences, Environmental Science, Food Science, Information Technology. Part-II (General Ability - 40 Marks): Quantitative Reasoning, Logical Reasoning, Mental Abilities.',
       'current-affairs': 'National and international current events, political developments, economic trends, and social issues.',
       'pakistan-affairs': 'History of Pakistan, constitutional development, political system, and contemporary issues.',
       'islamic-studies': 'Islamic history, Islamic civilization, Islamic law, and contemporary Islamic thought.',

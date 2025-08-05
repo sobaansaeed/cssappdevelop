@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
 import pdfData from '../../../data/pdfs.json';
 
 interface PDFFile {
@@ -54,12 +52,4 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Helper function to check if a file exists
-function fileExists(filePath: string): boolean {
-  try {
-    const fullPath = path.join(process.cwd(), 'public', filePath);
-    return fs.existsSync(fullPath);
-  } catch {
-    return false;
-  }
-} 
+ 

@@ -250,6 +250,159 @@ export default function SubjectSyllabusPage() {
           'Join study groups for peer learning and feedback'
         ]
       },
+      'general-science': {
+        subjectId: 'general-science',
+        subjectName: 'General Science & Ability',
+        subjectType: 'compulsory',
+        code: 'CE-3',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          {
+            title: 'Part-I: General Science (60 Marks)',
+            description: 'Comprehensive coverage of physical sciences, biological sciences, environmental science, food science, and information technology.',
+            topics: [
+              'Physical Sciences: Universe, Galaxy, Solar System, Natural Processes, Energy Resources',
+              'Biological Sciences: Cell Biology, Biomolecules, Human Physiology, Diseases',
+              'Environmental Science: Pollution, Remote Sensing, GIS, Population Planning',
+              'Food Science: Balanced Diet, Food Quality, Preservation',
+              'Information Technology: Computer Systems, Networking, AI, Telecommunications'
+            ]
+          },
+          {
+            title: 'I. Physical Sciences',
+            description: 'Study of matter, energy, and natural phenomena',
+            topics: [
+              'Constituents and Structure (Universe, Galaxy, Solar System)',
+              'Process of Nature (Eclipses, Weather Variables)',
+              'Natural Hazards and Disasters (Earthquakes, Floods, Cyclones)',
+              'Energy Resources (Renewable and Non-Renewable)',
+              'Atomic Structure and Chemical Bonding',
+              'Electromagnetic Radiations',
+              'Modern Materials/Chemicals (Ceramics, Plastics, Semiconductors, Antibiotics, Vaccines, Fertilizers, Pesticides)'
+            ]
+          },
+          {
+            title: 'II. Biological Sciences',
+            description: 'Study of living organisms and biological processes',
+            topics: [
+              'The Basis of Life (Cell Structures, Organelles)',
+              'Biomolecules (Proteins, Lipids, Carbohydrates, Enzymes)',
+              'Plant and Animal Kingdom',
+              'A Brief Account of Human Physiology',
+              'Common Diseases and Epidemics (Polio, Malaria, Hepatitis, Dengue)',
+              'New Model Concept of Producing BIO Fuel Method'
+            ]
+          },
+          {
+            title: 'III. Environmental Science',
+            description: 'Understanding environmental systems and pollution',
+            topics: [
+              'Environment (Atmosphere, Hydrosphere, Biosphere, Lithosphere)',
+              'Atmospheric Pollution (Types, Sources, Causes, Effects of pollutants like COx, NOx, SOx)',
+              'Ozone Depletion, Greenhouse Effect, Acid-rain',
+              'International agreements (Montreal and Kyoto Protocols)',
+              'Water Pollution (Types, Sources, Causes, Effects of pollutants like Organic Chemicals, Heavy Metals)',
+              'Land Pollution (Solid Waste Management)',
+              'Role of Remote Sensing and GIS',
+              'Population Planning'
+            ]
+          },
+          {
+            title: 'IV. Food Science',
+            description: 'Study of food composition, quality, and preservation',
+            topics: [
+              'Concept of Balance Diet (Vitamins, Carbohydrates, Protein, Fats, Minerals, Fiber)',
+              'Quality of Food (Bioavailability, Appearance, Texture, Flavor)',
+              'Food Additives, Preservatives, Antioxidants',
+              'Food Deterioration and its Control'
+            ]
+          },
+          {
+            title: 'V. Information Technology',
+            description: 'Computer systems, networking, and modern technology',
+            topics: [
+              'Computer (Hardware & Software Fundamentals, I/O Processing)',
+              'Networking, Internet Standards',
+              'Application and Business Software, Social Media',
+              'Information Systems, Artificial Intelligence',
+              'Telecommunications (Wireless Communication, Mobile, Satellite, GPS, Fiber Optic)'
+            ]
+          },
+          {
+            title: 'Part-II: General Ability (40 Marks)',
+            description: 'Assessment of quantitative, logical, and mental abilities',
+            topics: [
+              'Quantitative Ability/Reasoning: Mathematical Skills, Arithmetic, Algebra, Geometry',
+              'Logical Reasoning: Systematic problem-solving',
+              'Analytical Reasoning: Complex problem analysis',
+              'Mental Abilities: Verbal, Mechanical, Numerical, Social ability measurement'
+            ]
+          },
+          {
+            title: 'VI. Quantitative Ability/Reasoning',
+            description: 'Mathematical skills and quantitative reasoning',
+            topics: [
+              'Basic Mathematical Skills and Quantitative Reasoning',
+              'Basic Arithmetic, Algebra and Geometry',
+              'Average, Ratios, Rates, Percentage',
+              'Angles, Triangles, Sets, Remainders',
+              'Equations, Symbols, Rounding of Numbers',
+              'Random Sampling'
+            ]
+          },
+          {
+            title: 'VII. Logical Reasoning and Analytical Reasoning/Ability',
+            description: 'Systematic problem-solving and complex problem analysis',
+            topics: [
+              'Logical Reasoning as systematic problem-solving',
+              'Analytical Reasoning as visualizing, articulating, and solving complex problems',
+              'Using logical thinking to solve complex problems',
+              'Critical thinking and analysis skills'
+            ]
+          },
+          {
+            title: 'VIII. Mental Abilities',
+            description: 'Assessment of various mental capabilities',
+            topics: [
+              'Mental Abilities Scales',
+              'Verbal ability measurement',
+              'Mechanical ability measurement',
+              'Numerical ability measurement',
+              'Social ability measurement'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'Science: A Very Short Introduction by John Gribbin',
+          'Physics: A Very Short Introduction by Sidney Perkowitz',
+          'Chemistry: A Very Short Introduction by Peter Atkins',
+          'Life Science: A Very Short Introduction by John Postgate',
+          'Physical Science: A Very Short Introduction by John Gribbin',
+          'Animal Biology: A Very Short Introduction by Peter Holland',
+          'Forensic Science: A Very Short Introduction by Jim Fraser',
+          'Physical Geography: A Very Short Introduction by John Matthews',
+          'Information Technology: A Very Short Introduction by Darrel Ince',
+          'Management Information Systems by Kenneth Laudon',
+          'Telecommunications: A Very Short Introduction by John Gribbin',
+          'Environmental Science: A Very Short Introduction by James Lovelock',
+          'Food Science: A Very Short Introduction by John Krebs',
+          'Books for Logical Reasoning: Various titles covering reasoning and analytical skills'
+        ],
+        examPattern: 'Part-I (General Science - 60 Marks) + Part-II (General Ability - 40 Marks) = 100 Marks',
+        preparationTips: [
+          'Study fundamental concepts in physical sciences including universe, energy, and modern materials',
+          'Understand biological processes, human physiology, and common diseases',
+          'Learn about environmental issues, pollution types, and international agreements',
+          'Master food science concepts including balanced diet and food preservation',
+          'Stay updated with information technology, AI, and telecommunications',
+          'Practice quantitative reasoning with arithmetic, algebra, and geometry',
+          'Develop logical reasoning and analytical thinking skills',
+          'Work on mental ability questions covering verbal, mechanical, numerical, and social skills',
+          'Use recommended books for comprehensive study of each section',
+          'Practice previous year questions and mock tests regularly'
+        ]
+      },
       'economics': {
         subjectId: 'economics',
         subjectName: 'Economics',

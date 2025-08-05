@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import pastPapersData from '../../../data/past-papers.json';
-import subjectsData from '../../../data/subjects.json';
+
 
 interface PastPaper {
   id: string;
@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function OPTIONS(_request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {

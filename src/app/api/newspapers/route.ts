@@ -16,7 +16,7 @@ export interface Newspaper {
   fileUrl: string;
 }
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     // Filter only newspapers from the PDF data
     const newspapers: Newspaper[] = (pdfData.pdfs as PDFFile[])
@@ -47,7 +47,7 @@ export async function GET(_request: NextRequest) {
 }
 
 // Optional: Add CORS headers if needed
-export async function OPTIONS(_request: NextRequest) {
+export async function OPTIONS() {
   return new NextResponse(null, {
     status: 200,
     headers: {
