@@ -39,6 +39,8 @@ const TimelinePage: React.FC = () => {
   });
 
   const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [subscribing, setSubscribing] = useState(false);
+  const [subscribeStatus, setSubscribeStatus] = useState<{ success: boolean; message: string } | null>(null);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -271,10 +273,51 @@ const TimelinePage: React.FC = () => {
     }
   };
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Subscribing:', email, notifications);
-    alert('Successfully subscribed to notifications!');
+    setSubscribing(true);
+    setSubscribeStatus(null);
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          source: 'timeline',
+          preferences: notifications
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSubscribeStatus({
+          success: true,
+          message: 'Successfully subscribed to notifications!'
+        });
+        setEmail('');
+        setNotifications({
+          deadlines: false,
+          results: false,
+          tips: false
+        });
+      } else {
+        setSubscribeStatus({
+          success: false,
+          message: data.message || 'Failed to subscribe. Please try again.'
+        });
+      }
+    } catch (error) {
+      setSubscribeStatus({
+        success: false,
+        message: 'An error occurred. Please try again.'
+      });
+    } finally {
+      setSubscribing(false);
+    }
   };
 
   const filteredEvents = activeFilter === 'all' 
@@ -632,10 +675,22 @@ const TimelinePage: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full bg-white text-blue-600 font-bold py-4 px-8 rounded-xl hover:bg-gray-100 transition-colors text-lg"
+              disabled={subscribing}
+              className="w-full bg-white text-blue-600 font-bold py-4 px-8 rounded-xl hover:bg-gray-100 transition-colors text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Subscribe to Notifications
+              {subscribing ? 'Subscribing...' : 'Subscribe to Notifications'}
             </button>
+
+            {/* Success/Error Messages */}
+            {subscribeStatus && (
+              <div className={`mt-4 p-4 rounded-xl text-center ${
+                subscribeStatus.success 
+                  ? 'bg-green-100 text-green-800 border border-green-200' 
+                  : 'bg-red-100 text-red-800 border border-red-200'
+              }`}>
+                {subscribeStatus.message}
+              </div>
+            )}
           </form>
         </div>
 

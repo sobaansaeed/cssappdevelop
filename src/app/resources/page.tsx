@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Download, FileText, Calendar, Star, Book, GraduationCap, Target, TrendingUp } from 'lucide-react';
+import SubscriberCounter from '@/components/SubscriberCounter';
 
 // Animated Counter Component
 const AnimatedCounter: React.FC<{ 
@@ -63,14 +64,50 @@ const AnimatedCounter: React.FC<{
 };
 
 const ResourcesPage: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [subscribing, setSubscribing] = useState(false);
+  const [subscribeStatus, setSubscribeStatus] = useState<{ success: boolean; message: string } | null>(null);
 
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubscribing(true);
+    setSubscribeStatus(null);
 
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          source: 'resources'
+        }),
+      });
 
+      const data = await response.json();
 
-
-
-
-
+      if (data.success) {
+        setSubscribeStatus({
+          success: true,
+          message: 'Successfully subscribed! You\'ll receive updates soon.'
+        });
+        setEmail('');
+      } else {
+        setSubscribeStatus({
+          success: false,
+          message: data.message || 'Failed to subscribe. Please try again.'
+        });
+      }
+    } catch (error) {
+      setSubscribeStatus({
+        success: false,
+        message: 'An error occurred. Please try again.'
+      });
+    } finally {
+      setSubscribing(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -145,8 +182,6 @@ const ResourcesPage: React.FC = () => {
             </div>
           </Link>
         </div>
-
-
 
         {/* Enhanced Overview Section */}
         <div className="relative overflow-hidden mb-8">
@@ -306,37 +341,57 @@ const ResourcesPage: React.FC = () => {
 
             {/* Email Form */}
             <div className="max-w-md mx-auto">
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-0">
-                <input
-                  type="email"
-                  placeholder="Enter your email address"
-                  className="flex-1 px-4 py-3 sm:py-4 rounded-lg sm:rounded-r-none bg-white/95 backdrop-blur-sm border border-white/20 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent text-base"
-                />
-                <button className="bg-white hover:bg-gray-100 text-blue-600 font-semibold px-6 py-3 sm:py-4 rounded-lg sm:rounded-l-none transition-all duration-300 hover:shadow-lg hover:scale-105 text-base">
-                  Subscribe Now
-                </button>
-              </div>
+              <form onSubmit={handleSubscribe} className="space-y-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-0">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email address"
+                    className="flex-1 px-4 py-3 sm:py-4 rounded-lg sm:rounded-r-none bg-white/95 backdrop-blur-sm border border-white/20 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent text-base"
+                    required
+                  />
+                  <button 
+                    type="submit"
+                    disabled={subscribing}
+                    className="bg-white hover:bg-gray-100 text-blue-600 font-semibold px-6 py-3 sm:py-4 rounded-lg sm:rounded-l-none transition-all duration-300 hover:shadow-lg hover:scale-105 text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {subscribing ? 'Subscribing...' : 'Subscribe Now'}
+                  </button>
+                </div>
+                
+                {/* Success/Error Messages */}
+                {subscribeStatus && (
+                  <div className={`text-center p-3 rounded-lg text-sm ${
+                    subscribeStatus.success 
+                      ? 'bg-green-100 text-green-800 border border-green-200' 
+                      : 'bg-red-100 text-red-800 border border-red-200'
+                  }`}>
+                    {subscribeStatus.message}
+                  </div>
+                )}
+              </form>
+            </div>
               
-              {/* Trust indicators */}
-              <div className="flex items-center justify-center space-x-6 mt-6 text-blue-100 text-sm">
-                <div className="flex items-center space-x-1">
-                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>Free Updates</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>No Spam</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>Unsubscribe Anytime</span>
-                </div>
+            {/* Trust indicators */}
+            <div className="flex items-center justify-center space-x-6 mt-6 text-blue-100 text-sm">
+              <div className="flex items-center space-x-1">
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                <span>Free Updates</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                <span>No Spam</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                <span>Unsubscribe Anytime</span>
               </div>
             </div>
 
@@ -344,7 +399,7 @@ const ResourcesPage: React.FC = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-8 mt-10 max-w-lg mx-auto">
               <div className="text-center">
                 <div className="text-2xl sm:text-3xl font-bold text-white">
-                  <AnimatedCounter target={5000} suffix="+" className="text-2xl sm:text-3xl font-bold text-white" />
+                  <SubscriberCounter className="text-2xl sm:text-3xl font-bold text-white" suffix="+" />
                 </div>
                 <div className="text-blue-200 text-xs sm:text-sm">Subscribers</div>
               </div>
