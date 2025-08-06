@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getSubscriberCount, readSubscribersData } from '@/lib/subscribers';
+import { NextResponse } from 'next/server';
+import { readSubscribersData } from '@/lib/subscribers';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const data = readSubscribersData();
     

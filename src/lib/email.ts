@@ -1,4 +1,4 @@
-import { Subscriber, SubscribersData, SubscribeRequest } from './types';
+import { Subscriber, SubscribeRequest } from './types';
 
 // Email validation function
 export function isValidEmail(email: string): boolean {

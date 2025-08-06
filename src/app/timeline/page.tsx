@@ -310,7 +310,7 @@ const TimelinePage: React.FC = () => {
           message: data.message || 'Failed to subscribe. Please try again.'
         });
       }
-    } catch (error) {
+    } catch {
       setSubscribeStatus({
         success: false,
         message: 'An error occurred. Please try again.'

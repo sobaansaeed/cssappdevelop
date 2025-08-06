@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   Users, 
@@ -10,7 +10,6 @@ import {
   Calendar, 
   Mail, 
   TrendingUp, 
-  Eye,
   LogOut,
   RefreshCw,
   FileText,
@@ -47,18 +46,21 @@ const AdminSubscribersPage: React.FC = () => {
   const [exporting, setExporting] = useState(false);
   const router = useRouter();
 
-  useEffect(() => {
-    fetchSubscribers();
-  }, []);
-
-  const fetchSubscribers = async () => {
+  const fetchSubscribers = useCallback(async () => {
     try {
+      console.log('Fetching subscribers...'); // Debug log
       const response = await fetch('/api/admin/subscribers');
+      console.log('Subscribers response status:', response.status); // Debug log
+      
       if (response.status === 401) {
+        console.log('Unauthorized, redirecting to admin login...'); // Debug log
         router.push('/admin');
         return;
       }
+      
       const data = await response.json();
+      console.log('Subscribers response data:', data); // Debug log
+      
       if (data.success) {
         setSubscribers(data.subscribers);
         setStats(data.stats);
@@ -68,7 +70,11 @@ const AdminSubscribersPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [router]);
+
+  useEffect(() => {
+    fetchSubscribers();
+  }, [fetchSubscribers]);
 
   const handleLogout = () => {
     // Clear admin session

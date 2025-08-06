@@ -18,6 +18,7 @@ const AdminLoginPage: React.FC = () => {
     setError('');
 
     try {
+      console.log('Attempting admin login...'); // Debug log
       const response = await fetch('/api/admin/login', {
         method: 'POST',
         headers: {
@@ -26,14 +27,17 @@ const AdminLoginPage: React.FC = () => {
         body: JSON.stringify({ username, password }),
       });
 
+      console.log('Login response status:', response.status); // Debug log
       const data = await response.json();
+      console.log('Login response data:', data); // Debug log
 
       if (data.success) {
+        console.log('Login successful, redirecting...'); // Debug log
         router.push('/admin/subscribers');
       } else {
         setError(data.message || 'Login failed');
       }
-    } catch (error) {
+    } catch {
       setError('An error occurred during login');
     } finally {
       setLoading(false);
