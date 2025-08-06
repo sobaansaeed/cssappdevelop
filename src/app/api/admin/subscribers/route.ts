@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAdminToken } from '@/lib/auth';
-import { readSubscribersData } from '@/lib/subscribers';
+import { getSubscribersData } from '@/lib/vercel-storage';
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
       }, { status: 401 });
     }
 
-    const data = readSubscribersData();
+    const data = getSubscribersData();
     
     return NextResponse.json({
       success: true,

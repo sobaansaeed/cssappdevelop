@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isValidEmail, isEmailDuplicate, createSubscriber, checkRateLimit } from '@/lib/email';
-import { addSubscriber } from '@/lib/subscribers';
+import { isValidEmail, createSubscriber, checkRateLimit } from '@/lib/email';
+import { addSubscriberToStorage, isEmailDuplicateInStorage } from '@/lib/vercel-storage';
 import { SubscribeRequest, SubscribeResponse } from '@/lib/types';
 
 export async function POST(request: NextRequest) {
@@ -39,10 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check for duplicates
-    const { readSubscribersData } = await import('@/lib/subscribers');
-    const data = readSubscribersData();
-    
-    if (isEmailDuplicate(email, data.subscribers)) {
+    if (isEmailDuplicateInStorage(email)) {
       return NextResponse.json({
         success: false,
         message: 'This email is already subscribed to our newsletter.'
@@ -52,8 +49,8 @@ export async function POST(request: NextRequest) {
     // Create new subscriber
     const subscriber = createSubscriber({ email, source, preferences });
     
-    // Save to database
-    const success = addSubscriber(subscriber);
+    // Save to storage
+    const success = addSubscriberToStorage(subscriber);
     
     if (!success) {
       return NextResponse.json({

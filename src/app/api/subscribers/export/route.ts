@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { exportSubscribersToCSV, getAllSubscribers } from '@/lib/subscribers';
+import { exportSubscribersToCSVFromStorage, getAllSubscribersFromStorage } from '@/lib/vercel-storage';
 
 export async function GET(request: NextRequest) {
   try {
@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const format = searchParams.get('format') || 'csv';
     
     if (format === 'csv') {
-      const csvData = exportSubscribersToCSV();
+      const csvData = exportSubscribersToCSVFromStorage();
       
       return new NextResponse(csvData, {
         status: 200,
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
         }
       });
     } else if (format === 'json') {
-      const subscribers = getAllSubscribers();
+      const subscribers = getAllSubscribersFromStorage();
       
       return NextResponse.json({
         success: true,

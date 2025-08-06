@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { readSubscribersData } from '@/lib/subscribers';
+import { getSubscribersData } from '@/lib/vercel-storage';
 
 export async function GET() {
   try {
-    const data = readSubscribersData();
+    const data = getSubscribersData();
     
     return NextResponse.json({
       success: true,
