@@ -1,9 +1,26 @@
 {
-  "subscribers": [],
+  "subscribers": [
+    {
+      "id": "1754477552926o4xf3e1hv",
+      "email": "test@example.com",
+      "date": "2025-08-06T10:52:32.926Z",
+      "source": "resources",
+      "preferences": {},
+      "status": "active"
+    },
+    {
+      "id": "17544776275546zl9rdsdo",
+      "email": "learning@css.com",
+      "date": "2025-08-06T10:53:47.554Z",
+      "source": "resources",
+      "preferences": {},
+      "status": "active"
+    }
+  ],
   "stats": {
-    "total": 0,
-    "active": 0,
+    "total": 2,
+    "active": 2,
     "unsubscribed": 0,
-    "lastUpdated": "2025-08-05T00:00:00Z"
+    "lastUpdated": "2025-08-06T10:53:47.554Z"
   }
-} 
+}
