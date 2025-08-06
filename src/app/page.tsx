@@ -158,7 +158,7 @@ const HomePage: React.FC = () => {
               </div>
             </Link>
 
-            <div className="group">
+            <Link href="/exam-pattern" className="group">
               <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-8 h-full hover:shadow-xl transition-all duration-300 group-hover:scale-105">
                 <div className="bg-orange-600 rounded-lg p-3 w-fit mb-6">
                   <FileText className="h-8 w-8 text-white" />
@@ -168,10 +168,10 @@ const HomePage: React.FC = () => {
                   Detailed exam pattern, marking scheme, and guidelines
                 </p>
                 <div className="text-orange-600 font-medium group-hover:text-orange-700">
-                  Coming Soon →
+                  View Pattern →
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
         </div>
       </section>

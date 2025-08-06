@@ -30,6 +30,15 @@ function generateId() {
   return Date.now().toString() + Math.random().toString(36).substr(2, 9);
 }
 
+// Check if a past paper already exists
+function pastPaperExists(existingPapers, subjectId, year, paperNumber = null) {
+  return existingPapers.some(paper => 
+    paper.subjectId === subjectId && 
+    paper.year === year && 
+    paper.paperNumber === paperNumber
+  );
+}
+
 function scanPastPapersFolder() {
   const pastPapersDir = path.join(__dirname, 'public/past-papers');
   const newPastPapers = [];
@@ -224,15 +233,29 @@ function main() {
   }
 
   // Scan for new past papers
-  const newPastPapers = scanPastPapersFolder();
+  const allFoundPastPapers = scanPastPapersFolder();
 
-  if (newPastPapers.length === 0) {
-    console.log('📁 No new past papers found in the folder structure.');
+  if (allFoundPastPapers.length === 0) {
+    console.log('📁 No past papers found in the folder structure.');
     console.log('💡 Make sure you have uploaded PDF files to the subject folders.');
     return;
   }
 
-  console.log(`📄 Found ${newPastPapers.length} new past papers:\n`);
+  // Filter out duplicates
+  const newPastPapers = allFoundPastPapers.filter(paper => {
+    const exists = pastPaperExists(existingPastPapers.pastPapers, paper.subjectId, paper.year, paper.paperNumber);
+    if (exists) {
+      console.log(`⚠️  Skipping duplicate: ${paper.title} (${paper.year})`);
+    }
+    return !exists;
+  });
+
+  if (newPastPapers.length === 0) {
+    console.log('📁 No new past papers found. All files already exist in the database.');
+    return;
+  }
+
+  console.log(`📄 Found ${newPastPapers.length} new past papers (${allFoundPastPapers.length - newPastPapers.length} duplicates skipped):\n`);
 
   // Display found past papers
   newPastPapers.forEach((paper, index) => {

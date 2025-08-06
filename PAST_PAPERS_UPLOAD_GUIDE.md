@@ -59,6 +59,7 @@ This script will:
 - ✅ Scan all subject folders for new PDF files
 - ✅ Extract year from filename
 - ✅ Generate proper titles
+- ✅ **Prevent duplicates** - automatically skips existing entries
 - ✅ Add entries to the database
 - ✅ Create proper file URLs
 
@@ -89,6 +90,31 @@ Check that past papers appear on the website:
 3. **Confirm addition** when prompted
 
 4. **Check the website**: Files will appear in the English Essay section
+
+---
+
+## 🔧 **Duplicate Prevention & Management**
+
+### **✅ Automatic Duplicate Prevention**
+The upload script now automatically prevents duplicates by checking:
+- Subject ID
+- Year
+- Paper Number (if applicable)
+
+If a past paper already exists, it will be skipped with a warning message.
+
+### **🧹 Remove Existing Duplicates**
+If you have existing duplicates in the database, use the cleanup script:
+
+```bash
+node remove-duplicate-past-papers.js
+```
+
+This script will:
+- Scan the database for duplicate entries
+- Show you which duplicates were found
+- Remove duplicates while keeping the first occurrence
+- Provide a summary of the cleanup
 
 ---
 
@@ -130,6 +156,7 @@ https://your-domain.com/past-papers/{subject-folder}/{filename}.pdf
 - Automated database updates
 - Smart file detection
 - Year extraction from filenames
+- **Duplicate prevention**
 
 ### **🌐 Web Integration**
 - Seamless website integration
@@ -143,6 +170,7 @@ https://your-domain.com/past-papers/{subject-folder}/{filename}.pdf
 The folder structure is now complete and ready for:
 - ✅ **File Uploads**: Upload past papers to specific subject folders
 - ✅ **Database Integration**: Use the automated script
+- ✅ **Duplicate Prevention**: Automatic detection and skipping of duplicates
 - ✅ **Website Display**: Files will be accessible through the past papers pages
 - ✅ **Year-wise Organization**: Multiple years can be stored for each subject
 

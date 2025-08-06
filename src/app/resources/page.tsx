@@ -89,53 +89,61 @@ const ResourcesPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Resource Categories Overview */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
-            <div className="bg-blue-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <FileText className="h-8 w-8 text-blue-600" />
+          <Link href="/past-papers" className="group">
+            <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105 cursor-pointer">
+              <div className="bg-blue-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                <FileText className="h-8 w-8 text-blue-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Past Papers</h3>
+              <p className="text-gray-600 mb-4">Complete archive of CSS exam papers from 2010 to 2024</p>
+              <div className="flex justify-center space-x-4 text-sm text-gray-500">
+                <span className="flex items-center"><FileText className="h-4 w-4 mr-1" />500+ Papers</span>
+                <span className="flex items-center"><Calendar className="h-4 w-4 mr-1" />15 Years</span>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Past Papers</h3>
-            <p className="text-gray-600 mb-4">Complete archive of CSS exam papers from 2010 to 2024</p>
-            <div className="flex justify-center space-x-4 text-sm text-gray-500">
-              <span className="flex items-center"><FileText className="h-4 w-4 mr-1" />500+ Papers</span>
-              <span className="flex items-center"><Calendar className="h-4 w-4 mr-1" />15 Years</span>
-            </div>
-          </div>
+          </Link>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
-            <div className="bg-green-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Book className="h-8 w-8 text-green-600" />
+          <Link href="/syllabus" className="group">
+            <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105 cursor-pointer">
+              <div className="bg-green-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                <Book className="h-8 w-8 text-green-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Complete Syllabus</h3>
+              <p className="text-gray-600 mb-4">Detailed CSS syllabus with compulsory and optional subjects</p>
+              <div className="flex justify-center space-x-4 text-sm text-gray-500">
+                <span className="flex items-center"><Book className="h-4 w-4 mr-1" />50+ Subjects</span>
+                <span className="flex items-center"><Star className="h-4 w-4 mr-1" />Updated 2024</span>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Complete Syllabus</h3>
-            <p className="text-gray-600 mb-4">Detailed CSS syllabus with compulsory and optional subjects</p>
-            <div className="flex justify-center space-x-4 text-sm text-gray-500">
-              <span className="flex items-center"><Book className="h-4 w-4 mr-1" />50+ Subjects</span>
-              <span className="flex items-center"><Star className="h-4 w-4 mr-1" />Updated 2024</span>
-            </div>
-          </div>
+          </Link>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
-            <div className="bg-purple-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Target className="h-8 w-8 text-purple-600" />
+          <Link href="/exam-pattern" className="group">
+            <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105 cursor-pointer">
+              <div className="bg-purple-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                <Target className="h-8 w-8 text-purple-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Exam Pattern</h3>
+              <p className="text-gray-600 mb-4">Detailed exam pattern, marking scheme, and guidelines</p>
+              <div className="flex justify-center space-x-4 text-sm text-gray-500">
+                <span className="flex items-center"><Target className="h-4 w-4 mr-1" />Latest Pattern</span>
+                <span className="flex items-center"><GraduationCap className="h-4 w-4 mr-1" />FPSC Official</span>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Exam Pattern</h3>
-            <p className="text-gray-600 mb-4">Detailed exam pattern, marking scheme, and guidelines</p>
-            <div className="flex justify-center space-x-4 text-sm text-gray-500">
-              <span className="flex items-center"><Target className="h-4 w-4 mr-1" />Latest Pattern</span>
-              <span className="flex items-center"><GraduationCap className="h-4 w-4 mr-1" />FPSC Official</span>
-            </div>
-          </div>
+          </Link>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-shadow">
-            <div className="bg-orange-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-              <Download className="h-8 w-8 text-orange-600" />
+          <Link href="/study-materials" className="group">
+            <div className="bg-white rounded-xl p-6 shadow-lg text-center hover:shadow-xl transition-all duration-300 group-hover:scale-105 cursor-pointer">
+              <div className="bg-orange-100 rounded-full p-4 w-16 h-16 mx-auto mb-4 flex items-center justify-center group-hover:bg-orange-200 transition-colors">
+                <Download className="h-8 w-8 text-orange-600" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Study Materials</h3>
+              <p className="text-gray-600 mb-4">Subject-wise study guides, notes, and reference materials</p>
+              <div className="flex justify-center space-x-4 text-sm text-gray-500">
+                <span className="flex items-center"><Download className="h-4 w-4 mr-1" />1000+ Files</span>
+                <span className="flex items-center"><Star className="h-4 w-4 mr-1" />Free Access</span>
+              </div>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Study Materials</h3>
-            <p className="text-gray-600 mb-4">Subject-wise study guides, notes, and reference materials</p>
-            <div className="flex justify-center space-x-4 text-sm text-gray-500">
-              <span className="flex items-center"><Download className="h-4 w-4 mr-1" />1000+ Files</span>
-              <span className="flex items-center"><Star className="h-4 w-4 mr-1" />Free Access</span>
-            </div>
-          </div>
+          </Link>
         </div>
 
 
