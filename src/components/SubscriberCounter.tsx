@@ -17,10 +17,13 @@ const SubscriberCounter: React.FC<SubscriberCounterProps> = ({ className = '', s
         const response = await fetch('/api/subscribers');
         const data = await response.json();
         if (data.success) {
-          setCount(data.count);
+          // Show fake count of 5000+ instead of actual count
+          setCount(5000);
         }
       } catch (error) {
         console.error('Error fetching subscriber count:', error);
+        // Fallback to fake count even if API fails
+        setCount(5000);
       } finally {
         setLoading(false);
       }
