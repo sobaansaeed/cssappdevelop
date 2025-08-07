@@ -2044,19 +2044,6 @@ export default function SubjectSyllabusPage() {
           'Juvenile Delinquency: Theory, Practice, and Law by Seigel, L.J.',
           'Crime Prevention: Theory and Practice by Stephen, S.'
         ],
-        suggestedWebsites: [
-          'International Society of Criminology (ICS): http://www.isc-sic.org',
-          'American Society of Criminology (ASC): http://www.asc41.com/',
-          'British Society of Criminology (BSC): http://www.britsoccrim.org/',
-          'European Society of Criminology (ESC): http://www.esc-eurocrim.org/',
-          'International Police Executive Symposium (IPES): http://www.ipes.info/',
-          'Asian Criminological Society (ACS): http://www.ntpu.edu.tw/college/e4/acs/home.php',
-          'Asian Association of Police Studies (AAPS): http://www.aaps.or.kr/',
-          'Campbell Library: http://www.campbellcollaboration.org/library.php',
-          'UNAFEI (Japan): http://www.unafei.or.jp/english/',
-          'Pakistan Society of Criminology (PSC): www.pakistansocietyofcriminology.com',
-          'South Asian Society of Criminology and Victimology (SASCV): http://www.sascv.org/'
-        ],
         examPattern: 'Section-I: Introduction to Criminology (25 Marks) + Section-II: Juvenile Justice and Criminal Justice System (25 Marks) + Section-III: Criminal Investigation and International Policing (25 Marks) + Section-IV: Modern Concepts in Contemporary Criminology (25 Marks) = 100 Marks',
         preparationTips: [
           'Study the fundamental concepts of criminology and their application',
@@ -2086,7 +2073,6 @@ export default function SubjectSyllabusPage() {
           'Study the relationship between urbanization and crime',
           'Understand the impact of technology on crime and law enforcement',
           'Read recommended books for comprehensive understanding',
-          'Explore suggested websites for current research and developments',
           'Practice analyzing criminal cases and their criminological aspects',
           'Stay updated with current criminological research and trends',
           'Understand the interdisciplinary nature of criminology',
@@ -2817,6 +2803,719 @@ export default function SubjectSyllabusPage() {
           'Understand the ethical aspects of geological practice'
         ]
       },
+      'international-law': {
+        subjectId: 'international-law',
+        subjectName: 'International Law',
+        subjectType: 'optional',
+        subjectGroup: 'group6',
+        code: 'OG6-3',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          {
+            title: 'I. Nature, Origin and Basis of International Law',
+            description: 'Foundation concepts and theoretical framework of international law.',
+            topics: [
+              'The Emergence of International Law',
+              'Early European Authors',
+              'The Nation-State System',
+              'Enforcement, Effectiveness, Weakness',
+              'Juridical Basis',
+              'Future of International Law',
+              'Material Sources'
+            ]
+          },
+          {
+            title: 'II. Relation between International Law and State Law',
+            description: 'Understanding the relationship between international and domestic legal systems.',
+            topics: [
+              'Article 38 of the Statute of International Court of Justice',
+              'Primary Sources',
+              'Subsidiary Sources',
+              'International Soft Law'
+            ]
+          },
+          {
+            title: 'III. State in General and Recognition',
+            description: 'Statehood, personality, and recognition in international law.',
+            topics: [
+              'Personality and Statehood',
+              'Subjects of International Law',
+              'Recognition of State and Government in International Law',
+              'Recognition of State and Government in National Law'
+            ]
+          },
+          {
+            title: 'IV. The Law and Practice as to Treaties',
+            description: 'International treaty law and practice.',
+            topics: [
+              'The Vienna Convention on the Law of Treaties'
+            ]
+          },
+          {
+            title: 'V. The Settlement of International Disputes',
+            description: 'Methods and mechanisms for resolving international disputes.',
+            topics: [
+              'Negotiation',
+              'Mediation and Good Offices',
+              'Inquiry',
+              'Settlement by the United Nations',
+              'Conciliation',
+              'Arbitration',
+              'The International Court of Justice'
+            ]
+          },
+          {
+            title: 'VI. International Humanitarian Law',
+            description: 'Laws governing armed conflicts and protection of individuals.',
+            topics: [
+              'International and Non-International Armed Conflicts',
+              '\'Combatant\' and \'Protected Persons\'',
+              'Protection of Wounded, Sick and Ship-Wrecked Persons',
+              'POWs, Civilians',
+              'Limitations on the Conduct of War',
+              'Limits on the Choice of Methods and Means of Warfare'
+            ]
+          },
+          {
+            title: 'VII. The Use of Force',
+            description: 'Legal framework governing the use of force in international relations.',
+            topics: [
+              'The Law before the UN Charter',
+              'The Law after the Charter',
+              'The Collective Use of Force',
+              'The Right of Self-Defence'
+            ]
+          },
+          {
+            title: 'VIII. International Institutions',
+            description: 'Role and functioning of international organizations.',
+            topics: [
+              'United Nations and its organs',
+              'Specialized agencies',
+              'Regional organizations',
+              'International financial institutions'
+            ]
+          },
+          {
+            title: 'IX. State Territorial Sovereignty',
+            description: 'Territorial rights and sovereignty of states.',
+            topics: [
+              'Territorial acquisition',
+              'Boundaries and frontiers',
+              'Territorial waters',
+              'Airspace and outer space'
+            ]
+          },
+          {
+            title: 'X. State Responsibility',
+            description: 'International responsibility of states for wrongful acts.',
+            topics: [
+              'Elements of state responsibility',
+              'Attribution of conduct',
+              'Circumstances precluding wrongfulness',
+              'Consequences of internationally wrongful acts'
+            ]
+          },
+          {
+            title: 'XI. State Jurisdiction',
+            description: 'Jurisdictional powers and limitations of states.',
+            topics: [
+              'Territorial jurisdiction',
+              'Personal jurisdiction',
+              'Extraterritorial jurisdiction',
+              'Immunities from jurisdiction'
+            ]
+          },
+          {
+            title: 'XII. Succession to Rights and Obligations',
+            description: 'Legal consequences of state succession.',
+            topics: [
+              'State succession to treaties',
+              'Succession to state property',
+              'Succession to state debts',
+              'Succession to state archives'
+            ]
+          },
+          {
+            title: 'XIII. The State and the Individual',
+            description: 'Relationship between states and individuals under international law.',
+            topics: [
+              'Nationality and statelessness',
+              'Human rights and fundamental freedoms',
+              'Refugee law',
+              'Extradition and asylum'
+            ]
+          },
+          {
+            title: 'XIV. The State and the Economic Interest',
+            description: 'Economic aspects of international law.',
+            topics: [
+              'International economic law',
+              'Investment protection',
+              'Trade law',
+              'Development law'
+            ]
+          },
+          {
+            title: 'XV. Diplomatic Envoys, Counsels and other Representatives',
+            description: 'Diplomatic and consular law.',
+            topics: [
+              'Diplomatic privileges and immunities',
+              'Consular functions and immunities',
+              'Diplomatic missions',
+              'Consular relations'
+            ]
+          },
+          {
+            title: 'XVI. War, Armed Conflicts and other Hostilities',
+            description: 'Legal framework governing armed conflicts.',
+            topics: [
+              'Definition of war and armed conflict',
+              'Laws of war',
+              'War crimes',
+              'Peace treaties'
+            ]
+          },
+          {
+            title: 'XVII. Neutrality',
+            description: 'Legal status and rights of neutral states.',
+            topics: [
+              'Neutrality in war',
+              'Rights and duties of neutral states',
+              'Neutrality and international organizations',
+              'Permanent neutrality'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'International Law by Malcolm N. Shaw',
+          'Principles of Public International Law by Ian Brownlie',
+          'International Law by Dr. S.K. Kapoor',
+          'Introduction to International Law by J.G. Starke, QC',
+          'International Humanitarian Law by ICRC Pakistan',
+          'Extradition Act, 1972',
+          'The Diplomatic and Consular Privileges Act, 1972',
+          'Territorial Waters and Maritime Zone Act, 1976',
+          'U.N. Convention on Law of the Sea, 1984',
+          'Cases and Materials on International Law by D.J. Harris'
+        ],
+        examPattern: '17 comprehensive sections covering all aspects of international law from nature and basis through neutrality = 100 Marks',
+        preparationTips: [
+          'Master the fundamental concepts and nature of international law',
+          'Understand the relationship between international and domestic law',
+          'Study the sources of international law under Article 38 of ICJ Statute',
+          'Learn about statehood and recognition in international law',
+          'Master the Vienna Convention on the Law of Treaties',
+          'Understand various methods of international dispute settlement',
+          'Study the International Court of Justice and its jurisdiction',
+          'Learn about international humanitarian law and armed conflicts',
+          'Master the legal framework governing the use of force',
+          'Understand the role of international institutions and organizations',
+          'Study state territorial sovereignty and jurisdiction',
+          'Learn about state responsibility for internationally wrongful acts',
+          'Master the concept of state succession',
+          'Understand the relationship between states and individuals',
+          'Study human rights and refugee law',
+          'Learn about diplomatic and consular law',
+          'Master the laws of war and neutrality',
+          'Understand international economic law and investment protection',
+          'Study Pakistan\'s international law obligations',
+          'Learn about the UN Charter and collective security',
+          'Master the concept of self-defense in international law',
+          'Understand the role of regional organizations',
+          'Study international environmental law',
+          'Learn about international criminal law',
+          'Master the law of the sea and maritime zones',
+          'Understand international trade law and WTO',
+          'Study international development law',
+          'Learn about international organizations and their legal personality',
+          'Master the concept of jus cogens and erga omnes obligations',
+          'Understand the role of international law in conflict resolution',
+          'Study the relationship between international law and politics',
+          'Learn about the enforcement mechanisms of international law',
+          'Master the interpretation of international treaties',
+          'Understand the role of customary international law',
+          'Study international law and human security',
+          'Learn about international law and terrorism',
+          'Master the concept of humanitarian intervention',
+          'Understand the role of international law in development',
+          'Study international law and climate change',
+          'Learn about the future challenges of international law',
+          'Read recommended books for comprehensive understanding',
+          'Stay updated with current international law developments',
+          'Practice analyzing international law cases and scenarios',
+          'Understand the role of international law in Pakistan\'s foreign policy',
+          'Study the relationship between international law and national sovereignty',
+          'Learn about international law and global governance',
+          'Master the communication of international law concepts',
+          'Understand the ethical dimensions of international law'
+        ]
+      },
+      'international-relations': {
+        subjectId: 'international-relations',
+        subjectName: 'International Relations',
+        subjectType: 'optional',
+        subjectGroup: 'group1',
+        code: 'OG1-3',
+        marks: 200,
+        duration: '6 Hours (2 Papers)',
+        sections: [
+          {
+            title: 'Paper-I: Theoretical Foundations and Contemporary Issues (100 Marks)',
+            description: 'Theoretical approaches and contemporary issues in international relations.',
+            topics: [
+              'I. Introduction: The Definition and Scope of International Relations, The Nation-State System, Evolution of International Society',
+              'II. Theories and Approaches: The Classical Approaches-Realism and Idealism, The Scientific Revolution-Behavioral Approach, System Approach, Neo-realism, Neo-liberalism, Post-modernism, Critical Theory, Feminism, Constructivism',
+              'III. International Political Security: Conceptualization of security in the Twenty-First century, Power: Elements of National Power, Balance of Power, Foreign Policy: Determinants, Decision Making and Analysis, Sovereignty, National Interest',
+              'IV. Strategic Approach to International Relation: War: Causation of War, Total War, Limited War, Asymmetric Warfare, Civil War, Guerilla Warfare, Strategic Culture: Determinants of Pakistani Strategic Culture, Deterrence: Theory and practice with special reference to India and Pakistan',
+              'V. International Political Economy: Theories in IPE: Mercantilism, Economic Liberalism, and Neo-Marxism, Theories of Imperialism, Dependence and Interdependence discourse',
+              'VI. International political community: Nationalism, Internationalism, Globalization',
+              'VII. Approaches to Peace: Diplomacy, International Law, Arms Control/Disarmament and Nuclear Non-proliferation Regime',
+              'VIII. International Political Institution: United Nations, International Monetary Fund (IMF), World Bank, International Court of Justice'
+            ]
+          },
+          {
+            title: 'Paper-II: Historical Development and Regional Analysis (100 Marks)',
+            description: 'Historical development of international relations and regional analysis.',
+            topics: [
+              'I. International Relation between two Wars: Russian Revolution, Fascism, League of Nations, Second World War',
+              'II. Cold War: Decolonization in Asia and Africa, Rise of United States and Soviet Union, Era of Tight Bipolarity, Détente and Loose Bipolarity, Revival of Cold War',
+              'III. Post Cold War: End of History, Clash of Civilizations, Terrorism, Globalization, Unipolarity (New World Order) and Revival of Multi-Polarity',
+              'IV. International and Regional Organizations: League of Nations, United Nations, Regional Organizations, EU, ASEAN, NAFTA, SAARC, SCO, OIC, ECO, WTO, Reforms in the United Nations, World Bank and the IMF',
+              'V. Foreign Policy of Selected Countries: USA, Russia, China, UK, India, Pakistan and EU',
+              'VI. South Asia: Peace-making and Peace-Building in South Asia: Analytical overview of peace processes between/among the states of South Asia especially between India and Pakistan, India and Pakistan: Overview of agreements and accords, Indus Water Treaty, Composite Dialogue, Sir Creek & Siachen border, Visa and People to people contact; Trade; and Role of civil society, Afghanistan: Cold war theatre; Soviet Invasion and Mujahedeen; Geneva Accord; Post Cold War situation—Rise of Taliban, AL-Qaeda & 9/11; Operation Enduring Freedom; The Bonn Process- Withdrawal',
+              'VII. Weapons of Mass Destruction: Proliferation of Nuclear Weapons, Nuclear Weapon States- Programs and Postures: Indian-Pakistan Nuclear Doctrines, Nuclear Non-Proliferation Regime: International Atomic Energy Agency, Nuclear Non-Proliferation Treaty; Nuclear Supplier Group; Partial Test Ban Treaty; Comprehensive Test Ban Treaty; Fissile Material Cut-off Treaty, Challenges of Non-Proliferation, Cooperation for Nuclear Energy, The Missile Defence Systems and their impact on global strategic environment, Militarization and Weaponization of Space',
+              'VIII. Contemporary Issues: Euro-Atlantic Vs. Asia Pacific: Great Power Policies, Kashmir Issue, Palestine Issue'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'World Politics: Trend and Transformation by Charles W. Kegley Jr. & Eugene R. Wittkopf',
+          'Politics Among Nations by Hans J. Morgenthau',
+          'The Globalization of World Politics by John Baylis & Steve Smith',
+          'Theory of International Politics by Kenneth N. Waltz',
+          'International Relations Theory by Tim Dunne, Milja Kurki & Steve Smith',
+          'The Anarchical Society by Hedley Bull',
+          'Power and Interdependence by Robert O. Keohane & Joseph S. Nye',
+          'Man, the State and War by Kenneth N. Waltz',
+          'The Tragedy of Great Power Politics by John J. Mearsheimer',
+          'Social Theory of International Politics by Alexander Wendt',
+          'International Relations: A Very Short Introduction by Paul Wilkinson',
+          'The Twenty Year\'s Crisis: 1919-1939 by E.H. Carr',
+          'Bomb Scare: The History and Future of Nuclear Weapons by Joseph Cirincione',
+          'Pakistan\'s Foreign Policy: An Historical Analysis by S.M. Burke',
+          'Nuclear Pakistan: Strategic Dimensions by Zulfqar Khan',
+          'The Future of Power by Joseph S. Nye',
+          'Soft Power: The Means to Success in World Politics by Joseph S. Nye',
+          'The Clash of Civilizations by Samuel P. Huntington',
+          'The End of History and the Last Man by Francis Fukuyama',
+          'Globalization and its Discontents by Joseph E. Stiglitz',
+          'The World is Flat by Thomas L. Friedman',
+          'International Political Economy by Thomas Oatley',
+          'Global Political Economy by John Ravenhill',
+          'The Political Economy of International Relations by Robert Gilpin',
+          'International Organizations: Politics, Law, Practice by Ian Hurd',
+          'The United Nations: A Very Short Introduction by Jussi M. Hanhimäki'
+        ],
+        examPattern: 'Paper-I: Theoretical Foundations and Contemporary Issues (100 Marks) + Paper-II: Historical Development and Regional Analysis (100 Marks) = 200 Marks',
+        preparationTips: [
+          'Master the fundamental concepts and scope of international relations',
+          'Understand the evolution of the nation-state system',
+          'Study classical theories: Realism, Idealism, and their variants',
+          'Learn about modern approaches: Neo-realism, Neo-liberalism, Constructivism',
+          'Master the concept of power and national interest',
+          'Understand balance of power and security dynamics',
+          'Study foreign policy analysis and decision-making processes',
+          'Learn about strategic culture and deterrence theory',
+          'Master international political economy theories',
+          'Understand globalization and interdependence',
+          'Study the role of international organizations',
+          'Learn about diplomacy and conflict resolution',
+          'Master the historical development of international relations',
+          'Understand the Cold War and its impact',
+          'Study post-Cold War developments and new world order',
+          'Learn about regional organizations and their roles',
+          'Master the foreign policies of major powers',
+          'Understand South Asian regional dynamics',
+          'Study India-Pakistan relations and peace processes',
+          'Learn about Afghanistan and its regional implications',
+          'Master nuclear proliferation and non-proliferation regimes',
+          'Understand contemporary security challenges',
+          'Study the Kashmir and Palestine issues',
+          'Learn about terrorism and asymmetric warfare',
+          'Master the role of civil society in international relations',
+          'Understand the impact of technology on international relations',
+          'Study international law and its relationship with IR',
+          'Learn about humanitarian intervention and R2P',
+          'Master the concept of soft power and public diplomacy',
+          'Understand the role of media in international relations',
+          'Study international trade and economic diplomacy',
+          'Learn about climate change and international cooperation',
+          'Master the analysis of international conflicts',
+          'Understand the role of intelligence in foreign policy',
+          'Study international migration and refugee issues',
+          'Learn about cyber security and international relations',
+          'Master the concept of human security',
+          'Understand the role of non-state actors',
+          'Study international development and aid',
+          'Learn about international justice and accountability',
+          'Master the analysis of foreign policy documents',
+          'Understand the role of think tanks and academia',
+          'Study Pakistan\'s strategic environment',
+          'Learn about the future of international relations',
+          'Read recommended books for comprehensive understanding',
+          'Stay updated with current international developments',
+          'Practice analyzing international events and policies',
+          'Understand the relationship between theory and practice',
+          'Master the communication of complex international issues',
+          'Study the ethical dimensions of international relations'
+        ]
+      },
+      'islamic-history-culture': {
+        subjectId: 'islamic-history-culture',
+        subjectName: 'Islamic History & Culture',
+        subjectType: 'optional',
+        subjectGroup: 'group4',
+        code: 'OG4-3',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          {
+            title: 'Part-I: Early Islamic History and Development (50 Marks)',
+            description: 'Study of early Islamic history from pre-Islamic period to the end of Pious Caliphate.',
+            topics: [
+              'I. Pre-Islamic Near East: An Overview: Political, Social, Cultural, Religious, and Economic Conditions in the Near East including Arabia before the dawn of Islam',
+              'II. The Dawn of Islam: The Prophetic Age (570-632): Biography of the Prophet Muhammad (PBUH): A Chronology of the Major Events in his Life, Prophet Muhammad (PBUH) as a Motivator (Daa\'i), Major points of his mission, Prophet Muhammad (PBUH) as a Military Leader/Strategist, Prophet Muhammad (PBUH) as a Political Leader/Head of the State',
+              'III. The Pious Caliphate (632-660): Caliph Abu Bakr (632-34): Apostasy Wars and Consolidation of Islam, Caliph Umar b. Khattab (634-44): Establishment of Administrative System and Expansion of Muslim Empire, Caliph Uthman b. Affan (644-56): Problems and Issues in the Muslim Community, Caliph Ali b. Talib (656-660): Rise of Factionalism, Abdication of Imam Hasan and Establishment of Umayyad Dynasty (660)',
+              'IV. Political System of Islam under the Prophet (PBUH) and the Pious Caliphate: Nature of Islamic State, Form of the Government, Functions of the Islamic State, Sovereignty of God, Caliphate or Vicegerency of Man, Appointment of Caliph, Shura or the Consultative Body and its Role',
+              'V. Institutional Development of the Muslim Civilization: The Early Phase (622-660): Development of Law and Judiciary in Early Islam, Administration and State Conduct, Defense in Early Islam, Educational System, Propagation of Islam, Financial Administration, Heritage and Culture'
+            ]
+          },
+          {
+            title: 'Part-II: Islamic Empires and Contemporary Aspects (50 Marks)',
+            description: 'Study of later Islamic empires and contemporary Islamic developments.',
+            topics: [
+              'VI. The Umayyads in Power (660-749): Political History of the Umayyad Dynasty, Statecraft and Administration under the Umayyads, Society and the Development of Arabic Literature, Cultural Achievements',
+              'I. The Abbasids of Baghdad (749-1258): The Abbasid Revolution and the Establishment of the Abbasid Dynasty, Administrative Structure under the Abbasids, Development of Scientific Knowledge under the Abbasids, Muslim Philosophy under the Abbasids, Cultural Achievements',
+              'II. Spain under the Muslim Rule: Spain under the rule of the Arabs and Moors (711-1492), Political Fragmentation and the Fall of Granada (1492), Muslim Contribution in the Realm of Culture, Arts, and Architecture',
+              'III. The Crusades against Islam: Major Encounters and Actors (1092-1228), Impact of the Crusades on Muslim-Christian Relations',
+              'IV. The Ottoman Empire: Rise and Fall of the Ottoman Turks (1299-1923), State, Society, and Economy under the Ottomans, Treatment with the Religious Minorities, Contribution towards Culture, Arts, and Architecture',
+              'V. Sufism as an Institution of the Muslim Society: Origin and Development of Sufism, Contribution of the Sufis to the Muslim Civilization, Relationship of the Sufis with the State and Political Authorities, A Critical View of Sufism',
+              'VI. Islam and Modernity in Contemporary World: The Emergence of Islamic Modernism, Intellectual, Political, Economic, Social, and Educational Aspects of Islamic Modernism, Dissemination of Muslim Learning in the West'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'Discovering Islam—Making Sense of Muslim History and Society by Ahmad, Akbar',
+          'The Spirit of Islam by Ali, S. Ameer',
+          'The Preaching of Islam—A History of the Propagation of the Muslim Faith by Arnold, T.W.',
+          'The History of Islamic Peoples by Brockelmann, Carl (ed)',
+          'The Cambridge History of Islam by Holts, P. M., Lewis, Bernard, Ann KS Lambton',
+          'Islam in History by Munir, Muhammad',
+          'The Legacy of Islam by Schacht, Joseph & Bosworth, C.E (eds)',
+          'Islamic History—A New Interpretation AD 750—1055 by Shaban, M.A.',
+          'Sirat un Nabi Vol. I & II by Nomani, Shibli',
+          'Rasol-e-Akram ki Siasi Zindagi by Hamidullah, Dr. Muhammad',
+          'Khilafat-o-Malokiat by Syed Abul Aala Maudoodi',
+          'History of Islam by Najeebabadi, Akbar Shah',
+          'The Cultural Atlas of Islam by Ismall Raji al-Faruqi & Lois Lamya\' al-Faruqi',
+          'The Venture of Islam by Hodgson, Marshall G.S.',
+          'A History of the Arab Peoples by Hourani, Albert',
+          'The Arabs in History by Lewis, Bernard',
+          'The Middle East by Lewis, Bernard',
+          'The Muslim Discovery of Europe by Lewis, Bernard',
+          'Islam and the West by Lewis, Bernard',
+          'The Crisis of Islam by Lewis, Bernard',
+          'What Went Wrong? by Lewis, Bernard',
+          'The Arabs by Mansfield, Peter',
+          'A History of Islamic Societies by Lapidus, Ira M.',
+          'Islamic Societies to the Nineteenth Century by Lapidus, Ira M.',
+          'A History of the Islamic World by Saunders, J.J.',
+          'The Prophet and the Age of the Caliphates by Kennedy, Hugh',
+          'The Early Abbasid Caliphate by Kennedy, Hugh',
+          'The Prophet\'s Pulpit by Kister, M.J.',
+          'Studies in Early Islamic Tradition by Kister, M.J.',
+          'The Formation of Islamic Art by Grabar, Oleg',
+          'Islamic Art and Architecture by Hillenbrand, Robert',
+          'Islamic Architecture by Michell, George',
+          'The Art and Architecture of Islam by Ettinghausen, Richard',
+          'Islamic Calligraphy by Schimmel, Annemarie',
+          'Mystical Dimensions of Islam by Schimmel, Annemarie',
+          'The Sufi Orders in Islam by Trimingham, J. Spencer',
+          'Islamic Science and Engineering by Hill, Donald R.',
+          'Science and Civilization in Islam by Nasr, Seyyed Hossein',
+          'Islamic Philosophy by Fakhry, Majid',
+          'A History of Islamic Philosophy by Corbin, Henry',
+          'Islamic Theology by Watt, W. Montgomery',
+          'Islamic Philosophy and Theology by Watt, W. Montgomery',
+          'The Faith and Practice of Al-Ghazali by Watt, W. Montgomery',
+          'Muslim Intellectual by Watt, W. Montgomery'
+        ],
+        examPattern: 'Part-I: Early Islamic History and Development (50 Marks) + Part-II: Islamic Empires and Contemporary Aspects (50 Marks) = 100 Marks',
+        preparationTips: [
+          'Master the pre-Islamic conditions in the Near East and Arabia',
+          'Study the life and mission of Prophet Muhammad (PBUH) comprehensively',
+          'Understand the Prophet\'s role as a military leader and political head',
+          'Learn about the Pious Caliphate and its administrative achievements',
+          'Master the political system of Islam under the Prophet and Caliphs',
+          'Study the institutional development of early Muslim civilization',
+          'Understand the Umayyad dynasty and its contributions',
+          'Learn about the Abbasid revolution and its impact',
+          'Study Muslim Spain and its cultural achievements',
+          'Master the history of the Crusades and their impact',
+          'Understand the rise and fall of the Ottoman Empire',
+          'Learn about Sufism and its role in Muslim society',
+          'Study Islamic modernism and contemporary developments',
+          'Focus on the development of Islamic law and judiciary',
+          'Understand the concept of Islamic state and governance',
+          'Study the role of Shura in Islamic political system',
+          'Learn about the expansion of Muslim empire under early caliphs',
+          'Master the cultural and scientific achievements of Muslim civilization',
+          'Understand the relationship between religion and politics in Islam',
+          'Study the treatment of religious minorities in Islamic states',
+          'Learn about Islamic art, architecture, and calligraphy',
+          'Understand the philosophical developments in Islamic thought',
+          'Study the impact of Islamic civilization on the West',
+          'Master the chronological development of Islamic history',
+          'Learn about the major historical figures and their contributions',
+          'Understand the economic and social systems in Islamic societies',
+          'Study the educational and scientific institutions in Muslim history',
+          'Learn about the role of women in Islamic history',
+          'Understand the concept of jihad and its historical context',
+          'Study the development of Islamic theology and philosophy',
+          'Master the relationship between Sufism and orthodox Islam',
+          'Learn about the impact of colonialism on Islamic societies',
+          'Understand the challenges of modernity to Islamic tradition',
+          'Study the contemporary Islamic movements and their goals',
+          'Learn about the role of Islamic scholars and intellectuals',
+          'Understand the concept of Islamic unity and diversity',
+          'Study the economic and trade networks in Islamic history',
+          'Learn about the role of Islamic institutions in society',
+          'Understand the concept of Islamic ethics and morality',
+          'Study the impact of Islamic civilization on world history',
+          'Learn about the preservation and transmission of Islamic knowledge',
+          'Understand the role of Islamic education and learning',
+          'Study the relationship between Islam and other religions',
+          'Learn about the concept of Islamic social justice',
+          'Master the chronological sequence of Islamic historical events',
+          'Read recommended books for comprehensive understanding',
+          'Stay updated with current research in Islamic history',
+          'Practice analyzing historical events and their significance',
+          'Understand the relationship between Islamic history and contemporary issues',
+          'Study the role of Islamic history in shaping Muslim identity'
+        ]
+      },
+      'journalism-mass-communication': {
+        subjectId: 'journalism-mass-communication',
+        subjectName: 'Journalism & Mass Communication',
+        subjectType: 'optional',
+        subjectGroup: 'group7',
+        code: 'OG7-4',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          {
+            title: 'I. Introduction to Mass Communication',
+            description: 'Foundation concepts and models of mass communication.',
+            topics: [
+              'Concept - Definitions, Need/Importance/Purposes, Types of Communication, Process of Communication, Basic Models',
+              'Functions of a model, Evaluation of a model',
+              'Basic models in Mass Communication: Lasswell\'s Model (1948), Shannon-Weaver model (1948), Osgoods model (1954), Schramm\'s model (1954), Newcomb\'s symmetry theory (1953), Westley-McLean\'s model (1976), Gerbner model (1956)'
+            ]
+          },
+          {
+            title: 'II. Mass Communication Theories',
+            description: 'Theoretical frameworks and models in mass communication.',
+            topics: [
+              'Normative theories of the press: Schramm\'s four theories and criticism on these theories',
+              'Media as agents of power',
+              'The Spiral of silence',
+              'Media Usage and gratifications',
+              'Media hegemony',
+              'Diffusion of innovations',
+              'Powerful effects model: hypodermic needle, magic bullet theory',
+              'Moderate effects model: two-step and multi-step flow of communication',
+              'Powerful media revisited: Marshal McLuhan\'s media determinism'
+            ]
+          },
+          {
+            title: 'III. Global / International Communication',
+            description: 'International communication and global media dynamics.',
+            topics: [
+              'The Historical Context of International Communication',
+              'Globalization, technology, and the mass media',
+              'Communication and Cultural imperialism',
+              'Communication Flow in Global Media: Imbalance in the flow of information between North and South',
+              'McBride commission and its recommendations',
+              'International Communication in the Internet Age: the new social media and its effects on developing world'
+            ]
+          },
+          {
+            title: 'IV. Media and Society',
+            description: 'Role and impact of media in society.',
+            topics: [
+              'Mass media and social change',
+              'Media as a social system: The balance between interrelation and interdependence',
+              'Media freedom and its role for democracy',
+              'The functional approach to mass media: four social functions of the media',
+              'Media as an awareness agent',
+              'Mass media and social representation'
+            ]
+          },
+          {
+            title: 'V. Mass Media in Pakistan',
+            description: 'Media system and journalism in Pakistan.',
+            topics: [
+              'Media system in Pakistan: historical, chronological, and analytical review',
+              'The system of journalism and the media system',
+              'Employer-employee relations in Pakistani media',
+              'Government-press relations',
+              'Press in Pakistan: The newspaper industry, from mission to the market',
+              'Electronic media: from total dependence to enormous power',
+              'The new 24/7 television: uses and abuses',
+              'The new radio: potential for change and the present performance',
+              'The question of freedom and responsibility'
+            ]
+          },
+          {
+            title: 'VI. Development Support Communication',
+            description: 'Communication for development and social change.',
+            topics: [
+              'Theories of development support communication with specific focus on the developing world',
+              'The dominant paradigm of development: historical, analytical perspective',
+              'The Alternative paradigm of development',
+              'Small is beautiful: community development as a snowball effect',
+              'Globalization vs Localization',
+              'Glocalization',
+              'Social Marketing: how to infuse new ideas into a developing population'
+            ]
+          },
+          {
+            title: 'VII. Public Relations',
+            description: 'Public relations concepts and practices.',
+            topics: [
+              'Concept of Public Relations',
+              'Historical development of public relations: from press agentry to PR',
+              'Public relation in Pakistan',
+              'Ministry of information',
+              'Press Information Department (PID)',
+              'Public relations and publicity',
+              'PR as a tool for governance',
+              'Private PR agencies and their structure',
+              'Basic methods of PR: press release, press note, press conference',
+              'PR Ethics'
+            ]
+          },
+          {
+            title: 'VIII. Media Laws and Ethics',
+            description: 'Legal framework and ethical considerations in media.',
+            topics: [
+              'History of Media Laws in Pakistan',
+              'Development of media regulations from British colonial era to independent Pakistan',
+              'Libel, Defamation and relevant portions of PPC',
+              'PPO, RPPPO',
+              'PEMRA: establishment, development, and operational mechanisms',
+              'Press Council of Pakistan (PCP)',
+              'Citizens Media Commission: need, present status, and reasons for inactivity',
+              'Press Code of Ethics',
+              'Inability of the media to develop a code of ethics as an institution',
+              'The media\'s quest for freedom and its inability to self regulate'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'Broadcast Regulations: the German Example by Metzger, Herbert. FES 1993',
+          'Communication Models for The Study of Mass Communication, 2nd Ed by McQuail, Dennis & Windhal, Swen, Longman, 1982',
+          'Convergence Culture: Where old and new Media by Blackwell publishing Ltd, USA',
+          'Communication Theories: Origins, Methods and Uses in the Mass Media 5th Ed by Werner J. Severin, James W. Tankard Jr. Longman, 1997',
+          'Diffusion of Innovations 5th Ed by Rogers, Everett M. Free Press 2003',
+          'Ethics in Journalism: A Reader on Their Perception in the Third World by Kunczik, Michael (Ed.). FES 1999',
+          'Handbook of International and Intercultural Communication 2nd Ed by Gudykunst & Mody, Sage, 2001',
+          'McQuail\'s Mass Communication Theory, 4th Ed by Denis McQuail. Sage, 2000',
+          'Media And Society into the 21st Century: A Historical Introduction by Blackwell publishing Ltd, USA',
+          'Media / Impact by Wads Worth/Thompson Learning, Belmont, CA',
+          'Media Now: Communication Media in the Information Age by Wads Worth/Thompson Learning, Belmont, CA',
+          'News Media and Journalism in Pakistan by Khan, Altaf. LAP Lambert Academic Publishing. June 2011',
+          'News Media and Journalism in Pakistan and Germany (Ed.) by Khan, Altaf. Peshawar, 2003',
+          'Participatory Development by Hasan, Arif, Oxford, 2010',
+          'Political Communication in Britain: The Leader Debates, the Campaign and the Media in the 2010 General Election, (Ed) by Palgrave McMillan, UK',
+          'Political Communication in Asia by Roultage, NY',
+          'Precision Journalism: A Reporter\'s Introduction to Social and Science Methods, 4th Ed by Rowman and Littlefield, Lanham, MD',
+          'Report and Recommendations of the Media Commission, appointed by the Supreme Court of Pakistan. 2013 by FES, Islamabad, 2013',
+          'Reporting the Frontier: Media Capacity Building for Peace in Pakistan\'s Tribal Areas by Khan, Altaf. VDM Verlag Dr. Müllere. K. June 2011',
+          'Writing, Directing, and Producing Documentary Films and Videos, 3rd edition by Carbondale: Southern Illinois Press, 2002',
+          'Directing the Documentary, 4th edition by Focal Press, 2004',
+          'Documentary Storytelling Making Stronger and More Dramatic Nonfiction Films, 2nd edition by Focal Press, 2007',
+          'Principles of Editing by McGraw-Hill 1996',
+          'Journalism-Principles and Practices by Vistaar Publications 2006',
+          'The Hand Book of New Media by London: Sage',
+          'Applying Communication Theory for Professional Life: An Introduction (2nd Edition) by London: Sage',
+          'Controversies in Contemporary Advertising by Newbury Park: Sage Publications',
+          'Public Relations-Writing & Media Techniques by Harper Collins College Publishers, NY',
+          'Telecommunications Policy in Pakistan by Telematics and Informatics',
+          'Guaranteeing Copyright- Media Manager\'s Guide to Pakistani Broadcast Law by Media Manager Companion Series, Internews Pakistan',
+          'Model Freedom of Information Act, 2001 by Consumer rights Protection Commission of Pakistan'
+        ],
+        examPattern: '8 comprehensive sections covering Introduction to Mass Communication, Theories, Global Communication, Media and Society, Mass Media in Pakistan, Development Communication, Public Relations, and Media Laws & Ethics = 100 Marks',
+        preparationTips: [
+          'Master the fundamental concepts and definitions of mass communication',
+          'Understand the process of communication and its basic models',
+          'Study all major communication models: Lasswell, Shannon-Weaver, Schramm, etc.',
+          'Learn about normative theories of the press and their criticisms',
+          'Master media effects theories: powerful, moderate, and limited effects',
+          'Understand the spiral of silence and media hegemony concepts',
+          'Study media usage and gratifications theory',
+          'Learn about diffusion of innovations and its applications',
+          'Master Marshal McLuhan\'s media determinism',
+          'Understand international communication and cultural imperialism',
+          'Study the McBride commission and its recommendations',
+          'Learn about the impact of social media on developing countries',
+          'Understand the role of media in social change and democracy',
+          'Study the four social functions of mass media',
+          'Master the historical development of media in Pakistan',
+          'Learn about government-press relations in Pakistan',
+          'Understand the evolution of electronic media in Pakistan',
+          'Study the challenges of 24/7 television and radio',
+          'Learn about development support communication theories',
+          'Master the dominant and alternative paradigms of development',
+          'Understand the concept of glocalization',
+          'Study social marketing and community development',
+          'Learn about the historical development of public relations',
+          'Master PR methods: press releases, press notes, press conferences',
+          'Understand PR ethics and governance applications',
+          'Study the history of media laws in Pakistan',
+          'Learn about PEMRA and its operational mechanisms',
+          'Understand the Press Council of Pakistan and its role',
+          'Master the concepts of libel, defamation, and media regulations',
+          'Study the Press Code of Ethics and self-regulation challenges',
+          'Understand the balance between media freedom and responsibility',
+          'Learn about the role of media in democracy and social change',
+          'Study the impact of globalization on media systems',
+          'Master the relationship between media and society',
+          'Understand the challenges of media in developing countries',
+          'Learn about the role of media in development communication',
+          'Study the evolution of journalism from mission to market',
+          'Understand the role of new media and digital communication',
+          'Learn about media convergence and its implications',
+          'Study the role of media in political communication',
+          'Understand the challenges of media ethics and professionalism',
+          'Learn about the role of media in conflict resolution',
+          'Study the impact of technology on media practices',
+          'Understand the role of media in public opinion formation',
+          'Learn about media literacy and critical thinking',
+          'Study the role of media in cultural preservation and change',
+          'Understand the challenges of media ownership and control',
+          'Learn about the role of media in education and awareness',
+          'Study the relationship between media and power',
+          'Read recommended books for comprehensive understanding',
+          'Stay updated with current developments in media and communication',
+          'Practice analyzing media content and its effects',
+          'Understand the role of media in Pakistan\'s development',
+          'Study the challenges and opportunities in Pakistani media',
+          'Learn about the future of journalism and mass communication'
+        ]
+      },
       'general-science': {
         subjectId: 'general-science',
         subjectName: 'General Science & Ability',
@@ -2968,67 +3667,6 @@ export default function SubjectSyllabusPage() {
           'Work on mental ability questions covering verbal, mechanical, numerical, and social skills',
           'Use recommended books for comprehensive study of each section',
           'Practice previous year questions and mock tests regularly'
-        ]
-      },
-      'economics': {
-        subjectId: 'economics',
-        subjectName: 'Economics',
-        subjectType: 'optional',
-        subjectGroup: 'group1',
-        code: 'OG1-2',
-        marks: 100,
-        duration: '3 Hours',
-        sections: [
-          {
-            title: 'Microeconomics',
-            description: 'Study of individual economic units and markets',
-            topics: [
-              'Consumer Behavior and Demand',
-              'Production and Cost Theory',
-              'Market Structures',
-              'Price Determination',
-              'Elasticity of Demand and Supply',
-              'Utility Theory'
-            ]
-          },
-          {
-            title: 'Macroeconomics',
-            description: 'Study of economy-wide phenomena',
-            topics: [
-              'National Income Accounting',
-              'Aggregate Demand and Supply',
-              'Monetary and Fiscal Policy',
-              'Inflation and Unemployment',
-              'Economic Growth and Development',
-              'International Trade'
-            ]
-          },
-          {
-            title: 'Development Economics',
-            description: 'Economic development and growth theories',
-            topics: [
-              'Development Theories',
-              'Poverty and Inequality',
-              'Human Development',
-              'Sustainable Development',
-              'Economic Planning',
-              'Foreign Aid and Investment'
-            ]
-          }
-        ],
-        recommendedBooks: [
-          'Principles of Economics by N. Gregory Mankiw',
-          'Economics by Paul Samuelson',
-          'Development Economics by Debraj Ray',
-          'Pakistan Economy by various authors'
-        ],
-        examPattern: 'Essay questions covering theoretical and applied aspects',
-        preparationTips: [
-          'Master fundamental economic concepts',
-          'Stay updated with economic policies and trends',
-          'Practice numerical problems and graphs',
-          'Read economic journals and reports',
-          'Focus on Pakistan\'s economic issues'
         ]
       },
       'computer-science': {
