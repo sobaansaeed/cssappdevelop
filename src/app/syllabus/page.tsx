@@ -106,6 +106,7 @@ export default function SyllabusPage() {
       'international-law': '17 comprehensive sections covering nature and basis of international law, state relations, treaties, dispute settlement, humanitarian law, use of force, institutions, sovereignty, responsibility, jurisdiction, and neutrality.',
       'international-relations': 'Paper-I (100 Marks): Theoretical foundations, security, strategic approaches, political economy, and international institutions. Paper-II (100 Marks): Historical development, regional analysis, South Asia, WMD, and contemporary issues.',
       'islamic-history-culture': 'Part-I (50 Marks): Early Islamic history from pre-Islamic period to Pious Caliphate. Part-II (50 Marks): Islamic empires, Sufism, and contemporary Islamic developments. Comprehensive coverage of Islamic civilization.',
+      'journalism-mass-communication': '8 comprehensive sections covering Introduction to Mass Communication, Theories, Global Communication, Media and Society, Mass Media in Pakistan, Development Communication, Public Relations, and Media Laws & Ethics.',
       'computer-science': 'Programming fundamentals, data structures, algorithms, database systems, and software engineering.',
       'physics': 'Classical mechanics, thermodynamics, electromagnetism, quantum physics, and modern physics.',
       'chemistry': 'Organic chemistry, inorganic chemistry, physical chemistry, and analytical chemistry.',
