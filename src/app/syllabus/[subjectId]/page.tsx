@@ -1233,7 +1233,7 @@ export default function SubjectSyllabusPage() {
           'A Punjabi Village in Pakistan by Zekiye Eglar',
           'The social organization of the Marri Baluch by Robert Niel Pehrson',
           'Introducing Anthropology by Park, MA 2007',
-          'Peoples and Cultures of Asia by Scupin, R 2005',
+          'Peples and Cultures of Asia by Scupin, R 2005',
           'Outlines and Highlights for Anthropology by Scupin, R and Decorse, CR 2010',
           'Economic Anthropology by Stuart Plattner',
           'Economies and Culture by Richard Wilk',
@@ -3777,7 +3777,7 @@ export default function SubjectSyllabusPage() {
           'Study partnership law and business relationships',
           'Learn about rights and duties of partners',
           'Master the Negotiable Instruments Act',
-          'Understand different types of negotiable instruments',
+          'Understand different types of negotiable instrument',
           'Study banking law and duties of bankers',
           'Learn about the Competition Act and anti-trust regulations',
           'Understand abuse of dominant position and anti-competitive practices',
@@ -4399,6 +4399,57 @@ export default function SubjectSyllabusPage() {
           'Master the analysis of political conflicts and resolution',
           'Understand the role of political science in international cooperation',
           'Study the future of political systems and governance models'
+        ]
+      },
+      'physics': {
+        subjectId: 'physics',
+        subjectName: 'Physics',
+        subjectType: 'optional',
+        subjectGroup: 'group2',
+        code: 'OG2-1',
+        marks: 200,
+        duration: 'Two papers, 3 hours each',
+        sections: [
+          {
+            title: 'PAPER-I (100 Marks)',
+            description: 'Mechanics, Fluid Mechanics, Waves & Oscillations, Optics, Heat and Thermodynamics.',
+            topics: [
+              'Mechanics: Vectors (dot, cross, triple products), gradient, divergence, curl and applications; Newtonian laws of motion (calculus-based kinematics and dynamics); conservation of energy and linear/angular momentum; dynamics of rigid body (spin, precession, gyroscope); gravitation (planetary motion, satellites, Kepler and centripetal forces); Special Relativity (Michelson–Morley experiment, Einstein postulates, Lorentz transformation, time dilation, length contraction, mass–energy equivalence).',
+              'Fluid Mechanics: Surface tension, viscosity, elasticity; fluid motion and Bernoulli\'s theorem.',
+              'Waves and Oscillations, Optics: Free, forced and damped oscillations; resonance and power transfer; travelling waves and energy transmission; phase and group velocity; standing waves; basics of acoustics; Reflection, Refraction, Interference, Diffraction and Polarization; interferometer and Newton\'s rings; diffraction gratings and resolving power; spectrometers; EM wave equation; normal and anomalous dispersion; coherence; lasers and applications.',
+              'Heat and Thermodynamics: Perfect gas, real gas and van der Waals equation; laws of thermodynamics; internal energy, temperature and entropy; thermal properties of simple systems; kinetic theory of gases; Maxwellian distribution of velocities; Brownian motion; transport phenomena; Classical Maxwell–Boltzmann statistics and applications; Bose–Einstein and Fermi–Dirac statistics.'
+            ]
+          },
+          {
+            title: 'PAPER-II (100 Marks)',
+            description: 'Electricity & Magnetism, Modern and Quantum Physics, Solid State Physics, Nuclear Physics.',
+            topics: [
+              'Electricity and Magnetism: Electric field of point charges; Gauss\'s law; electric potential; Poisson and Laplace equations; dielectrics and polarization; capacitance; moving charges and magnetic field; Ampere\'s law; magnetic properties of matter; Faraday\'s law and electromagnetic induction; AC circuits (LCR); Poynting theorem and vector; Maxwell\'s equations (integral and differential forms); scalar and vector potentials.',
+              'Modern and Quantum Physics: Wave–particle duality and de Broglie hypothesis; operators and quantum states; observables; time-dependent and time-independent Schrödinger equation; angular momentum; spin-1/2 in magnetic field; wave mechanics; particle in a box; tunneling; 1D harmonic oscillator; Heisenberg uncertainty; commutation relations; Bohr model and quantum numbers including electron spin; Pauli exclusion principle; spectra of simple systems with one or two valence electrons; photoelectric effect; Compton scattering; pair production; Lande\'s g-factor and Zeeman effect; Raman effect.',
+              'Solid State Physics: Crystal lattice and structure, Bravais lattices; free electron model; band theory; electron in periodic potential, Fermi energy and density of states; n- and p-type semiconductors; physics of transistor and MOSFET; dielectric properties; magnetic properties and origin of magnetism.',
+              'Nuclear Physics: Nuclear structure; radioactivity (alpha, beta, gamma decay); detection of nuclear radiation; mass spectrometer; accelerators; fission and fusion with applications; reactor and nuclear power; elementary particles and their properties.'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'Perspectives of Modern Physics - A. Beiser',
+          'Fundamentals of Physics - Halliday & Resnick',
+          'Introduction to Electromagnetic Fields and Waves - D. Corson & P. Lorrain',
+          'Heat and Thermodynamics - D. Zemansky',
+          'Introduction to Quantum Mechanics - D. J. Griffiths',
+          'Modern Physics - Serway, Moses, Moyer',
+          'Solid State Physics - C. Kittel'
+        ],
+        examPattern: 'Two Papers: Paper-I (Mechanics, Fluid Mechanics, Waves & Oscillations, Optics, Heat & Thermodynamics) 100 marks + Paper-II (Electricity & Magnetism, Modern & Quantum Physics, Solid State Physics, Nuclear Physics) 100 marks = 200 marks total',
+        preparationTips: [
+          'Master calculus-based mechanics and problem solving.',
+          'Practice oscillations, waves and optics numericals regularly.',
+          'Build strong intuition for thermodynamics and statistical mechanics.',
+          'Derive and apply Maxwell\'s equations; practice AC circuit analysis.',
+          'Solve standard quantum mechanics problems from Griffiths.',
+          'Study semiconductor physics and basic devices (diode, BJT, MOSFET).',
+          'Revise nuclear physics fundamentals and detection techniques.',
+          'Solve past CSS physics papers under timed conditions.'
         ]
       },
       'psychology': {
@@ -6104,451 +6155,6 @@ export default function SubjectSyllabusPage() {
           'Focus on understanding concepts rather than memorization',
           'Work on real-world data analysis projects'
         ]
-      },
-      'town-planning': {
-        subjectId: 'town-planning',
-        subjectName: 'Town Planning & Urban Management',
-        subjectType: 'optional',
-        subjectGroup: 'group3',
-        code: 'OG3-4',
-        marks: 100,
-        duration: '3 Hours',
-        sections: [
-          {
-            title: 'I. Definition of Town Planning, Goals and Objectives',
-            description: 'Understanding the fundamental concepts and multidisciplinary approach of town planning.',
-            topics: [
-              'Definition of Town Planning as a multi-disciplinary approach',
-              'Goals and objectives of Town Planning',
-              'Relationship with other professions and disciplines',
-              'Scope and importance of urban planning',
-              'Professional standards and ethics in town planning'
-            ]
-          },
-          {
-            title: 'II. Historical Perspective of Urban Planning',
-            description: 'Study of historical urban planning practices across different civilizations.',
-            topics: [
-              'Planning of historical towns globally',
-              'European urban planning traditions',
-              'Nile Valley civilization planning',
-              'Euphrates and Tigris Valley planning',
-              'Indus Valley Civilization planning',
-              'Mohenjodaro and Harappa urban design',
-              'Kot Diji and Mehr Garh settlements',
-              'Gandhara Civilization urban planning',
-              'Lessons from historical planning practices'
-            ]
-          },
-          {
-            title: 'III. Urban Rural Differences and Hierarchy of Settlements',
-            description: 'Understanding the distinction between urban and rural areas and settlement patterns.',
-            topics: [
-              'Urbanization and its characteristics',
-              'Environmental effects on urban areas',
-              'Rural-urban continuum and differences',
-              'Hierarchy of settlements and their functions',
-              'Urban-rural migration patterns',
-              'Spatial distribution of settlements'
-            ]
-          },
-          {
-            title: 'IV. History of Planning in Pakistan',
-            description: 'Evolution of planning practices and policies in Pakistan.',
-            topics: [
-              '5-year development plans',
-              'Regional planning initiatives',
-              'Master Plans development and implementation',
-              'Planning institutions and their evolution',
-              'Historical planning policies and their impact',
-              'Development of planning legislation'
-            ]
-          },
-          {
-            title: 'V. Managing Urbanization',
-            description: 'Strategies and practices for effective urban management.',
-            topics: [
-              'How to manage urbanization effectively',
-              'Best practices in urban management',
-              'Land use classification policy',
-              'Building and development control',
-              'Removal of encroachments',
-              'Introduction to Intelligent Transport Systems (ITS)',
-              'Urban governance and administration',
-              'Public participation in planning'
-            ]
-          },
-          {
-            title: 'VI. Housing Community and Economic Development',
-            description: 'Focus on equitable development and quality of life improvement.',
-            topics: [
-              'Preparing professionals with skills and knowledge',
-              'Equitable development strategies',
-              'Expanding opportunities for all communities',
-              'Providing quality of life for disadvantaged groups',
-              'Housing policies and programs',
-              'Community development approaches',
-              'Economic development in urban areas',
-              'Social housing and affordable housing'
-            ]
-          },
-          {
-            title: 'VII. Public Policy and Urban Design Management',
-            description: 'Solving social and environmental problems through integrated approaches.',
-            topics: [
-              'Economics in urban planning and policy',
-              'Policy analysis and formulation',
-              'Political science and urban governance',
-              'Urban Design principles and practices',
-              'Integration of social and environmental concerns',
-              'Policy implementation and evaluation',
-              'Stakeholder engagement in policy making'
-            ]
-          },
-          {
-            title: 'VIII. Sustainability, Environmental Policy and Planning',
-            description: 'Conserving natural resources while promoting development.',
-            topics: [
-              'How society conserves and manages natural resources',
-              'Promoting sustainable development',
-              'Maintaining a healthy environment',
-              'Environmental impact assessment',
-              'Green building and sustainable design',
-              'Climate change adaptation in urban areas',
-              'Renewable energy in urban planning',
-              'Waste management and recycling'
-            ]
-          },
-          {
-            title: 'IX. Urban Information Systems',
-            description: 'Use of technology and software in urban planning and analysis.',
-            topics: [
-              'Planning-related software applications',
-              'Spatial analysis tools and systems',
-              'Geographic Information Systems (GIS)',
-              'Statistical Package for Social Sciences (SPSS)',
-              'Remote sensing and urban monitoring',
-              'Data collection and analysis methods',
-              'Digital mapping and visualization',
-              'Smart city technologies and applications'
-            ]
-          }
-        ],
-        recommendedBooks: [
-          'Introducing Town Planning - Clara Greed',
-          'Introduction to Town and Country Planning - John Ratcliff',
-          'Town Planning for the Third World - A.K. Bhatti',
-          'Contemporary Urban Planning - J.M. Levy',
-          'Land Use, Planning, and Zoning - Peter J. Loughlin',
-          'Town and Country Planning in the UK - J.B. Cullingworth, Vincent Nadin',
-          'Town Planning in Practice - Raymond Unwin, Mike Janks',
-          'World Cities and Urban - Mike Janks',
-          'Urban Land Use Planning - Philip R. B',
-          'Environmental Science: A Global Concern - William P',
-          'Megacity Management in the Asian and Pacific Region (Vol-2) - Stubbs, Jeffery Giles Clarke',
-          'Dying Cities: Surviving the Urban Jungle - Somaiya N',
-          'Handbook on Urban Sustainability - Springer',
-          'Emerald Cities - Urban sustainability and Economics - Joan Fitzgerald',
-          'Growing Greener Cities - Eugene Birch, Susan Wachter',
-          'The Earth scan Reader in Sustainability Cities - David Sattethwaite',
-          'The Poverty Curtain - Dr. Mehboob -ul-Haq',
-          'Reflections on Human Development - Dr. Mehboob -ul-Haq',
-          'Smart Cities - Anthony Townsend'
-        ],
-        examPattern: 'Comprehensive examination covering all nine sections of Town Planning & Urban Management (100 Marks)',
-        preparationTips: [
-          'Develop strong understanding of multidisciplinary approach to town planning',
-          'Study historical urban planning practices from various civilizations',
-          'Understand urban-rural dynamics and settlement hierarchy',
-          'Learn about Pakistan\'s planning history and policies',
-          'Master urbanization management strategies and best practices',
-          'Focus on housing, community and economic development approaches',
-          'Study public policy and urban design integration',
-          'Understand sustainability and environmental planning principles',
-          'Learn to use planning software and spatial analysis tools',
-          'Practice case studies of successful urban planning projects',
-          'Stay updated with contemporary urban planning trends',
-          'Join urban planning workshops and seminars',
-          'Visit planned cities and study their design principles',
-          'Practice GIS and statistical analysis software',
-          'Read extensively from recommended books and journals'
-        ]
-      },
-      'urdu-literature': {
-        subjectId: 'urdu-literature',
-        subjectName: 'Urdu Literature',
-        subjectType: 'optional',
-        subjectGroup: 'group5',
-        code: 'OG5-7',
-        marks: 100,
-        duration: '3 Hours',
-        sections: [
-          {
-            title: 'I. اردو ادب کا مطالعہ (Study of Urdu Literature)',
-            description: 'Comprehensive study of Urdu literature including its Islamic identity and evolution.',
-            topics: [
-              'اردو زبان و ادب کی اسلامی شناخت (Islamic Identity of Urdu Language and Literature)',
-              'بیسویں صدی کی ادبی تحریکیں (Literary Movements of the 20th Century)',
-              'پاکستانی ادب کی اصطلاح: تشکیل و روایت اور ارتقاء (Concept of Pakistani Literature: Formation, Tradition, and Evolution)',
-              'Historical development of Urdu literature',
-              'Influence of Islamic culture on Urdu literature',
-              'Modern literary movements and their impact'
-            ]
-          },
-          {
-            title: 'II. شعری ادب کا تنقیدی مطالعہ - دور قدیم (Critical Study of Poetic Literature - Ancient Period)',
-            description: 'Critical analysis of classical Urdu poetry and poets.',
-            topics: [
-              'میر (Mir) - غزل - انتخاب میر مولوی عبد الحق (Ghazal - Selection by Maulvi Abdul Haq)',
-              'غالب (Ghalib) - دیوان غالب (Diwan-e-Ghalib)',
-              'حالی (Hali) - مسدس (Musaddas)',
-              'اقبال (Iqbal) - طلوع اسلام، خضر راہ، مسجد قرطبہ (Tulu-e-Islam, Khizr-e-Rah, Masjid-e-Qartaba)',
-              'Analysis of classical ghazal form',
-              'Study of poetic devices and literary techniques',
-              'Historical context and social commentary in poetry'
-            ]
-          },
-          {
-            title: 'III. شعری ادب کا تنقیدی مطالعہ - دور جدید (Critical Study of Poetic Literature - Modern Period)',
-            description: 'Critical analysis of modern Urdu poetry and contemporary poets.',
-            topics: [
-              'فیض (Faiz) - غزل - دست صبا (Ghazal - Dast-e-Saba)',
-              'راشد (Rashid) - نظم - ایران میں اجنبی (Nazm - Iran Mein Ajnabi)',
-              'مجید امجد (Majid Amjad) - نظم - شب رفتہ (Nazm - Shab-e-Rafta)',
-              'ناصر کاظمی (Nasir Kazmi) - غزل - برگ نے (Ghazal - Barg-e-Nai)',
-              'Modern poetic forms and experimentation',
-              'Contemporary themes and social issues',
-              'Evolution of poetic expression in modern era'
-            ]
-          },
-          {
-            title: 'IV. نثری ادب کا تنقیدی مطالعہ - غیر افسانوی نثر (Critical Study of Prose Literature - Non-Fictional Prose)',
-            description: 'Critical analysis of non-fictional Urdu prose literature.',
-            topics: [
-              'شبلی (Shibli) - سیرت النبی، جلد اول (Seerat-un-Nabi, Volume 1)',
-              'مولوی عبدالحق (Maulvi Abdul Haq) - خاکے، چند ہم عصر (Khake, Chand Hum Asr)',
-              'Biographical and historical writing',
-              'Literary criticism and essays',
-              'Development of Urdu prose style',
-              'Influence of Islamic scholarship on Urdu prose'
-            ]
-          },
-          {
-            title: 'V. نثری ادب کا تنقیدی مطالعہ - افسانوی نثر (Critical Study of Prose Literature - Fictional Prose)',
-            description: 'Critical analysis of fictional Urdu prose including short stories and novels.',
-            topics: [
-              'منٹو (Manto) - افسانے منٹو کے ہیں افسانے: مرتب ڈاکٹر انوار احمد، ڈاکٹر اے بی اشرف (Afsane Manto Ke Hain Afsane: Compiled by Dr. Anwar Ahmed, Dr. A.B. Ashraf)',
-              'احمد ندیم قاسمی (Ahmed Nadeem Qasmi) - افسانے، کپاس کا پھول (Afsane, Kapas Ka Phool)',
-              'مشتاق احمد یوسفی (Mushtaq Ahmed Yusufi) - طنز و مزاح، آب گم (Tanz-o-Mazah, Aab-e-Gum)',
-              'Short story development in Urdu',
-              'Satire and humor in Urdu literature',
-              'Social realism and contemporary themes',
-              'Narrative techniques and character development'
-            ]
-          },
-          {
-            title: 'VI. تلخیص (Precis Writing)',
-            description: 'Skills in precis writing and text summarization.',
-            topics: [
-              'Techniques of precis writing',
-              'Text comprehension and analysis',
-              'Summarization skills',
-              'Maintaining original meaning and style',
-              'Word limit management',
-              'Critical reading and interpretation'
-            ]
-          },
-          {
-            title: 'VII. مضمون (Essay Writing)',
-            description: 'Essay writing skills and literary composition.',
-            topics: [
-              'Essay writing techniques',
-              'Literary analysis and criticism',
-              'Argumentative and descriptive essays',
-              'Style and expression in Urdu',
-              'Research and documentation',
-              'Creative writing and literary expression'
-            ]
-          }
-        ],
-        recommendedBooks: [
-          'تنقید اور جدید اردو تنقید (Criticism and Modern Urdu Criticism) - ڈاکٹر وزیر آغا (Dr. Wazir Agha)',
-          'اردو ادب کی تحریکیں (Movements of Urdu Literature) - ڈاکٹر انور سدید (Dr. Anwar Sadeed)',
-          'آب کوثر (Aab-e-Kausar) - شیخ محمد اکرام (Sheikh Muhammad Ikram)',
-          'رود کوثر (Rud-e-Kausar) - شیخ محمد اکرام (Sheikh Muhammad Ikram)',
-          'موج کوثر (Mauj-e-Kausar) - شیخ محمد اکرام (Sheikh Muhammad Ikram)',
-          'اردو تنقید میں پاکستانی تصور قومیت (Pakistani Concept of Nationalism in Urdu Criticism) - ڈاکٹر روبینہ شہناز (Dr. Rubina Shehnaz)',
-          'اقبالیات کے سوسال (One Hundred Years of Iqbal Studies) - مرتب: ڈاکٹر رفیع الدین ہاشمی، ڈاکٹر سہیل عمر، ڈاکٹر وحید عشرت (Compiled by Dr. Rafiuddin Hashmi, Dr. Sohail Umar, Dr. Waheed Ishrat)',
-          'تاریخ ادبیات مسلمانان پاکستان و ہند (History of Literature of Muslims of Pakistan and India) - New Arrangement by ڈاکٹر خواجہ محمد زکریا (Dr. Khawaja Muhammad Zakaria)',
-          'اردو ادب کے پچاس سال (Fifty Years of Urdu Literature) - مرتب: ڈاکٹر نوازش علی (Dr. Nawazish Ali)'
-        ],
-        examPattern: 'Comprehensive examination covering Urdu Literature study, Critical analysis of poetry and prose, Precis writing, and Essay writing (100 Marks)',
-        preparationTips: [
-          'Develop strong command over Urdu language and literature',
-          'Study classical and modern Urdu poets extensively',
-          'Practice critical analysis of both poetry and prose',
-          'Master precis writing techniques and skills',
-          'Practice essay writing in Urdu on various topics',
-          'Read recommended books for comprehensive understanding',
-          'Study literary movements and their historical context',
-          'Focus on understanding Islamic influence on Urdu literature',
-          'Practice analyzing literary devices and techniques',
-          'Join Urdu literature study groups and discussions',
-          'Attend literary seminars and mushairas',
-          'Practice writing literary criticism and analysis',
-          'Stay updated with contemporary Urdu literature',
-          'Develop appreciation for both classical and modern forms',
-          'Practice time management for different question types'
-        ]
-      },
-      'zoology': {
-        subjectId: 'zoology',
-        subjectName: 'Zoology',
-        subjectType: 'optional',
-        subjectGroup: 'group5',
-        code: 'OG5-5',
-        marks: 100,
-        duration: '3 Hours',
-        sections: [
-          {
-            title: 'I. Animal Diversity-Invertebrates',
-            description: 'Study of invertebrate animals and their diversity, structure, and adaptations.',
-            topics: [
-              'Architectural pattern of an animal, Taxonomy and phylogeny',
-              'Major subdivisions of animal kingdom',
-              'Animal-Like Protists: The Protozoa (evolutionary perspective, locomotion, reproduction, veterinary and medical importance)',
-              'Porifera: Body wall, skeleton, water currents system',
-              'Coelenterates: Reproduction plan, alteration of generation (Polymorphism), Coral reefs',
-              'Platyhelminthes and Nematodes: Parasitic adaptations and medical importance',
-              'Annelids: Metamerism and ecological importance',
-              'Molluscs: Modification of foot, Feeding and their role in shell fishery',
-              'Arthropods: Modification in mouth parts, Role as vectors in microbial infection, Ecological importance',
-              'Echinoderms: Characteristics, Evolutionary perspective, Relationships to other animals'
-            ]
-          },
-          {
-            title: 'II. Animal Diversity-Chordata',
-            description: 'Study of chordate animals including vertebrates and their evolutionary adaptations.',
-            topics: [
-              'Hemichordates and Invertebrate Chordates: Evolutionary Perspective, Phylogenetic Relationships and considerations',
-              'Fishes: Structural and functional adaptations',
-              'Amphibians: Movement onto land and early evolution of terrestrial vertebrates',
-              'Reptiles: Characteristics and adaptations',
-              'Birds: Migration and navigation, adaptations',
-              'Mammals: Structural and functional adaptations'
-            ]
-          },
-          {
-            title: 'III. Principles of Animal Life',
-            description: 'Fundamental biological principles underlying animal life and function.',
-            topics: [
-              'The chemical basis of animal life: Bio-molecules (carbohydrates, lipids, proteins, nucleic acids)',
-              'Cell concept and cell theory, Organization of cellular organelle (structure and functions)',
-              'Central dogma of cell biology (Transcription and Translation), Meiosis and Mitosis',
-              'Protozoa: Reproduction pattern and Parasitism',
-              'Mesozoa and Parazoa: Porifera (cell types, body wall, skeleton, water currents system)',
-              'Coelenterata: Reproduction plan and alteration of generation (Polymorphism)',
-              'Tissues Types: epithelial, connective, muscle and nervous tissues; organs and organ systems',
-              'Enzymes function and factors affecting their activity, cofactors and coenzymes',
-              'Energy Harvesting: Aerobic and anaerobic respiration (major source of ATP)',
-              'Mendel\'s law of inheritance, Chromosomal basis of inheritance, Multiple alleles',
-              'Eukaryotic chromosomes (Mutations and chromosomal aberrations)'
-            ]
-          },
-          {
-            title: 'IV. Ecological Concepts and Evolution',
-            description: 'Understanding ecological interactions and evolutionary processes.',
-            topics: [
-              'Ecological Concepts: Interactions, Concepts and components of ecosystem',
-              'Food chain, Food web, Biogeochemical cycles',
-              'Forests, Biomes, Wildlife conservation and management',
-              'Environmental pollution, Green house effect, Acid rain, Global warming and climate change',
-              'Evolution: Darwinian evolutionary theory based on natural selection and evidence',
-              'Microevolution (Genetic variation and change within species)',
-              'Macroevolution (Species and speciation - Allopatric, Parapatric and Sympatric speciation)'
-            ]
-          },
-          {
-            title: 'V. Animal Form and Function - Protection, Support and Movement',
-            description: 'Study of integumentary and muscular systems in animals.',
-            topics: [
-              'Protection, Support and Movement: Integumentary system of invertebrates and vertebrates',
-              'Animal muscles (muscular system of invertebrates and vertebrates)',
-              'Structural adaptations for movement and protection',
-              'Comparative anatomy of integumentary systems',
-              'Muscle types and their functions in different animal groups'
-            ]
-          },
-          {
-            title: 'VI. Animal Form and Function - Digestion and Nutrition',
-            description: 'Understanding feeding mechanisms and digestive systems.',
-            topics: [
-              'Digestion and Nutrition: Feeding mechanism, Digestion',
-              'Organization and regional function of alimentary canal',
-              'Regulation of food intake, Nutritional requirements',
-              'Comparative digestive systems across animal groups',
-              'Adaptations for different feeding strategies'
-            ]
-          },
-          {
-            title: 'VII. Animal Form and Function - Internal Fluids and Respiration',
-            description: 'Study of circulatory and respiratory systems.',
-            topics: [
-              'Internal Fluids and Respiration: Internal fluid environment',
-              'Composition of blood, Circulation and respiration mechanisms',
-              'Comparative circulatory systems',
-              'Respiratory adaptations in different environments',
-              'Transport mechanisms in animals'
-            ]
-          },
-          {
-            title: 'VIII. Animal Form and Function - Homeostasis and Coordination',
-            description: 'Understanding regulatory systems and coordination mechanisms.',
-            topics: [
-              'Homeostasis: Excretion, Vertebrate kidney mechanisms, Temperature regulation',
-              'Nervous Coordination: Nervous system and Senses',
-              'Functional units of nervous system, Synapses junctions between nerves',
-              'Chemical Coordination: Endocrine System',
-              'Vertebrate endocrine glands and types of hormones, Mechanism of hormones action'
-            ]
-          },
-          {
-            title: 'IX. Animal Behavior',
-            description: 'Study of animal behavior patterns and learning mechanisms.',
-            topics: [
-              'Animal Behavior: Learning, Habituation, Insight learning, latent learning, classical learning',
-              'Control of Behavior; social behavior',
-              'Behavioral adaptations and survival strategies',
-              'Communication systems in animals',
-              'Social organization and group dynamics'
-            ]
-          }
-        ],
-        recommendedBooks: [
-          'Integrated Principles of Zoology - Hickman, Jr. C.P., Keen, S. L, Larson, and Eisenhour, D.J.',
-          'Zoology - Miller, S. A. and Harley, J. B.',
-          'Biology - Campbell, N.A.',
-          'Evolution. 2nd Edition - Douglas Futuyma',
-          'Animal behavior: An Evolutionary Approach, (9th Edition) - John Alcock'
-        ],
-        examPattern: 'Comprehensive examination covering Animal Diversity (Invertebrates & Chordata), Principles of Animal Life, Ecological Concepts, Evolution, and Animal Form and Function (100 Marks)',
-        preparationTips: [
-          'Develop strong understanding of animal diversity and classification',
-          'Study comparative anatomy and physiology across animal groups',
-          'Master fundamental biological principles and cell biology',
-          'Understand ecological concepts and environmental interactions',
-          'Learn evolutionary theories and evidence',
-          'Practice identifying and classifying different animal groups',
-          'Study animal behavior and adaptation mechanisms',
-          'Focus on understanding physiological systems and homeostasis',
-          'Practice laboratory techniques and specimen identification',
-          'Join zoology study groups and field trips',
-          'Visit zoos, museums, and natural history collections',
-          'Stay updated with current research in zoology',
-          'Practice drawing and labeling anatomical structures',
-          'Understand the relationship between structure and function',
-          'Study conservation biology and environmental issues'
-        ]
       }
     };
 
@@ -6578,7 +6184,6 @@ export default function SubjectSyllabusPage() {
       </div>
     );
   }
-
   if (!subject || !syllabus) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-8">
