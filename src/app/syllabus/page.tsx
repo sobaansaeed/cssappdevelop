@@ -121,12 +121,8 @@ export default function SyllabusPage() {
       'chemistry': 'Organic chemistry, inorganic chemistry, physical chemistry, and analytical chemistry.',
       'mathematics': 'Calculus, linear algebra, differential equations, and mathematical analysis.',
       'history': 'World history, regional history, historical methodology, and historiography.',
-      'law': 'Constitutional law, criminal law, civil law, international law, and legal systems.',
-      'psychology': 'General psychology, social psychology, developmental psychology, and clinical psychology.',
-      'sociology': 'Sociological theory, social institutions, social change, and research methods.',
-      'political-science': 'Political theory, comparative politics, international relations, and public administration.',
-      'literature': 'Literary theory, critical analysis, genre studies, and literary history.',
-      'languages': 'Language structure, linguistics, translation, and language teaching.'
+
+
     };
 
     return syllabusMap[subjectId] || 'Comprehensive syllabus covering all aspects of the subject including theoretical concepts, practical applications, and contemporary developments.';
