@@ -1870,6 +1870,154 @@ export default function SubjectSyllabusPage() {
           'Understand sustainability and corporate social responsibility'
         ]
       },
+      'governance-policies': {
+        subjectId: 'governance-policies',
+        subjectName: 'Governance & Public Policies',
+        subjectType: 'optional',
+        subjectGroup: 'group3',
+        code: 'OG3-3',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          {
+            title: 'I. Basic Concepts of Governance',
+            description: 'Foundations of governance and good governance.',
+            topics: [
+              'Origin and definition of Governance',
+              'Definition and characteristics of Good Governance: participation, rule of law, transparency, responsiveness, equity, effectiveness and efficiency, accountability, strategic vision',
+              'Collapse/Failure of Governance: indicators, diagnostic tools and effects'
+            ]
+          },
+          {
+            title: 'II. Governance Theories',
+            description: 'Key theoretical approaches to governance and the state.',
+            topics: [
+              'Communitarianism and Decentralized Theory',
+              'Libertarian Socialism',
+              'Pluralism',
+              'Marxism and Neo-liberalism',
+              'Rational Choice Theory and Regulation Theory'
+            ]
+          },
+          {
+            title: 'III. Governance Indicators and Pakistan',
+            description: 'Measurement and application of governance indicators with Pakistan focus.',
+            topics: [
+              'Indicators developed by World Bank/IMF/UN/ESCAP/UNDP/ADB',
+              'Explanation and application level in Pakistan',
+              'Voice and Accountability',
+              'Political Stability and Absence of Violence/Terrorism',
+              'Government Effectiveness',
+              'Regulatory Quality and Rule of Law',
+              'Control of Corruption'
+            ]
+          },
+          {
+            title: 'IV. Public Policy & Planning Institutions and the Role in Planning',
+            description: 'Planning machinery and policy coordination in Pakistan.',
+            topics: [
+              'Institutional framework for policy coordination and planning at federal and provincial levels',
+              'Economic Coordination Committee, Cabinet and Cabinet Committees; The Secretaries Committee; Ministries and attached departments',
+              'Role of Planning Commission, The Finance Division, and line Ministries in development planning',
+              'Public Policy and Implementation (IMF/World Bank/UNDP framework); Pakistan Vision, Five Year Plans and Medium Term Framework',
+              'Public Policy and Implementation in key sectors (e.g., Health, Education)'
+            ]
+          },
+          {
+            title: 'V. Accountability',
+            description: 'Standards and instruments of accountability in governance.',
+            topics: [
+              'General introduction to Accountability and its concepts/Standards',
+              'Symbolism, regional and country-wise comparisons',
+              'Types: Political, Administrative, Legal/Judicial, Social',
+              'Administrative Accountability, Professional Accountability, Private vs Public',
+              'Accountability strategies against corruption and remedial measures'
+            ]
+          },
+          {
+            title: 'VI. Bureaucracy',
+            description: 'Role of bureaucracy and administrative culture.',
+            topics: [
+              'Historical evolution of bureaucracy; Weber, Wilson, and contemporary perspectives',
+              'Bureaucracy in Pakistan: British legacy, neutrality, steel frame and administrative culture',
+              'Rules of Business, code of ethics, effectiveness of the Establishment and the DMG/PCS debate',
+              'Recruitment, training, promotions and compensation; politicization and reform'
+            ]
+          },
+          {
+            title: 'VII. Public Policy Formulation and Implementation',
+            description: 'Policy cycle and challenges in Pakistan context.',
+            topics: [
+              'How policies are made: agenda setting, stakeholders, analysis, formulation, decision, implementation, evaluation',
+              'Six thinking hats and diagnosis; evidence-based policy; policy learning',
+              'Pitfalls: status quo bias, lack of coordination, weak capacity, political economy constraints',
+              'Tools: problem structuring, policy instruments, regulatory impact analysis, M&E'
+            ]
+          },
+          {
+            title: 'VIII. Multi-level Governance in Pakistan',
+            description: 'Institutions across tiers of government.',
+            topics: [
+              'Parliament and Provincial Assemblies; Senate',
+              'Judiciary: Supreme Court, High Courts, Lower Courts',
+              'Executive: Federal, Provincial and Local Government',
+              'Police and civil administration; Office of Ombudsman',
+              'Office of the President/Prime Minister; Federal Cabinet and Secretariat',
+              'Local government system: District, Tehsil/Town, Union Administration; efficacy, performance and causes of success/failure'
+            ]
+          },
+          {
+            title: 'IX. Federalism, Devolution and Decentralization',
+            description: 'Structures of the state and service delivery.',
+            topics: [
+              'Constitutional underpinnings of federal structure',
+              'Principle of subsidiarity in service delivery',
+              'Devolution model(s) in Pakistan and international comparisons'
+            ]
+          },
+          {
+            title: 'X. Role of Citizens in Governance',
+            description: 'Citizen-centric governance and participation.',
+            topics: [
+              'Citizen charters and social accountability',
+              'Right to Information and transparency',
+              'Public participation, co-production and community monitoring'
+            ]
+          },
+          {
+            title: 'XI. Good Governance in Islam',
+            description: 'Islamic guidance on governance and public policy.',
+            topics: [
+              'Quranic guidance on good governance',
+              'Application of governance concepts in the light of Quran, Sunnah and Fiqh'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'Governance by Anne Mette Kjaer',
+          'Encyclopedia of Governance by Mark Bevir',
+          'Implementing Public Policy by Hill & Hupe',
+          'Economic Survey of Pakistan (latest) and Planning Commission documents',
+          'Public Administration and Public Affairs by Nicholas Henry',
+          'Local Government Reforms in Pakistan by Shah & Ghaus-Pasha',
+          'Pakistan: Beyond the Crisis State by Maleeha Lodhi',
+          'Power Dynamics, Institutional Instability and Economic Growth in Pakistan by Akmal Hussain',
+          'Constitution of Islamic Republic of Pakistan (National Assembly of Pakistan)',
+          'Governance: South Asian Perspective by Hasnat Abdul Hye',
+          'Governance, Economic Policy and Reform in Pakistan by Abdus Samad'
+        ],
+        examPattern: 'Comprehensive 100-mark paper covering 11 sections from basic concepts and theories to accountability, policy, multi-level governance, federalism, citizen role, and Islamic perspective.',
+        preparationTips: [
+          'Map each section to current affairs examples in Pakistan',
+          'Learn measurement frameworks (WGI) and practice interpreting indicators',
+          'Study Pakistan\'s planning machinery and how policies travel from agenda to implementation',
+          'Prepare short notes for theories of governance and their critiques',
+          'Revise accountability institutions and legal frameworks (Ombudsman, RTI, anti-corruption bodies)',
+          'Use recent policy cases in health/education to illustrate implementation challenges',
+          'Understand federalism and the post-18th Amendment devolution architecture',
+          'Incorporate Islamic principles of good governance with contemporary relevance'
+        ]
+      },
       'constitutional-law': {
         subjectId: 'constitutional-law',
         subjectName: 'Constitutional Law',
@@ -2170,6 +2318,74 @@ export default function SubjectSyllabusPage() {
           'Study the impact of globalization on Pakistan\'s economy'
         ]
       },
+      'chemistry': {
+        subjectId: 'chemistry',
+        subjectName: 'Chemistry',
+        subjectType: 'optional',
+        subjectGroup: 'group2',
+        code: 'OG2-2',
+        marks: 200,
+        duration: '6 Hours (2 Papers)',
+        sections: [
+          {
+            title: 'Paper-I: Physical, Analytical and Inorganic Chemistry (100 Marks)',
+            description: 'Core physical chemistry, kinetics, thermodynamics and foundational analytical/inorganic topics.',
+            topics: [
+              'I. Atomic Structure and Quantum Chemistry: Electromagnetic spectrum, photoelectric effect, de Broglie equation, Heisenberg uncertainty principle, Schrödinger equation and its applications (particle in a box, hydrogen atom); quantum numbers, orbitals and shapes; Pauli principle, Hund’s rule and Aufbau principle',
+              'II. Electrochemistry: Conductance in ionic solutions, transport number, ionic mobility, Debye–Hückel theory (qualitative), electrochemical cells, EMF and Nernst equation, standard electrode potential, reference electrodes, corrosion and its prevention, batteries and fuel cells',
+              'III. Thermodynamics: Ideal and real gases, van der Waals equation, laws of thermodynamics, enthalpy, entropy, Helmholtz and Gibbs free energies, criteria of spontaneity, Maxwell relations, chemical equilibrium and phase equilibria (phase rule basics)',
+              'IV. Chemical Kinetics: Rate of reaction, order and molecularity, integrated rate laws, temperature dependence (Arrhenius equation), activation energy, collision and transition state theories (qualitative), catalysts and enzyme kinetics, reaction mechanisms',
+              'V. Fundamentals of Chemometrics and Data Analysis: Significant figures, measurement and systematic/random errors, accuracy vs precision, confidence limits, Gaussian distribution, least-squares fitting, analysis of variance (ANOVA), mean, median, mode, standard deviation',
+              'VI. Separation Methods: Principles and applications of analytical separations; solvent extraction, paper and thin-layer chromatography, column chromatography, gas chromatography (GC), high-performance liquid chromatography (HPLC), ion-exchange chromatography, electrophoresis; qualitative and quantitative applications',
+              'VII. Spectroscopic Methods: Basic principles, instrumentation and applications of UV–Visible, IR, NMR and Mass spectrometry for qualitative and quantitative analysis; structure elucidation basics',
+              'VIII. Basic Inorganic Chemistry and Bonding: Ionic and covalent bonding, localized vs delocalized bonding, VBT, VSEPR and MO approaches, hydrogen bonding, resonance, electronegativity and periodic trends; HSAB concept',
+              'IX. Acids and Bases: Arrhenius, Brønsted–Lowry and Lewis concepts; hard and soft acids and bases; buffer solutions, pH and pKa, acid–base titrations',
+              'X. Chemistry of s-, p-, d- and f-Block Elements (overview): General periodic trends; transition elements – oxidation states, complex formation, magnetic properties; lanthanides and actinides – common oxidation states and applications; introduction to coordination chemistry – ligands, coordination number, isomerism, Werner’s theory, crystal field theory (octahedral/tetrahedral splitting), spectrochemical series, Jahn–Teller distortion (qualitative)'
+            ]
+          },
+          {
+            title: 'Paper-II: Organic, Biochemistry and Industrial Chemistry (100 Marks)',
+            description: 'Fundamental and applied organic chemistry including stereochemistry, mechanisms, spectroscopy, biomolecules and industrial processes.',
+            topics: [
+              'I. Basic Concepts of Organic Chemistry: Bonding and hybridization (sp, sp2, sp3), bond polarity and dipole moment, resonance and hyperconjugation, inductive and mesomeric effects, aromaticity, acidity and basicity of organic compounds',
+              'II. Stereochemistry: Structural, geometrical and optical isomerism; conformational analysis of alkanes and cyclohexane; chirality, enantiomers, diastereomers, racemization and resolution; R/S and E/Z nomenclature',
+              'III. Chemistry of Aromatic Compounds: Benzene structure and aromaticity (Hückel rule); electrophilic aromatic substitution – mechanism and reactivity; directing effects, orientation and poly-substitution; polynuclear aromatics',
+              'IV. Chemistry of Functional Groups: Preparation, properties and reactions of alkanes, alkenes, alkynes, alkyl halides, alcohols, phenols, ethers, epoxides, amines, nitro compounds, carbonyls (aldehydes and ketones), carboxylic acids and their derivatives',
+              'V. Reaction Mechanisms: Nucleophilic substitution (SN1, SN2), elimination (E1, E2), addition to carbon–carbon multiple bonds, electrophilic and nucleophilic additions to carbonyls; overview of reactive intermediates (carbocations, carbanions, radicals)',
+              'VI. Organic Spectroscopy: Principles and interpretation of UV–Visible, IR, 1H- and 13C-NMR and Mass spectra for structure determination of organic molecules',
+              'VII. Biochemistry (Fundamentals): Carbohydrates (mono-, di- and polysaccharides), amino acids, peptides and proteins (primary to quaternary structure), lipids and fatty acids, nucleic acids (DNA/RNA) – basic structure and biological role; enzymes and vitamins (basics)',
+              'VIII. Chemical Industries and Environmental Aspects: Basic processes and flow-sheets for manufacture of sugar, cement, glass, paper, fertilizers, soaps and detergents; petroleum refining basics; occupational safety and environmental considerations',
+              'IX. Polymers and Macromolecules: Classification and nomenclature, tacticity and stereoregularity, mechanisms of polymerization (addition and condensation), average molecular weights and distributions, properties, additives and applications; common industrial polymers'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'Atkins’ Physical Chemistry by P. Atkins & J. de Paula',
+          'Physical Chemistry by P. W. Atkins & R. Friedman',
+          'Elements of Physical Chemistry by P. Atkins',
+          'Skoog, West, Holler & Crouch: Fundamentals of Analytical Chemistry',
+          'Shriver & Atkins: Inorganic Chemistry',
+          'Housecroft & Sharpe: Inorganic Chemistry',
+          'Morrison & Boyd: Organic Chemistry',
+          'Clayden, Greeves & Warren: Organic Chemistry',
+          'Pavia, Lampman, Kriz & Vyvyan: Introduction to Spectroscopy',
+          'Lehninger: Principles of Biochemistry',
+          'Shreve’s Chemical Process Industries'
+        ],
+        examPattern: 'Two Papers: Paper-I (Physical/Analytical/Inorganic) 100 Marks + Paper-II (Organic/Biochemistry/Industrial) 100 Marks = 200 Marks',
+        preparationTips: [
+          'Master quantum basics, thermodynamics and kinetics with numerical practice',
+          'Practice Nernst equation, electrochemical cells and electrode potentials problems',
+          'Revise chromatographic and spectroscopic techniques with typical applications',
+          'Consolidate bonding models (VBT, VSEPR, MO) and coordination chemistry fundamentals',
+          'Build strong command over reaction mechanisms (SN1/SN2, E1/E2, additions) and reagent chemistry',
+          'Drill stereochemistry: R/S, E/Z and conformational analysis problems',
+          'Solve past questions on spectral interpretation (IR, NMR, MS) and multi-step structure elucidation',
+          'Summarize biomolecule chemistry with emphasis on structure–function relationships',
+          'Review common industrial processes and environmental/safety considerations',
+          'Use high-yield summary sheets and attempt timed mock papers for both papers'
+        ]
+      },
       'english-literature': {
         subjectId: 'english-literature',
         subjectName: 'English Literature',
@@ -2380,6 +2596,199 @@ export default function SubjectSyllabusPage() {
           'Understand the relationship between European history and global events'
         ]
       },
+      'history-pakistan-india': {
+        subjectId: 'history-pakistan-india',
+        subjectName: 'History of Pakistan & India',
+        subjectType: 'optional',
+        subjectGroup: 'group4',
+        code: 'OG4-1',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          {
+            title: 'I. Muslim Rule and Heritage in India (712–1857)',
+            description: 'Political and administrative history under Muslim dynasties to the end of Mughal rule.',
+            topics: [
+              'Arrival, foundation and consolidation of Muslim rule in India',
+              'Important rulers of Slave, Khalji, Tughlaq, Sayyid, Lodi and Mughal dynasties',
+              'Spirit and legacy of Muslim civilization: art, architecture and literature',
+              'Public administration under Muslim rulers; social, judicial, civil and military systems',
+              'Industry, trade and commerce under Muslim patronage; financial administration'
+            ]
+          },
+          {
+            title: 'II. British Rule in India (1857–1947)',
+            description: 'From the rise of East India Company to end of British Raj.',
+            topics: [
+              'British imperialism; origin and growth of East India Company power',
+              'Causes and effects of the downfall of Mughal Empire',
+              'The War of Independence 1857: causes and effects'
+            ]
+          },
+          {
+            title: 'III. Constitutional and Political Reforms (1858–1947)',
+            description: 'Evolution of British constitutional reforms and party politics.',
+            topics: [
+              'Acts and reforms from 1858 to 1947',
+              'Growth of political parties with focus on Indian National Congress'
+            ]
+          },
+          {
+            title: 'IV. Muslim Struggle for Independence',
+            description: 'Political awakening and Muslim nationalism.',
+            topics: [
+              'Role of Shah Waliullah, Syed Ahmad Shaheed and Sir Syed Ahmed Khan',
+              'Muslim rule in South Asia and its legacy',
+              'All India Muslim League; Partition of Bengal; Simla Deputation; Lucknow Pact',
+              'Khilafat Movement; Nehru Report; Quaid-i-Azam’s Fourteen Points'
+            ]
+          },
+          {
+            title: 'V. Pakistan Movement',
+            description: 'Towards independence.',
+            topics: [
+              'Allama Iqbal’s Allahabad Address (1930) and Round Table Conferences',
+              'Congress Rule and policies; events of 1937–1939',
+              'Lahore Resolution 1940 and subsequent developments',
+              'Plans for partition of South Asia; major actors',
+              'Quaid-i-Azam, Mohsin-ul-Mulk, Syed Ameer Ali, Ali Brothers, Sir Agha Khan, Chaudhry Rahmat Ali and others'
+            ]
+          },
+          {
+            title: 'VI. History of Pakistan (1947–to date)',
+            description: 'Early challenges and constitutional development.',
+            topics: [
+              'Pakistan’s early challenges; Quaid-i-Azam as Governor General',
+              'Constitution making attempts and milestones'
+            ]
+          },
+          {
+            title: 'VII. Military in Politics',
+            description: 'Civil–military relations and regimes.',
+            topics: [
+              'Ayub Khan, Yahya Khan, Zia-ul-Haq and Pervez Musharraf regimes',
+              'Civil–military relations in Pakistan'
+            ]
+          },
+          {
+            title: 'VIII. Separation of East Pakistan',
+            description: 'Background, causes and consequences of 1971.',
+            topics: [
+              'Political, social and economic factors; war and aftermath'
+            ]
+          },
+          {
+            title: 'IX. Working of Democracy in Pakistan',
+            description: 'Democratic eras, leadership and party politics.',
+            topics: [
+              'From Liaquat Ali Khan to Feroz Khan Noon (1947–1958)',
+              'Zulfikar Ali Bhutto period (1971–1977)',
+              'Benazir Bhutto and Nawaz Sharif eras; Restoration of Democracy (1988–1999)',
+              'Restoration of Democracy (2008 to date)',
+              'Role of major political parties and pressure groups'
+            ]
+          },
+          {
+            title: 'X. Foreign Policy of Pakistan (1947–1999)',
+            description: 'Pakistan’s external relations and major phases.',
+            topics: [
+              'Key determinants, shifts and events in foreign policy during 1947–1999'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'Political Parties in Pakistan: 1947–1958 by M. Rafique Afzal (1986)',
+          'Government & Politics in Pakistan by Mushtaq Ahmad (1970)',
+          'Party Politics in Pakistan: 1947–58 by K.K. Aziz (1976)',
+          'India’s Struggle for Independence by Bipin Chandra (1989)',
+          'Constitutional Development in Pakistan by G.W. Chaudhary (1959)',
+          'Wavell and the Days of the Raj by Muhammad Iqbal Chawla (2011)',
+          'Nationalism and Communal Politics in India by Mushirul Hassan (1991)',
+          'The Charismatic Leader: Jinnah and the Creation of Pakistan by Sikandar Hayat (2007)',
+          'The Culture of Power and Governance of Pakistan 1947–2008 by Ilhan Niaz (2011)',
+          'Muslim Civilization of Indo-Pakistan by Shaikh Muhammad Ikram (1966)',
+          'Pakistan’s Failure in National Integration by Rounaq Jahan (1972)',
+          'Constitutional and Political History of Pakistan by Hamid Khan (2005)',
+          'The Muslim Politics in Punjab by Qalb-i-Abid (1992)',
+          'The Muslim Community of the Indo-Pak by Ishtiaq Hussain Qureshi (1962)',
+          'The Struggle for Pakistan by Ishtiaq Hussain Qureshi (1965)',
+          'Pakistan: The Formative Phase by Khalid bin Sayeed (1968)',
+          'The Military and Politics in Pakistan 1947–86 by Hassan Askari Rizvi',
+          'Pakistan: A New History by Ian Talbot (1999)',
+          'Politics and the State in Pakistan by Mohammad Waseem (1989)',
+          'Jinnah of Pakistan by Stanley Wolpert (1984)'
+        ],
+        examPattern: 'Single paper, 100 marks covering 10 sections from Muslim and British rule to Pakistan’s politics, democracy, foreign policy and key movements.',
+        preparationTips: [
+          'Build a chronological timeline from 712 to present for both India and Pakistan',
+          'Link constitutional reforms to political movements and leadership',
+          'Prepare short notes on key personalities and their contributions',
+          'Use maps and primary documents where possible (acts, reports, speeches)',
+          'Practice past papers focusing on analytical essays and cause–effect questions'
+        ]
+      },
+      'history-usa': {
+        subjectId: 'history-usa',
+        subjectName: 'History of USA',
+        subjectType: 'optional',
+        subjectGroup: 'group4',
+        code: 'OG4-5',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          {
+            title: 'I. Introduction',
+            topics: [
+              'From ancient times to 1492',
+              'Advent of the Europeans to British supremacy (1492–1606)'
+            ]
+          },
+          { title: 'II. USA as a British Colony (1606–1783)', topics: [] },
+          { title: 'III. USA as an Independent Country (1783–1819)', topics: [] },
+          { title: 'IV. Expansion of USA: From 13 to 50 States (1820–1949)', topics: [] },
+          { title: 'V. Constitution of the USA: Salient Features', topics: [] },
+          { title: 'VI. Civil War between the North and the South (1850–1869)', topics: [] },
+          { title: 'VII. Industrialization and Emergence as a World Power (1870–1916)', topics: [] },
+          { title: 'VIII. USA’s Role in the Two World Wars (1914–1918 & 1939–1945)', topics: [] },
+          { title: 'IX. Post-1945 Scenario and Emergence of USA and USSR as Two World Powers', topics: [] },
+          { title: 'X. American Role in Patronizing UNO and International Organizations (1945–2012)', topics: [] },
+          { title: 'XI. American Role in Cold War and Emergence as the Sole Super Power (1945–1990)', topics: [] },
+          { title: 'XII. International Concerns of USA: An Overview', topics: [] },
+          { title: 'XIII. The War on Terror: The Role of Pakistan and USA (2001–2012)', topics: [] },
+          { title: 'XIV. Global Perceptions of the USA', topics: [] },
+          { title: 'XV. Progressive Era: Reforms of Theodore Roosevelt and Woodrow Wilson', topics: [] },
+          { title: 'XVI. The Great Depression and the New Deal', topics: [] },
+          { title: 'XVII. Civil Rights Movement', topics: [] },
+          { title: 'XVIII. United States’ Role in International Conflicts', topics: [] },
+          { title: 'XIX. US Presidential Election', topics: [] },
+          { title: 'XX. The US Congress: Role and Functions', topics: [] },
+          { title: 'XXI. Separation of Powers: Checks and Balances', topics: [] }
+        ],
+        recommendedBooks: [
+          'The Ideological Origins of the American Revolution by Bernard Bailyn (1992)',
+          'A Pocket History of the United States by H. Commager and Allan Nevins (1967)',
+          'Painless American History by Curt Lader (2009)',
+          'The Politically Incorrect Guide to American History by Thomas E. Woods Jr. (2004)',
+          'The Civil War: A Narrative by Shelby Foote (1986)',
+          'The American Political Tradition and the Men Who Made It by Richard Hofstadter (1948)',
+          'US–South Asian Relations 1784–1940: A History Perspective by Iftikhar H. Malik (2006)',
+          'The Tragedy of Great Power Politics by John Mearsheimer (2001)',
+          'Enlightenment Revolution and the Birth of Modern Nation (Thomas Paine) by Craig Nelson (2006)',
+          'The USA: 1917–1980 by Nigel Smith (2006)',
+          'American Colonies: The Selling of North America by Alan Taylor (2002)',
+          'White Over Black: American Attitudes Toward the Negro 1550–1812 by Winthrop D. Jordan',
+          'The Complete Book of U.S. Presidents by William A. DeGregorio (2005)',
+          'A People’s History of the United States: 1492 to Present by Howard Zinn (1980)'
+        ],
+        examPattern: 'Single paper, 100 marks covering 21 sections from origins and colonial era to institutions, reforms, world role and checks and balances.',
+        preparationTips: [
+          'Build a periodized outline from colonial era to contemporary times',
+          'Track territorial expansion, industrialization and institutional evolution',
+          'Prepare concise briefs on the Civil War, Progressive reforms, New Deal and Civil Rights Movement',
+          'Link US foreign policy phases (World Wars, Cold War, War on Terror) to domestic politics',
+          'Understand constitutional structure: Congress, presidency, elections and checks and balances'
+        ]
+      },
       'gender-studies': {
         subjectId: 'gender-studies',
         subjectName: 'Gender Studies',
@@ -2545,6 +2954,127 @@ export default function SubjectSyllabusPage() {
           'Read recommended books for comprehensive understanding',
           'Stay updated with current gender issues and developments',
           'Practice analyzing gender issues from multiple perspectives'
+        ]
+      },
+      'environmental-sciences': {
+        subjectId: 'environmental-sciences',
+        subjectName: 'Environmental Science',
+        subjectType: 'optional',
+        subjectGroup: 'group5',
+        code: 'OG5-2',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          {
+            title: 'I. History of Environmental Thought',
+            topics: [
+              'Environment and Sustainable Development',
+              'History of environmental movements',
+              'Industrial and Agricultural Revolutions',
+              'UN Conference on Human Environment 1972, Our Common Future 1987',
+              'Rio Summit 1992, Agenda 21, World Summit on Sustainable Development 2002',
+              'Rio+20 Summit 2012, Millennium Development Goals'
+            ]
+          },
+          {
+            title: 'II. Sustainable Development Issues',
+            topics: [
+              'Population growth and urbanization',
+              'Poverty and food security',
+              'Biodiversity loss and conservation',
+              'Energy security and renewable energy',
+              'Carrying capacity and ecological footprint',
+              'Sustainable agriculture and climate-resilient development'
+            ]
+          },
+          {
+            title: 'III. Interdisciplinary Nature of Environmental Science',
+            topics: [
+              'Convergence of social and natural sciences',
+              'Environmental biology, chemistry, physics and microbiology',
+              'Environmental toxicology and health',
+              'Environmental economics and policy',
+              'Environmental geography and geology',
+              'Environmental sociology'
+            ]
+          },
+          {
+            title: 'IV. Environmental Pollution',
+            topics: [
+              'Air, water and soil pollution',
+              'Noise pollution',
+              'Solid waste, water logging and salinity',
+              'Deforestation, desertification and land degradation',
+              'Eutrophication and global/regional air pollution',
+              'Acid rain, photochemical smog and climate change linkages'
+            ]
+          },
+          {
+            title: 'V. Climate Change',
+            topics: [
+              'Climate patterns at local, regional and global scales',
+              'Types and indicators of climate change',
+              'Effects on natural and societal systems',
+              'Carbon footprint; mitigation and adaptation',
+              'CDM, REDD+ and global climate politics (role of India, China, USA; Copenhagen 2009)'
+            ]
+          },
+          {
+            title: 'VI. Environmental Governance',
+            topics: [
+              'Policy, legal and institutional frameworks in Pakistan',
+              'National Conservation Strategy 1992; NEP 2005; PEPA 1997 and EIA/IEE rules',
+              'Municipal and hazardous waste rules; drinking water policy',
+              'National Climate Change Policy 2012'
+            ]
+          },
+          {
+            title: 'VII. Global Initiatives',
+            topics: [
+              'Convention on Biological Diversity (CBD) and Cartagena Protocol',
+              'CITES and Ramsar Convention; World Heritage Convention',
+              'UNFCCC and Kyoto Protocol; UNCCD',
+              'Montreal Protocol on Substances that Deplete the Ozone Layer',
+              'United Nations initiatives on sustainable development'
+            ]
+          },
+          {
+            title: 'VIII. Environmental Assessment and Management',
+            topics: [
+              'Environmental Impact Assessment (EIA) and Strategic Environmental Assessment (SEA)',
+              'Environmental Management Systems (ISO 14000) and OHSAS 18000',
+              'Participatory and technological approaches to environmental management',
+              'Solid waste management; disaster risk management',
+              'Pollution control technologies',
+              'GIS & Remote Sensing; Natural resources management'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'Environmental Economics in Theory and Practice by Hanley, Shogren & White',
+          'Industrial Safety Health and Environmental Management by R.K. Jain & S.S. Rao',
+          'Environmental Science: Earth as a Living Planet by Botkin & Keller (2014)',
+          'Environmental Geology Facing the Challenges of Our Changing Earth by Erickson',
+          'Environmental Geology by Keller & Edward',
+          'Earth Science by Tarbuck, Lutgens & Frederick',
+          'Environmental Science: A Study of Interrelationships by Enger & Smith',
+          'Basics of Forestry & Applied Sciences by Masood A.A. Qureshi',
+          'Environmental Science: Working with Earth by T.G. Miller',
+          'Disaster Management: A Disaster Manager’s Handbook by Carter N.W.',
+          'Disasters and Development by Cuny F.C.',
+          'Disaster Management: Warning Response and Community Relocation by Perry & Mushkatel',
+          'Energy: Crisis or Opportunity by Diana Schumacher',
+          'Environmental Health: Ecological Perspective by Kathryn Hilgenkamp',
+          'Official Website of Govt. of Pakistan (www.environment.gov.pk)',
+          'Official Website of UN Environment Programme (www.unep.org)'
+        ],
+        examPattern: 'Single paper, 100 marks covering 8 sections from evolution of thought and sustainable development to governance, global initiatives, and assessment/management.',
+        preparationTips: [
+          'Prepare crisp definitions and current examples for each section',
+          'Link Pakistan policies with global agreements (UNFCCC, CBD, CITES, Montreal Protocol)',
+          'Practice diagram-based answers (pollution pathways, EIA flow, climate drivers)',
+          'Build updated notes on climate policy, SDGs and National Climate Change Policy',
+          'Use case studies in water, solid waste and air pollution for applied answers'
         ]
       },
       'geography': {
@@ -3623,7 +4153,7 @@ export default function SubjectSyllabusPage() {
         subjectName: 'Mercantile Law',
         subjectType: 'optional',
         subjectGroup: 'group6',
-        code: 'OG6-2',
+        code: 'OG6-5',
         marks: 100,
         duration: '3 Hours',
         sections: [
@@ -3830,6 +4360,76 @@ export default function SubjectSyllabusPage() {
           'Master the art of legal argumentation in commercial disputes',
           'Understand the role of commercial law in economic development',
           'Study the relationship between commercial law and public policy'
+        ]
+      },
+      'muslim-law-jurisprudence': {
+        subjectId: 'muslim-law-jurisprudence',
+        subjectName: 'Muslim Law & Jurisprudence',
+        subjectType: 'optional',
+        subjectGroup: 'group6',
+        code: 'OG6-4',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          {
+            title: 'I. The Sources of Islamic Law',
+            topics: [
+              'The Quran',
+              'The Sunnah',
+              'Ijma',
+              'Qiyas',
+              'Ijtehad'
+            ]
+          },
+          { title: 'II. Principles of Islamic Jurisprudence', topics: [] },
+          {
+            title: 'III. Islamic Criminal Law',
+            topics: [
+              'Hadd',
+              'Taz’ir',
+              'Qisas and Diyat'
+            ]
+          },
+          {
+            title: 'IV. Islamic Family Law',
+            topics: [
+              'Marriage and Dower',
+              'Divorce',
+              'Separation by Repudiation (Talaq)',
+              'Separation by Mutual Agreement (Khula)',
+              'Judicial Separation (Faskh)',
+              'Post-divorce maintenance',
+              'Child custody',
+              'Succession'
+            ]
+          },
+          { title: 'V. Islamic Law of Contract', topics: [] },
+          { title: 'VI. Islamic Banking and Insurance', topics: [] },
+          { title: 'VII. Islamic International Law', topics: [] },
+          { title: 'VIII. Islamic Law and Human Rights', topics: [] },
+          { title: 'IX. Dissolution of Muslim Marriages Act, 1939', topics: [] },
+          { title: 'X. Muslim Family Laws Ordinance 1961', topics: [] }
+        ],
+        recommendedBooks: [
+          'An Introduction to the Study of Islamic Law by Hussain Hamid Hassan',
+          'Principles of Islamic Jurisprudence by Mohammad Hashim Kamali',
+          'Theories of Islamic Law by Imran Ahsan Nyazee',
+          'Islamic Law of Contracts and Business Transactions by Tahir Mansuri',
+          'Family Law in Islam by Mohammad Tahir Mansuri',
+          'Outlines of Islamic Jurisprudence by Imran Ahsan Nyazee',
+          'General Principles of Criminal Law by Imran Ahsan Nyazee',
+          'State and Legislation in Islam by Mahmood Ahmad Gazi',
+          'Mahomedan Jurisprudence by Abdur Rahim',
+          'Islamic Law of Inheritance by Hamid Khan',
+          'Munir Principles of Muhammadan Law by Munir Ahmad Siddiqui'
+        ],
+        examPattern: 'Single paper, 100 marks covering sources, usul al-fiqh, criminal and family law, contracts, banking and insurance, international law, human rights, and key Pakistani statutes.',
+        preparationTips: [
+          'Prepare concise notes of sources and principles with contemporary applications',
+          'Use case-based approach for family law and criminal law doctrines',
+          'Link Islamic banking concepts with modern finance instruments',
+          'Review Pakistani statutes (DMMA 1939; MFLO 1961) with case law summaries',
+          'Practice structured answers citing Quran, Sunnah and classical jurists where relevant'
         ]
       },
       'pashto': {
@@ -4780,7 +5380,7 @@ export default function SubjectSyllabusPage() {
         subjectName: 'Public Administration',
         subjectType: 'optional',
         subjectGroup: 'group3',
-        code: 'OG3-3',
+        code: 'OG3-2',
         marks: 100,
         duration: '3 Hours',
         sections: [
@@ -5373,6 +5973,195 @@ export default function SubjectSyllabusPage() {
           'Understand the relationship between literature and philosophy',
           'Study the role of literature in moral and ethical development',
           'Learn about the future of literary expression and creativity'
+        ]
+      },
+      'sindhi': {
+        subjectId: 'sindhi',
+        subjectName: 'Sindhi',
+        subjectType: 'optional',
+        subjectGroup: 'group7',
+        code: 'OG7-7',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          { title: 'I. تاريخ، تَخليقيات ۽ ٻوليءَ جو پسمنظر', topics: ['سنڌي ٻوليءَ جي ابتدا ۽ ارتقا', 'سنڌي ادب جا اهم دور ۽ رجحان', 'صوفي روايتون ۽ سماجي-تاريخي پسمنظر'] },
+          { title: 'II. لسانيات ۽ عربي/فارسي اثرات', topics: ['صرف و نحو جو جائزو', 'لفظي ذخيرو، املا ۽ آوازياتي خصوصيتون', 'عربي، فارسي ۽ سنسڪرت جا اثر'] },
+          { title: 'III. صنفون: شاعري', topics: ['بيت، وايون، ڪافيون، غزل، نظم، دوها، گيت'] },
+          { title: 'IV. صنفون: نثر', topics: ['افسانو، ناول، انشائيه، سفرنامو، ڊرامو، تنقيد'] },
+          { title: 'V. قديم شاعرن جو مطالعو', topics: ['شاهه عبداللطيف ڀٽائي', 'سچل سرمست', 'عبدالرحيم گرڪ', 'روحل فقير', 'ڪلاسيڪي لوڪ ادب'] },
+          { title: 'VI. جديد شاعرن ۽ تحريڪن', topics: ['شيخ اياز', 'نظم جديد ۽ آزاد شاعري', 'اهم جديد تحريڪون ۽ موضوعات'] },
+          { title: 'VII. افسانه نگاري', topics: ['جديد افسانه نگارن جو جائزو', 'موضوعات، اسلوب ۽ فني حربا'] },
+          { title: 'VIII. تنقيد ۽ تحقيق', topics: ['سنڌي تنقيد جا رُجحان', 'تحقيقي طريقا ۽ ڪتابيات', 'ادبي تاريخ نويسي'] },
+          { title: 'IX. لوڪ ادب ۽ ثقافت', topics: ['لوڪ گيت، ڏند ڪٿائون، ريتون ۽ رسمون', 'لوڪ ڪهاڻيون ۽ ڊوها', 'سنڌي ثقافتي سرمايو'] },
+          { title: 'X. Script، املا ۽ ترجمو', topics: ['سنڌي لکت ۽ املا جا اصول', 'اردو/انگريزي مان سنڌي ڏانهن ترجمو (مشقي سوال)'] }
+        ],
+        recommendedBooks: [
+          'شاهه جو رسالو (مختلف ايڊيشنز)',
+          'سچل سرمست: ڪليات',
+          'شيخ اياز: چونڊ شاعري ۽ نثر',
+          'سنڌي ادب جي تاريخ – مختلف محقق',
+          'سنڌي لسانيات – تحقيقاتي مقالا',
+          'سنڌي افسانو – چونڊ مجموعا'
+        ],
+        examPattern: 'واحد پرچو (100 نمبر): تاريخ/لسانيات، صنفون (شاعري/نثر)، قديم ۽ جديد ادب، تنقيد/تحقيق، لوڪ ادب ۽ ترجمي تي مشتمل.',
+        preparationTips: [
+          'شاهه عبداللطيف ۽ سچل سرمست جا سلسلا ۽ بيت مع حوالا ياد ڪريو',
+          'صنفي خصوصيتن تي مختصر نوٽس ٺاهيو (بيت، وائي، ڪافي، افسانو وغيره)',
+          'جديد تحريڪن ۽ شيخ اياز جي شاعري مان حوالا مثال گڏ ڪريو',
+          'لساني نقطه نگاهه کان املا، صرف و نحو ۽ لفظيات جي مشق ڪريو',
+          'ترجمي ۽ لوڪ ادب تي مثالن سان تياري ڪريو'
+        ]
+      },
+      'balochi': {
+        subjectId: 'balochi',
+        subjectName: 'Balochi',
+        subjectType: 'optional',
+        subjectGroup: 'group7',
+        code: 'OG7-9',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          {
+            title: 'A) شاعري',
+            topics: [
+              'بيت، گيت، دوها ۽ غزل',
+              'جديد نظم (آزاد/نثري نظم)',
+              'ڪلاسيڪي شاعري جا موضوع: عشق، دليرئ، قبائلي روايت، وطن دوستي',
+              'جديد موضوعات: سماجي تبديلين، قومي سڃاڻپ، امن ۽ ترقي'
+            ]
+          },
+          {
+            title: 'B) نثر',
+            topics: [
+              'داستان ۽ روايتي قصا (سنگل/شاهنامي واري روايت)',
+              'افسانو ۽ ناول: اسلوب، ڪردار نگاري، پلاٽ',
+              'ڊرامو ۽ اسٽيچ روايت',
+              'مقالا نويسي ۽ تنقيد'
+            ]
+          },
+          {
+            title: 'C) تاريخ، ثقافت ۽ لوڪ ادب',
+            topics: [
+              'بلوچستان جي تاريخ ۽ تمدن جو جائزو',
+              'لوڪ بيت، لوڪ ڪهاڻيون، رزميه روايتون',
+              'بلوچي ريتون ۽ ثقافتي قدريون'
+            ]
+          },
+          {
+            title: 'D) ٻولي ۽ لسانيات',
+            topics: [
+              'بلوچي ٻوليءَ جي شاخون، صوتيات ۽ صرف و نحو',
+              'لغوي ذخيرو، لهجن جو جائزو، معياري املا'
+            ]
+          },
+          {
+            title: 'E) تخليقي لکڻ',
+            topics: [
+              'موضوع تي مختصر مضمون/افسانوي خاڪو'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'بلوچستان جي ادبي تاريخ (منتخب ابواب)',
+          'بلوچي شاعري جا چونڊ مجموعا',
+          'بلوچي افسانا ۽ ناول – منتخب ڪتاب',
+          'لساني جائزو: بلوچي گرامر ۽ صوتيات تي مقالا'
+        ],
+        examPattern: 'واحد پرچو (100 نمبر): شاعري، نثر، تاريخ/ثقافت/لوڪ ادب، لسانيات ۽ تخليقي لکڻ.',
+        preparationTips: [
+          'ڪلاسيڪي ۽ جديد شاعرن مان حوالا ياد ڪريو',
+          'غزل/نظم ۽ افسانوي صنفن جي فني خصوصيتن تي مختصر نوٽس ٺاهيو',
+          'بلوچ تاريخ ۽ ثقافت بابت مستند حوالن سان مثال گڏ ڪريو',
+          'لساني نقطن (آوازيات، صرف و نحو) جي مشق ۽ املا جي درستي تي ڌيان ڏيو'
+        ]
+      },
+      'philosophy': {
+        subjectId: 'philosophy',
+        subjectName: 'Philosophy',
+        subjectType: 'optional',
+        subjectGroup: 'group6',
+        code: 'OG6-7',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          { title: 'I. Introduction', topics: ['Definition, nature and scope of Philosophy'] },
+          {
+            title: 'II. Philosophical Methods',
+            topics: [
+              'Socratic Method (Socrates)',
+              'Inductive Method (Bacon, Mill)',
+              'Deductive Method (Aristotle, Descartes)',
+              'Dialectical Method (Hegel)',
+              'Fallibilistic Method (Popper)'
+            ]
+          },
+          {
+            title: 'III. Epistemology',
+            topics: [
+              'Rationalism (Plato, Descartes, Spinoza)',
+              'Empiricism (Locke, Berkeley, Hume)',
+              'Transcendentalism (Kant)',
+              'Intuitionism (Bergson)'
+            ]
+          },
+          {
+            title: 'IV. Ontology',
+            topics: [
+              'Idealism (Plato, Berkeley)',
+              'Representative Realism (Locke)',
+              'Historical and Dialectical Materialism (Marx)'
+            ]
+          },
+          {
+            title: 'V. Ethics',
+            topics: [
+              'What is morality? Cultural relativism challenge; Does morality depend on religion?',
+              'Psychological and ethical egoism',
+              'Virtue Ethics (Aristotle)',
+              'Moral Absolutism (Kant)',
+              'Utilitarianism (J.S. Mill)',
+              'Social Contract Theory (Hobbes, Rawls)'
+            ]
+          },
+          {
+            title: 'VI. Muslim Thinkers',
+            topics: [
+              'Al-Farabi, Ibn Sina, Al-Ghazali, Ibn Rushd, Ibn Khaldun, Shah Waliullah, Muhammad Iqbal'
+            ]
+          },
+          {
+            title: 'VII. Contemporary Philosophical Movements',
+            topics: [
+              'Existentialism (Heidegger, Sartre)',
+              'Pragmatism (Peirce, James, Dewey)',
+              'Neo-pragmatism (Rorty)',
+              'Postmodernism (Lyotard, Foucault, Derrida)'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'A History of Western Philosophy by Bertrand Russell',
+          'Philosophy: The Power of Ideas by Brooke Noel Moore & Kenneth Bruder',
+          'Elements of Moral Philosophy by James Rachels',
+          'Existentialism & Human Emotions by Jean-Paul Sartre',
+          'The Postmodern Condition: A Report on Knowledge by Jean-Francois Lyotard',
+          'Descartes to Derrida: An Introduction to European Philosophy by Peter Sedgwick',
+          'Continental Philosophy in the 20th Century by Richard Kearney',
+          'A Short History of Modern Philosophy by Roger Scruton',
+          'A History of Muslim Philosophy (Vol I & II) edited by M.M. Sharif',
+          'A History of Islamic Philosophy by Majid Fakhry',
+          'The Reconstruction of Religious Thought in Islam by Muhammad Iqbal',
+          'Iqbal by Mustansir Mir',
+          'Stanford Encyclopedia of Philosophy (plato.stanford.edu)',
+          'Internet Encyclopedia of Philosophy (www.iep.utm.edu)'
+        ],
+        examPattern: 'Single paper, 100 marks covering methods, epistemology, ontology, ethics, Muslim thinkers and contemporary movements.',
+        preparationTips: [
+          'Make brief philosophers’ cards (life, key works, core theses, critiques)',
+          'Practice short comparative notes (Rationalism vs Empiricism; Idealism vs Materialism)',
+          'Use examples to illustrate ethical theories and apply them to cases',
+          'Link Muslim thinkers to Western debates for synoptic answers',
+          'Quote primary texts where possible for high-scoring analysis'
         ]
       },
       'pure-mathematics': {
