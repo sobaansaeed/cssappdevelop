@@ -59,6 +59,18 @@
       "description": "CSS 2025 Past Paper - Comparative Study of Major Religions"
     },
     {
+      "id": "1754429572152ocaqn5ery-2024",
+      "subjectId": "comparative-religions",
+      "subjectName": "Comparative Study of Major Religions",
+      "subjectType": "compulsory",
+      "year": "2024",
+      "paperNumber": null,
+      "title": "Comparative Religions 2024",
+      "fileUrl": "/past-papers/compulsory/comparative-religions/comparative-religions-2024.pdf",
+      "uploadDate": "2025-08-05",
+      "description": "CSS 2024 Past Paper - Comparative Study of Major Religions"
+    },
+    {
       "id": "1754429572152goqn84gov",
       "subjectId": "current-affairs",
       "subjectName": "Current Affairs",
@@ -83,6 +95,18 @@
       "description": "CSS 2025 Past Paper - English Essay"
     },
     {
+      "id": "1754429572152bickko325-2022",
+      "subjectId": "english-essay",
+      "subjectName": "English Essay",
+      "subjectType": "compulsory",
+      "year": "2022",
+      "paperNumber": null,
+      "title": "English Essay 2022",
+      "fileUrl": "/past-papers/compulsory/english-essay/english-essay-2022.pdf",
+      "uploadDate": "2025-08-05",
+      "description": "CSS 2022 Past Paper - English Essay"
+    },
+    {
       "id": "1754429572153s6zctc5pf",
       "subjectId": "english-precis",
       "subjectName": "English (Precis and Composition)",
@@ -105,6 +129,54 @@
       "fileUrl": "/past-papers/compulsory/general-science/general-science-2025.pdf",
       "uploadDate": "2025-08-05",
       "description": "CSS 2025 Past Paper - General Science & Ability"
+    },
+    {
+      "id": "1754429572153jhgk5q0zk-2024",
+      "subjectId": "general-science",
+      "subjectName": "General Science & Ability",
+      "subjectType": "compulsory",
+      "year": "2024",
+      "paperNumber": null,
+      "title": "General Science 2024",
+      "fileUrl": "/past-papers/compulsory/general-science/general-science-2024.pdf",
+      "uploadDate": "2025-08-05",
+      "description": "CSS 2024 Past Paper - General Science & Ability"
+    },
+    {
+      "id": "1754429572153jhgk5q0zk-2023",
+      "subjectId": "general-science",
+      "subjectName": "General Science & Ability",
+      "subjectType": "compulsory",
+      "year": "2023",
+      "paperNumber": null,
+      "title": "General Science 2023",
+      "fileUrl": "/past-papers/compulsory/general-science/general-science-2023.pdf",
+      "uploadDate": "2025-08-05",
+      "description": "CSS 2023 Past Paper - General Science & Ability"
+    },
+    {
+      "id": "1754429572153jhgk5q0zk-2022",
+      "subjectId": "general-science",
+      "subjectName": "General Science & Ability",
+      "subjectType": "compulsory",
+      "year": "2022",
+      "paperNumber": null,
+      "title": "General Science 2022",
+      "fileUrl": "/past-papers/compulsory/general-science/general-science-2022.pdf",
+      "uploadDate": "2025-08-05",
+      "description": "CSS 2022 Past Paper - General Science & Ability"
+    },
+    {
+      "id": "1754429572153jhgk5q0zk-2021",
+      "subjectId": "general-science",
+      "subjectName": "General Science & Ability",
+      "subjectType": "compulsory",
+      "year": "2021",
+      "paperNumber": null,
+      "title": "General Science 2021",
+      "fileUrl": "/past-papers/compulsory/general-science/general-science-2021.pdf",
+      "uploadDate": "2025-08-05",
+      "description": "CSS 2021 Past Paper - General Science & Ability"
     },
     {
       "id": "1754429572153mbscagr7w",
