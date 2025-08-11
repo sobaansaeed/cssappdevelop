@@ -149,7 +149,7 @@
           "code": "OG3-2"
         },
         {
-          "id": "governance-policies",
+          "id": "governance-public-policies",
           "name": "Governance & Public Policies",
           "type": "optional",
           "group": "group3",
