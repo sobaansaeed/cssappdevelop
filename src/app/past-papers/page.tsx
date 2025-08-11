@@ -85,7 +85,10 @@ export default function PastPapersPage() {
 
   const getAvailableYears = (subjectId: string) => {
     const papers = getPastPapersForSubject(subjectId);
-    return papers.map(paper => paper.year).sort((a, b) => parseInt(b) - parseInt(a));
+    const years = papers.map(paper => paper.year);
+    // Remove duplicates and sort in descending order
+    const uniqueYears = [...new Set(years)].sort((a, b) => parseInt(b) - parseInt(a));
+    return uniqueYears;
   };
 
   if (loading) {
