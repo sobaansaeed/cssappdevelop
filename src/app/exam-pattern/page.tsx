@@ -97,29 +97,31 @@ const ExamPatternPage: React.FC = () => {
         {/* Navigation */}
         <div className="bg-white rounded-lg shadow-sm mb-8">
           <div className="border-b border-gray-200">
-            <nav className="flex space-x-8 px-6">
-              {[
-                { id: 'overview', label: 'Exam Overview', icon: Target },
-                { id: 'schedule', label: 'Exam Schedule', icon: Calendar },
-                { id: 'marking', label: 'Marking Scheme', icon: Star },
-                { id: 'guidelines', label: 'Guidelines', icon: FileText }
-              ].map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveSection(tab.id)}
-                    className={`flex items-center space-x-2 py-4 border-b-2 font-medium text-sm transition-colors ${
-                      activeSection === tab.id
-                        ? 'border-purple-500 text-purple-600'
-                        : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
+            <nav className="overflow-x-auto scrollbar-hide">
+              <div className="flex space-x-8 px-6 min-w-max">
+                {[
+                  { id: 'overview', label: 'Exam Overview', icon: Target },
+                  { id: 'schedule', label: 'Exam Schedule', icon: Calendar },
+                  { id: 'marking', label: 'Marking Scheme', icon: Star },
+                  { id: 'guidelines', label: 'Guidelines', icon: FileText }
+                ].map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveSection(tab.id)}
+                      className={`flex items-center space-x-2 py-4 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
+                        activeSection === tab.id
+                          ? 'border-purple-500 text-purple-600'
+                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      }`}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <span>{tab.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </nav>
           </div>
         </div>

@@ -5,7 +5,7 @@
   "private": true,
   "description": "CSS Prep Hub - Manual PDF System",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

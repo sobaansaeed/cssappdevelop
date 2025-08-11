@@ -6944,6 +6944,91 @@ export default function SubjectSyllabusPage() {
           'Focus on understanding concepts rather than memorization',
           'Work on real-world data analysis projects'
         ]
+      },
+      'urdu-literature': {
+        subjectId: 'urdu-literature',
+        subjectName: 'Urdu Literature',
+        subjectType: 'optional',
+        subjectGroup: 'group5',
+        code: 'OG5-7',
+        marks: 100,
+        duration: '3 Hours',
+        sections: [
+          {
+            title: 'Study of Urdu Literature (اردو ادب کا مطالعہ)',
+            description: 'Comprehensive study of Urdu literature development, Islamic identity, and literary movements.',
+            topics: [
+              'Islamic Identity of Urdu Language and Literature',
+              'Literary Movements of the Twentieth Century',
+              'Pakistani Literature Terminology: Formation, Tradition, and Evolution'
+            ]
+          },
+          {
+            title: 'Critical Study of Poetic Literature (شعری ادب کا تنقیدی مطالعہ)',
+            description: 'Critical analysis of classical and modern Urdu poetry from ancient to contemporary periods.',
+            topics: [
+              'Ancient Period (دور قدیم): Mir (Ghazal), Ghalib (Diwan-e-Ghalib), Hali (Musaddas), Iqbal (Tulu-e-Islam, Khizr-e-Rah, Masjid-e-Qartaba)',
+              'Modern Period (دور جدید): Faiz (Ghazal - Dast-e-Saba), Rashid (Nazm - Iran Mein Ajnabi), Majid Amjad (Nazm - Shab-e-Rafta), Nasir Kazmi (Ghazal - Barg-e-Nai)'
+            ]
+          },
+          {
+            title: 'Critical Study of Prose Literature (نثری ادب کا تنقیدی مطالعہ)',
+            description: 'Analysis of both non-fictional and fictional Urdu prose literature.',
+            topics: [
+              'Non-Fictional Prose (غیر افسانوی نثر): Shibli (Seerat-un-Nabi, Volume 1), Maulvi Abdul Haq (Sketches, Chand Ham Asr)',
+              'Fictional Prose (افسانوی نثر): Manto (Afsane Manto Ke Hain Afsane), Ahmed Nadeem Qasmi (Afsane, Kapas Ka Phool), Mushtaq Ahmed Yusufi (Satire & Humor, Aab-e-Gum)'
+            ]
+          },
+          {
+            title: 'Summary/Precis (تلخيص)',
+            description: 'Writing skills for summarization and precis writing in Urdu.',
+            topics: [
+              'Text condensation and summarization techniques',
+              'Maintaining original meaning and tone',
+              'Word limit management and structure',
+              'Title selection and justification'
+            ]
+          },
+          {
+            title: 'Essay (مضمون)',
+            description: 'Essay writing skills in Urdu language.',
+            topics: [
+              'Essay structure and organization',
+              'Argument development and critical analysis',
+              'Language proficiency and expression',
+              'Contemporary topics and current affairs'
+            ]
+          }
+        ],
+        recommendedBooks: [
+          'Criticism and Modern Urdu Criticism by Dr. Wazir Agha',
+          'Movements of Urdu Literature by Dr. Anwar Sajjad',
+          'Aab-e-Kausar by Sheikh Muhammad Ikram',
+          'Rood-e-Kausar by Sheikh Muhammad Ikram',
+          'Mauj-e-Kausar by Sheikh Muhammad Ikram',
+          'Pakistani Concept of Nationalism in Urdu Criticism by Dr. Rubina Shehnaz Zaro',
+          '100 Years of Iqbal Studies compiled by Dr. Rafiuddin Hashmi, Dr. Sohail Umar, and Dr. Waheed Ishrat',
+          'History of Literature of Muslims of Pakistan and India (New Arrangement) by Dr. Khawaja Muhammad Zakariya',
+          'Fifty Years of Urdu Literature compiled by Dr. Nawazish Ali'
+        ],
+        examPattern: 'Comprehensive coverage of Urdu literature from ancient to modern periods, including poetry, prose, criticism, and practical writing skills (100 Marks)',
+        preparationTips: [
+          'Study the Islamic identity and development of Urdu language and literature',
+          'Understand literary movements of the twentieth century',
+          'Master critical analysis of classical and modern Urdu poetry',
+          'Study classical poets: Mir, Ghalib, Hali, and Iqbal',
+          'Analyze modern poets: Faiz, Rashid, Majid Amjad, and Nasir Kazmi',
+          'Study non-fictional prose works of Shibli and Maulvi Abdul Haq',
+          'Analyze fictional prose of Manto, Qasmi, and Yusufi',
+          'Practice summary writing and precis skills',
+          'Master essay writing in Urdu',
+          'Read extensively from recommended books and authors',
+          'Practice critical analysis of literary texts',
+          'Join Urdu literature study groups',
+          'Attend literary workshops and seminars',
+          'Focus on understanding cultural and historical context',
+          'Practice writing in both Urdu and English for better understanding'
+        ]
       }
     };
 

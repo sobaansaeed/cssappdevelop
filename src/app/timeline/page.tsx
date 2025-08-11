@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Users, Trophy, Percent, Bell, Download, CheckCircle, AlertCircle, Circle, FileText, Award } from 'lucide-react';
+import { Calendar, Clock, Users, Trophy, Bell, Download, CheckCircle, AlertCircle, Circle, FileText, Award, Star, Info } from 'lucide-react';
 
 interface TimelineEvent {
   id: string;
@@ -10,7 +10,7 @@ interface TimelineEvent {
   description: string;
   status: 'completed' | 'current' | 'upcoming';
   phase: string;
-  category: 'registration' | 'examination' | 'results' | 'interview';
+  category: 'mpt' | 'registration' | 'examination' | 'results';
   priority: 'high' | 'medium' | 'low';
 }
 
@@ -25,10 +25,14 @@ interface Reminder {
 
 const TimelinePage: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
-    days: 45,
-    hours: 12,
-    minutes: 30,
-    seconds: 0
+    mptRegistrationDays: 0,
+    mptRegistrationHours: 0,
+    mptRegistrationMinutes: 0,
+    mptRegistrationSeconds: 0,
+    mptExamDays: 0,
+    mptExamHours: 0,
+    mptExamMinutes: 0,
+    mptExamSeconds: 0
   });
 
   const [email, setEmail] = useState('');
@@ -43,20 +47,53 @@ const TimelinePage: React.FC = () => {
   const [subscribeStatus, setSubscribeStatus] = useState<{ success: boolean; message: string } | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) {
-          return { ...prev, seconds: prev.seconds - 1 };
-        } else if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        } else if (prev.hours > 0) {
-          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        } else if (prev.days > 0) {
-          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
-        }
-        return prev;
-      });
-    }, 1000);
+    const calculateTimeLeft = () => {
+      const now = new Date().getTime();
+      
+      // MPT Registration deadline: August 25, 2025
+      const mptRegistrationDate = new Date('2025-08-25T23:59:59').getTime();
+      const mptRegistrationDiff = mptRegistrationDate - now;
+      
+      // MPT Exam date: November 9, 2025
+      const mptExamDate = new Date('2025-11-09T09:00:00').getTime();
+      const mptExamDiff = mptExamDate - now;
+      
+      if (mptRegistrationDiff > 0) {
+        const mptRegistrationDays = Math.floor(mptRegistrationDiff / (1000 * 60 * 60 * 24));
+        const mptRegistrationHours = Math.floor((mptRegistrationDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mptRegistrationMinutes = Math.floor((mptRegistrationDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const mptRegistrationSeconds = Math.floor((mptRegistrationDiff % (1000 * 60)) / 1000);
+        
+        setTimeLeft(prev => ({
+          ...prev,
+          mptRegistrationDays,
+          mptRegistrationHours,
+          mptRegistrationMinutes,
+          mptRegistrationSeconds
+        }));
+      }
+      
+      if (mptExamDiff > 0) {
+        const mptExamDays = Math.floor(mptExamDiff / (1000 * 60 * 60 * 24));
+        const mptExamHours = Math.floor((mptExamDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mptExamMinutes = Math.floor((mptExamDiff % (1000 * 60 * 60)) / (1000 * 60));
+        const mptExamSeconds = Math.floor((mptExamDiff % (1000 * 60)) / 1000);
+        
+        setTimeLeft(prev => ({
+          ...prev,
+          mptExamDays,
+          mptExamHours,
+          mptExamMinutes,
+          mptExamSeconds
+        }));
+      }
+    };
+
+    // Calculate immediately
+    calculateTimeLeft();
+    
+    // Update every second
+    const interval = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -64,102 +101,92 @@ const TimelinePage: React.FC = () => {
   const timelineEvents: TimelineEvent[] = [
     {
       id: '1',
-      date: '01 Dec 2023',
-      title: 'Advertisement Published',
-      description: 'CSS 2024 examination advertisement published by FPSC with detailed instructions and eligibility criteria.',
-      status: 'completed',
-      phase: 'Pre-Registration',
-      category: 'registration',
+      date: 'August 10, 2025',
+      title: 'MPT Public Notice Published',
+      description: 'FPSC announces the MCQ-Based Preliminary Test (MPT) for CSS 2026 with detailed instructions and eligibility criteria.',
+      status: 'upcoming',
+      phase: 'MPT Phase',
+      category: 'mpt',
       priority: 'high'
     },
     {
       id: '2',
-      date: '15 Dec 2023',
-      title: 'Registration Opens',
-      description: 'Online registration portal activated. Candidates can submit applications with required documents and fees.',
-      status: 'completed',
-      phase: 'Registration',
-      category: 'registration',
+      date: 'August 11-25, 2025',
+      title: 'MPT Online Applications Open',
+      description: 'Online registration portal activated for MPT. Candidates can submit applications with required documents and fees.',
+      status: 'upcoming',
+      phase: 'MPT Registration',
+      category: 'mpt',
       priority: 'high'
     },
     {
       id: '3',
-      date: '31 Jan 2024',
-      title: 'Registration Deadline',
-      description: 'Last date to submit CSS 2024 registration forms. No extensions will be granted after this date.',
-      status: 'current',
-      phase: 'Registration',
-      category: 'registration',
+      date: 'November 9, 2025',
+      title: 'MPT Examination',
+      description: 'MCQ-Based Preliminary Test conducted with 200 multiple choice questions. 33% passing mark required, no negative marking.',
+      status: 'upcoming',
+      phase: 'MPT Exam',
+      category: 'mpt',
       priority: 'high'
     },
     {
       id: '4',
-      date: '15 Feb 2024',
-      title: 'Roll Number Slips',
-      description: 'Examination roll number slips available for download. Candidates must verify all details carefully.',
+      date: 'November 2025',
+      title: 'MPT Results Announcement',
+      description: 'MPT results are announced. Only successful candidates (33% or above) become eligible for the main written examination.',
       status: 'upcoming',
-      phase: 'Pre-Exam',
-      category: 'examination',
-      priority: 'medium'
+      phase: 'MPT Results',
+      category: 'results',
+      priority: 'high'
     },
     {
       id: '5',
-      date: '01 Mar 2024',
-      title: 'Exam Centers Announced',
-      description: 'Final list of examination centers published. Candidates should verify their assigned center location.',
+      date: 'December 14, 2025',
+      title: 'Main Exam Public Notice',
+      description: 'FPSC publishes public notice for CSS 2026 main written examination. Only MPT qualifiers can apply.',
       status: 'upcoming',
-      phase: 'Pre-Exam',
-      category: 'examination',
-      priority: 'medium'
+      phase: 'Main Exam Registration',
+      category: 'registration',
+      priority: 'high'
     },
     {
       id: '6',
-      date: '15 Mar 2024',
-      title: 'Written Examination Begins',
-      description: 'CSS written examination starts with compulsory subjects. Exam will be conducted over multiple days.',
+      date: 'December 15-30, 2025',
+      title: 'Main Exam Applications',
+      description: 'Online applications for main written examination open exclusively for MPT qualifiers.',
       status: 'upcoming',
-      phase: 'Written Exam',
-      category: 'examination',
+      phase: 'Main Exam Registration',
+      category: 'registration',
       priority: 'high'
     },
     {
       id: '7',
-      date: '30 Apr 2024',
-      title: 'Written Examination Ends',
-      description: 'Completion of all written examination papers including optional subjects.',
+      date: 'January 9, 2026',
+      title: 'Hardcopy Submission Deadline',
+      description: 'Last date to submit hardcopy application forms and supporting documents for main written examination.',
+      status: 'upcoming',
+      phase: 'Documentation',
+      category: 'registration',
+      priority: 'high'
+    },
+    {
+      id: '8',
+      date: 'February 4, 2026',
+      title: 'Written Examination Begins',
+      description: 'CSS 2026 written examination commences with compulsory subjects. Exam will run for several days.',
       status: 'upcoming',
       phase: 'Written Exam',
       category: 'examination',
       priority: 'high'
     },
     {
-      id: '8',
-      date: '15 Jun 2024',
-      title: 'Written Results Expected',
-      description: 'Written examination results are expected to be announced. Successful candidates proceed to interview.',
-      status: 'upcoming',
-      phase: 'Results',
-      category: 'results',
-      priority: 'high'
-    },
-    {
       id: '9',
-      date: '01 Jul 2024',
-      title: 'Interview Process',
-      description: 'Psychological test and interview process for candidates who qualified written examination.',
+      date: 'February 4-22, 2026',
+      title: 'Complete Written Examination',
+      description: 'All written examination papers including essay, compulsory subjects, and optional subjects are completed.',
       status: 'upcoming',
-      phase: 'Interview',
-      category: 'interview',
-      priority: 'medium'
-    },
-    {
-      id: '10',
-      date: '31 Aug 2024',
-      title: 'Final Results',
-      description: 'Final merit list and allocation of successful candidates to various services and cadres.',
-      status: 'upcoming',
-      phase: 'Final Results',
-      category: 'results',
+      phase: 'Written Exam',
+      category: 'examination',
       priority: 'high'
     }
   ];
@@ -167,35 +194,35 @@ const TimelinePage: React.FC = () => {
   const reminders: Reminder[] = [
     {
       id: '1',
-      title: 'Registration Deadline',
-      description: 'Only 45 days left for registration. Submit your application before January 31, 2024.',
+      title: 'MPT Registration Opens Soon',
+      description: 'MPT applications will open on August 11, 2025. This is a new requirement for CSS 2026.',
       type: 'urgent',
-      timeRemaining: '45 days remaining',
-      action: 'Register Now'
+      timeRemaining: 'Coming Soon',
+      action: 'Prepare Documents'
     },
     {
       id: '2',
-      title: 'Document Verification',
-      description: 'Ensure all required documents are uploaded and verified in your application.',
+      title: 'Age Limit Increased',
+      description: 'Maximum age limit raised from 30 to 35 years effective from 2026. More candidates now eligible.',
       type: 'important',
-      timeRemaining: 'Ongoing',
-      action: 'Verify Documents'
+      timeRemaining: 'New Policy',
+      action: 'Check Eligibility'
     },
     {
       id: '3',
-      title: 'Fee Payment',
-      description: 'Complete fee payment through approved banking channels before deadline.',
+      title: 'MPT Requirement',
+      description: 'Candidates must pass MPT (33% marks) to be eligible for main written examination.',
       type: 'info',
-      timeRemaining: 'Required',
-      action: 'Pay Fee'
+      timeRemaining: 'Mandatory',
+      action: 'Learn More'
     },
     {
       id: '4',
-      title: 'Email Notifications',
-      description: 'Subscribe to email notifications for important updates and announcements.',
+      title: 'Document Preparation',
+      description: 'Start preparing all required documents for both MPT and main examination applications.',
       type: 'info',
-      timeRemaining: 'Recommended',
-      action: 'Subscribe'
+      timeRemaining: 'Ongoing',
+      action: 'Check List'
     }
   ];
 
@@ -223,14 +250,14 @@ const TimelinePage: React.FC = () => {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
+      case 'mpt':
+        return <Star className="h-4 w-4" />;
       case 'registration':
         return <FileText className="h-4 w-4" />;
       case 'examination':
         return <Calendar className="h-4 w-4" />;
       case 'results':
         return <Award className="h-4 w-4" />;
-      case 'interview':
-        return <Users className="h-4 w-4" />;
       default:
         return <Circle className="h-4 w-4" />;
     }
@@ -238,13 +265,13 @@ const TimelinePage: React.FC = () => {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'registration':
+      case 'mpt':
         return 'bg-purple-100 text-purple-800';
-      case 'examination':
+      case 'registration':
         return 'bg-blue-100 text-blue-800';
-      case 'results':
+      case 'examination':
         return 'bg-green-100 text-green-800';
-      case 'interview':
+      case 'results':
         return 'bg-orange-100 text-orange-800';
       default:
         return 'bg-gray-100 text-gray-800';
@@ -267,7 +294,7 @@ const TimelinePage: React.FC = () => {
       case 'urgent':
         return 'border-red-500 bg-red-50';
       case 'important':
-        return 'border-orange-500 bg-orange-50';
+        return 'border-orange-500 bg-orange-500';
       default:
         return 'border-blue-500 bg-blue-50';
     }
@@ -335,86 +362,160 @@ const TimelinePage: React.FC = () => {
               <Calendar className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
-              CSS 2024 Timeline
+              CSS 2026 Timeline
             </h1>
             <p className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">
-              Complete examination schedule, important deadlines, and key milestones for CSS 2024
+              Complete examination schedule with new MPT requirement and updated age limit for CSS 2026
             </p>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Important Notice - Age Limit Change */}
+        <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-6 lg:p-8 mb-12 text-white">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full mb-4">
+              <Info className="h-8 w-8 text-white" />
+            </div>
+            <h2 className="text-2xl lg:text-3xl font-bold mb-2">🎉 Major Policy Change for 2026!</h2>
+            <p className="text-green-100 text-lg">Maximum age limit increased from 30 to 35 years</p>
+          </div>
+          <div className="bg-white/20 backdrop-blur-sm rounded-xl p-6 text-center">
+            <p className="text-lg text-white mb-4">
+              <strong>Effective from CSS 2026:</strong> The Federal Public Service Commission (FPSC) has increased the maximum age limit for CSS candidates from 30 to 35 years.
+            </p>
+            <p className="text-green-100">
+              This change provides more opportunities for candidates and aligns with modern workforce trends.
+            </p>
+          </div>
+        </div>
+
+
+
+        {/* Dual Countdown Timers */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+          {/* MPT Registration Countdown */}
+          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-6 lg:p-8 text-white">
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full mb-4">
+                <Clock className="h-8 w-8 text-white" />
+              </div>
+              <h2 className="text-2xl lg:text-3xl font-bold mb-2">MPT Registration Countdown</h2>
+              <p className="text-blue-100">Don&apos;t miss the registration deadline - August 25, 2025!</p>
+            </div>
+            <div className="grid grid-cols-4 gap-4 max-w-md mx-auto mb-6">
+              <div className="text-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+                  <div className="text-2xl lg:text-3xl font-bold">{timeLeft.mptRegistrationDays}</div>
+                  <div className="text-sm text-blue-100">Days</div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+                  <div className="text-2xl lg:text-3xl font-bold">{timeLeft.mptRegistrationHours}</div>
+                  <div className="text-sm text-blue-100">Hours</div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+                  <div className="text-2xl lg:text-3xl font-bold">{timeLeft.mptRegistrationMinutes}</div>
+                  <div className="text-sm text-blue-100">Minutes</div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+                  <div className="text-2xl lg:text-3xl font-bold">{timeLeft.mptRegistrationSeconds}</div>
+                  <div className="text-sm text-blue-100">Seconds</div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center">
+              <p className="text-white text-sm leading-relaxed">
+                <strong>Registration closes August 25, 2025!</strong> Complete your MPT application with all required documents.
+              </p>
+            </div>
+          </div>
+
+          {/* MPT Exam Countdown */}
+          <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-2xl p-6 lg:p-8 text-white">
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full mb-4">
+                <Calendar className="h-8 w-8 text-white" />
+              </div>
+              <h2 className="text-2xl lg:text-3xl font-bold mb-2">MPT Exam Countdown</h2>
+              <p className="text-purple-100">Prepare for the MPT exam - November 9, 2025!</p>
+            </div>
+            <div className="grid grid-cols-4 gap-4 max-w-md mx-auto mb-6">
+              <div className="text-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+                  <div className="text-2xl lg:text-3xl font-bold">{timeLeft.mptExamDays}</div>
+                  <div className="text-sm text-purple-100">Days</div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+                  <div className="text-2xl lg:text-3xl font-bold">{timeLeft.mptExamHours}</div>
+                  <div className="text-sm text-purple-100">Hours</div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+                  <div className="text-2xl lg:text-3xl font-bold">{timeLeft.mptExamMinutes}</div>
+                  <div className="text-sm text-purple-100">Minutes</div>
+                </div>
+              </div>
+              <div className="text-center">
+                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
+                  <div className="text-2xl lg:text-3xl font-bold">{timeLeft.mptExamSeconds}</div>
+                  <div className="text-sm text-purple-100">Seconds</div>
+                </div>
+              </div>
+            </div>
+            <div className="bg-white/20 backdrop-blur-sm rounded-xl p-4 text-center">
+              <p className="text-white text-sm leading-relaxed">
+                <strong>MPT Exam: November 9, 2025!</strong> 200 MCQs, 33% passing mark, no negative marking.
+              </p>
+              </div>
+            </div>
+          </div>
+
         {/* Quick Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-12">
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
-              <Clock className="h-6 w-6 text-white" />
+            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+              <Star className="h-6 w-6 text-white" />
             </div>
-            <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-1">Next Deadline</h3>
-            <p className="text-xs lg:text-sm text-gray-600 mb-2">Registration Closes</p>
-            <span className="text-lg lg:text-xl font-bold text-red-600">{timeLeft.days} Days</span>
+            <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-1">MPT Phase</h3>
+            <p className="text-xs lg:text-sm text-gray-600 mb-2">First Screening</p>
+            <span className="text-lg lg:text-xl font-bold text-purple-600">New</span>
           </div>
 
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
               <Users className="h-6 w-6 text-white" />
             </div>
-            <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-1">Expected Candidates</h3>
-            <p className="text-xs lg:text-sm text-gray-600 mb-2">2024 Batch</p>
-            <span className="text-lg lg:text-xl font-bold text-blue-600">25K+</span>
+            <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-1">Age Limit</h3>
+            <p className="text-xs lg:text-sm text-gray-600 mb-2">Maximum Age</p>
+            <span className="text-lg lg:text-xl font-bold text-blue-600">35 Years</span>
           </div>
 
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
-              <Trophy className="h-6 w-6 text-white" />
+              <Calendar className="h-6 w-6 text-white" />
             </div>
-            <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-1">Available Posts</h3>
-            <p className="text-xs lg:text-sm text-gray-600 mb-2">Various Cadres</p>
-            <span className="text-lg lg:text-xl font-bold text-green-600">300+</span>
+            <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-1">Exam Period</h3>
+            <p className="text-xs lg:text-sm text-gray-600 mb-2">Written Exam</p>
+            <span className="text-lg lg:text-xl font-bold text-green-600">Feb 4-22</span>
           </div>
 
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 text-center hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
-            <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
-              <Percent className="h-6 w-6 text-white" />
+            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-full p-3 w-12 h-12 mx-auto mb-4 flex items-center justify-center">
+              <Trophy className="h-6 w-6 text-white" />
             </div>
-            <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-1">Success Rate</h3>
-            <p className="text-xs lg:text-sm text-gray-600 mb-2">Historical Average</p>
-            <span className="text-lg lg:text-xl font-bold text-purple-600">2.5%</span>
-          </div>
-        </div>
-
-        {/* Countdown Timer */}
-        <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-6 lg:p-8 mb-12 text-white">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl lg:text-3xl font-bold mb-2">Registration Deadline Countdown</h2>
-            <p className="text-orange-100">Don&apos;t miss the registration deadline!</p>
-          </div>
-          <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
-            <div className="text-center">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl lg:text-3xl font-bold">{timeLeft.days}</div>
-                <div className="text-sm text-orange-100">Days</div>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl lg:text-3xl font-bold">{timeLeft.hours}</div>
-                <div className="text-sm text-orange-100">Hours</div>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl lg:text-3xl font-bold">{timeLeft.minutes}</div>
-                <div className="text-sm text-orange-100">Minutes</div>
-              </div>
-            </div>
-            <div className="text-center">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl lg:text-3xl font-bold">{timeLeft.seconds}</div>
-                <div className="text-sm text-orange-100">Seconds</div>
-              </div>
-            </div>
+            <h3 className="text-sm lg:text-base font-semibold text-gray-900 mb-1">Total Phases</h3>
+            <p className="text-xs lg:text-sm text-gray-600 mb-2">MPT + Written</p>
+            <span className="text-lg lg:text-xl font-bold text-orange-600">2 Phases</span>
           </div>
         </div>
 
@@ -431,10 +532,20 @@ const TimelinePage: React.FC = () => {
             All Events
           </button>
           <button
+            onClick={() => setActiveFilter('mpt')}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              activeFilter === 'mpt'
+                ? 'bg-purple-600 text-white shadow-lg'
+                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+            }`}
+          >
+            MPT Phase
+          </button>
+          <button
             onClick={() => setActiveFilter('registration')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
               activeFilter === 'registration'
-                ? 'bg-purple-600 text-white shadow-lg'
+                ? 'bg-blue-600 text-white shadow-lg'
                 : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
             }`}
           >
@@ -444,7 +555,7 @@ const TimelinePage: React.FC = () => {
             onClick={() => setActiveFilter('examination')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
               activeFilter === 'examination'
-                ? 'bg-blue-600 text-white shadow-lg'
+                ? 'bg-green-600 text-white shadow-lg'
                 : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
             }`}
           >
@@ -454,29 +565,19 @@ const TimelinePage: React.FC = () => {
             onClick={() => setActiveFilter('results')}
             className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
               activeFilter === 'results'
-                ? 'bg-green-600 text-white shadow-lg'
-                : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-            }`}
-          >
-            Results
-          </button>
-          <button
-            onClick={() => setActiveFilter('interview')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-              activeFilter === 'interview'
                 ? 'bg-orange-600 text-white shadow-lg'
                 : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
             }`}
           >
-            Interview
+            Results
           </button>
         </div>
 
         {/* Main Timeline */}
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 lg:p-8 mb-12">
           <div className="text-center mb-8">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Complete Timeline</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Track your CSS 2024 journey from registration to final results</p>
+            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Complete CSS 2026 Timeline</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">Track your CSS 2026 journey from MPT to final written examination</p>
           </div>
           
           <div className="relative">
@@ -514,69 +615,16 @@ const TimelinePage: React.FC = () => {
                     
                     <p className="text-gray-700 mb-4 leading-relaxed">{event.description}</p>
                     
-                    {event.status === 'current' && (
-                      <div className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-lg p-4 mb-4">
-                        <h4 className="font-semibold text-orange-800 mb-3 flex items-center gap-2">
-                          <AlertCircle className="h-5 w-5" />
-                          Active Phase - Take Action Now!
+                    {/* Special highlighting for MPT events */}
+                    {event.category === 'mpt' && (
+                      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-lg p-4 mb-4">
+                        <h4 className="font-semibold text-purple-800 mb-3 flex items-center gap-2">
+                          <Star className="h-5 w-5" />
+                          New MPT Requirement
                         </h4>
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                          <div className="text-center">
-                            <div className="text-xl lg:text-2xl font-bold text-orange-600">{timeLeft.days}</div>
-                            <div className="text-xs text-orange-700">Days</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-xl lg:text-2xl font-bold text-orange-600">{timeLeft.hours}</div>
-                            <div className="text-xs text-orange-700">Hours</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-xl lg:text-2xl font-bold text-orange-600">{timeLeft.minutes}</div>
-                            <div className="text-xs text-orange-700">Minutes</div>
-                          </div>
-                          <div className="text-center">
-                            <div className="text-xl lg:text-2xl font-bold text-orange-600">{timeLeft.seconds}</div>
-                            <div className="text-xs text-orange-700">Seconds</div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    
-                    {event.id === '6' && event.status === 'upcoming' && (
-                      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
-                        <h4 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
-                          <Calendar className="h-5 w-5" />
-                          Exam Schedule Preview
-                        </h4>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 text-sm">
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                              <span className="text-blue-700">Day 1: English Essay & Composition</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                              <span className="text-blue-700">Day 2: General Knowledge</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                              <span className="text-blue-700">Day 3: Pakistan Affairs</span>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                              <span className="text-blue-700">Day 4: Current Affairs</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                              <span className="text-blue-700">Day 5: Islamic Studies/Ethics</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                              <span className="text-blue-700">Optional Subjects (Multiple Days)</span>
-                            </div>
-                          </div>
-                        </div>
+                        <p className="text-purple-700 text-sm">
+                          This is a new mandatory screening test introduced for CSS 2026. Candidates must pass MPT to proceed to the main written examination.
+                        </p>
                       </div>
                     )}
                   </div>
@@ -590,7 +638,7 @@ const TimelinePage: React.FC = () => {
         <div className="mb-12">
           <div className="text-center mb-8">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Important Reminders</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">Stay on track with these critical deadlines and actions</p>
+            <p className="text-gray-600 max-w-2xl mx-auto">Stay on track with these critical deadlines and new requirements</p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {reminders.map((reminder) => (
@@ -620,63 +668,63 @@ const TimelinePage: React.FC = () => {
         </div>
 
         {/* Notification Signup */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 lg:p-12 mb-12 text-white">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full mb-6">
-              <Bell className="h-8 w-8 text-white" />
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-6 lg:p-8 mb-12 text-white">
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center justify-center w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full mb-4">
+              <Bell className="h-6 w-6 text-white" />
             </div>
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Stay Updated</h2>
-            <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              Get notified about important deadlines, announcements, and exam updates
+            <h2 className="text-2xl lg:text-3xl font-bold mb-3">Stay Updated</h2>
+            <p className="text-lg text-blue-100 max-w-2xl mx-auto">
+              Get notified about important deadlines, MPT updates, and exam announcements
             </p>
           </div>
 
-          <form onSubmit={handleSubscribe} className="max-w-lg mx-auto">
-            <div className="mb-6">
+          <form onSubmit={handleSubscribe} className="max-w-md mx-auto">
+            <div className="mb-4">
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email address"
-                className="w-full px-6 py-4 border-0 rounded-xl text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-white/50 focus:outline-none text-lg"
+                className="w-full px-4 py-3 border-0 rounded-lg text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-white/50 focus:outline-none text-base bg-white"
                 required
               />
             </div>
 
-            <div className="space-y-4 mb-8">
+            <div className="space-y-3 mb-6">
               <label className="flex items-center">
                 <input
                   type="checkbox"
                   checked={notifications.deadlines}
                   onChange={(e) => setNotifications(prev => ({ ...prev, deadlines: e.target.checked }))}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-5 w-5"
+                  className="rounded border-gray-300 text-green-600 focus:ring-green-500 h-4 w-4 accent-green-600"
                 />
-                <span className="ml-3 text-blue-100">Exam deadlines and important dates</span>
+                <span className="ml-2 text-blue-100 text-sm">MPT and exam deadlines</span>
               </label>
               <label className="flex items-center">
                 <input
                   type="checkbox"
                   checked={notifications.results}
                   onChange={(e) => setNotifications(prev => ({ ...prev, results: e.target.checked }))}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-5 w-5"
+                  className="rounded border-gray-300 text-green-600 focus:ring-green-500 h-4 w-4 accent-green-600"
                 />
-                <span className="ml-3 text-blue-100">Result announcements</span>
+                <span className="ml-2 text-blue-100 text-sm">MPT and exam results</span>
               </label>
               <label className="flex items-center">
                 <input
                   type="checkbox"
                   checked={notifications.tips}
                   onChange={(e) => setNotifications(prev => ({ ...prev, tips: e.target.checked }))}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 h-5 w-5"
+                  className="rounded border-gray-300 text-green-600 focus:ring-green-500 h-4 w-4 accent-green-600"
                 />
-                <span className="ml-3 text-blue-100">Study tips and preparation guides</span>
+                <span className="ml-2 text-blue-100 text-sm">MPT preparation tips</span>
               </label>
             </div>
 
             <button
               type="submit"
               disabled={subscribing}
-              className="w-full bg-white text-blue-600 font-bold py-4 px-8 rounded-xl hover:bg-gray-100 transition-colors text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-white text-blue-600 font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors text-base disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {subscribing ? 'Subscribing...' : 'Subscribe to Notifications'}
             </button>
@@ -692,20 +740,6 @@ const TimelinePage: React.FC = () => {
               </div>
             )}
           </form>
-        </div>
-
-        {/* Download Timeline */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 lg:p-12 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-full mb-6">
-            <Download className="h-10 w-10 text-white" />
-          </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">Download Complete Timeline</h2>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto text-lg">
-            Get the complete CSS 2024 timeline as a PDF document for offline reference and sharing
-          </p>
-          <button className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 text-lg">
-            Download PDF Timeline
-          </button>
         </div>
       </div>
     </div>

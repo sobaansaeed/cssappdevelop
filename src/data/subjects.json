@@ -254,7 +254,114 @@
           "name": "Urdu Literature",
           "type": "optional",
           "group": "group5",
-          "code": "OG5-7"
+          "code": "OG5-7",
+          "syllabus": {
+            "totalMarks": 100,
+            "sections": [
+              {
+                "title": "Study of Urdu Literature (اردو ادب کا مطالعہ)",
+                "marks": 25,
+                "topics": [
+                  "Islamic Identity of Urdu Language and Literature",
+                  "Literary Movements of the Twentieth Century",
+                  "Terminology of Pakistani Literature: Formation, Tradition, and Evolution"
+                ]
+              },
+              {
+                "title": "Critical Study of Poetic Literature (شعری ادب کا تنقیدی مطالعہ)",
+                "marks": 15,
+                "subsections": [
+                  {
+                    "title": "Ancient Period (دور قدیم)",
+                    "marks": 5,
+                    "poets": [
+                      "Mir (Ghazal)",
+                      "Ghalib (Diwan-e-Ghalib)",
+                      "Hali (Musaddas)",
+                      "Iqbal (Tulu-e-Islam, Khizr-e-Rah, Masjid-e-Qartaba)"
+                    ]
+                  },
+                  {
+                    "title": "Modern Period (دور جدید)",
+                    "marks": 10,
+                    "poets": [
+                      "Faiz (Ghazal - Dast-e-Saba)",
+                      "Rashid (Nazm - Iran Mein Ajnabi)",
+                      "Majid Amjad (Nazm - Shab-e-Rafta)",
+                      "Nasir Kazmi (Ghazal - Barg-e-Nai)"
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "Critical Study of Prose Literature (نثری ادب کا تنقیدی مطالعہ)",
+                "marks": 25,
+                "subsections": [
+                  {
+                    "title": "Non-Fictional Prose (غیر افسانوی نثر)",
+                    "marks": 10,
+                    "authors": [
+                      "Shibli (Seerat-un-Nabi, Volume 1)",
+                      "Maulvi Abdul Haq (Sketches, Chand Ham Asr)"
+                    ]
+                  },
+                  {
+                    "title": "Fictional Prose (افسانوی نثر)",
+                    "marks": 15,
+                    "authors": [
+                      "Manto (Afsane Manto Ke Hain Afsane)",
+                      "Ahmed Nadeem Qasmi (Afsane, Kapas Ka Phool)",
+                      "Mushtaq Ahmed Yusufi (Satire & Humor, Aab-e-Gum)"
+                    ]
+                  }
+                ]
+              },
+              {
+                "title": "Summary/Precis (تلخيص)",
+                "marks": 10
+              },
+              {
+                "title": "Essay (مضمون)",
+                "marks": 15
+              }
+            ],
+            "recommendedBooks": [
+              "Criticism and Modern Urdu Criticism by Dr. Wazir Agha",
+              "Movements of Urdu Literature by Dr. Anwar Sajjad",
+              "Aab-e-Kausar by Sheikh Muhammad Ikram",
+              "Rood-e-Kausar by Sheikh Muhammad Ikram",
+              "Mauj-e-Kausar by Sheikh Muhammad Ikram",
+              "Pakistani Concept of Nationalism in Urdu Criticism by Dr. Rubina Shehnaz",
+              "100 Years of Iqbal Studies compiled by Dr. Rafiuddin Hashmi, Dr. Sohail Umar, and Dr. Waheed Ishrat",
+              "History of Literature of Muslims of Pakistan and India (New Arrangement) by Dr. Khawaja Muhammad Zakariya",
+              "Fifty Years of Urdu Literature compiled by Dr. Nawazish Ali"
+            ],
+            "examPattern": "Comprehensive coverage of Urdu literature from ancient to modern periods, including poetry, prose, criticism, and practical writing skills (100 Marks)",
+            "learningObjectives": [
+              "Study the Islamic identity and development of Urdu language and literature",
+              "Understand literary movements of the twentieth century",
+              "Master critical analysis of classical and modern Urdu poetry",
+              "Study classical poets: Mir, Ghalib, Hali, and Iqbal",
+              "Analyze modern poets: Faiz, Rashid, Majid Amjad, and Nasir Kazmi",
+              "Study non-fictional prose works of Shibli and Maulvi Abdul Haq",
+              "Analyze fictional prose of Manto, Qasmi, and Yusufi",
+              "Practice summary writing and precis skills",
+              "Master essay writing in Urdu",
+              "Understand the evolution of Pakistani literature terminology"
+            ],
+            "studyTips": [
+              "Focus on understanding the Islamic identity of Urdu literature",
+              "Study the transition from classical to modern Urdu poetry",
+              "Practice critical analysis of both poetry and prose works",
+              "Master the works of key poets from ancient to modern periods",
+              "Understand the development of Urdu prose in different genres",
+              "Practice summary writing and essay composition",
+              "Study the recommended books for comprehensive understanding",
+              "Focus on the 20th-century literary movements",
+              "Understand the formation of Pakistani literature tradition",
+              "Practice reading and analyzing Urdu texts regularly"
+            ]
+          }
         }
       ]
     },
