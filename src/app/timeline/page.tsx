@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, Users, Trophy, Bell, Download, CheckCircle, AlertCircle, Circle, FileText, Award, Star, Info } from 'lucide-react';
+import { Calendar, Clock, Users, Trophy, Bell, CheckCircle, AlertCircle, Circle, FileText, Award, Star, Info } from 'lucide-react';
 
 interface TimelineEvent {
   id: string;
