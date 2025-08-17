@@ -9,19 +9,30 @@
     },
     {
       "id": "2",
-      "title": "August 12 Dawn Editorial With Urdu Translation",
-      "date": "2024-08-12",
-      "fileUrl": "/pdfs/editorials/Aug 12 Dawn Editorial With Urdu Translation.pdf",
+      "title": "August 17 Dawn Editorial With Urdu Translation",
+      "date": "2024-08-17",
+      "fileUrl": "/pdfs/editorials/Aug 17 Dawn Editorial With Urdu Translation.pdf",
       "category": "editorials",
       "authorName": "Sobaan Saeed",
       "newspaper": "Dawn"
     },
     {
       "id": "3",
-      "title": "Testing Heading",
-      "date": "2024-01-20",
-      "fileUrl": "/pdfs/newspapers/sample-newspaper-2.pdf",
-      "category": "newspapers"
-    }
+     "title": "August 17 Dawn Opinion With Urdu Translation",
+      "date": "2024-08-17",
+      "fileUrl": "/pdfs/editorials/Aug 17 Dawn Opinion With Urdu Translation.pdf",
+      "category": "editorials",
+      "authorName": "Sobaan Saeed",
+      "newspaper": "Dawn"
+    },
+    {
+       "id": "4",
+     "title": "August 17 Dawn Vocabulary",
+      "date": "2024-08-17",
+      "fileUrl": "/pdfs/editorials/Aug 17 Dawn Vocabulary.pdf",
+      "category": "editorials",
+      "authorName": "Sobaan Saeed",
+      "newspaper": "Dawn"
+     } 
   ]
 }
