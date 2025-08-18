@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { GraduationCap, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { GraduationCap, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -94,15 +94,11 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               <li className="flex items-center space-x-2 text-sm text-gray-300">
                 <Mail className="h-4 w-4" />
-                <span>info@cssprephub.com</span>
-              </li>
-              <li className="flex items-center space-x-2 text-sm text-gray-300">
-                <Phone className="h-4 w-4" />
-                <span>+92 300 1234567</span>
+                <span>info@csskro.com</span>
               </li>
               <li className="flex items-center space-x-2 text-sm text-gray-300">
                 <MapPin className="h-4 w-4" />
-                <span>Islamabad, Pakistan</span>
+                <span>Lahore, Pakistan</span>
               </li>
             </ul>
           </div>

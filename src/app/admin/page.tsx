@@ -33,7 +33,7 @@ const AdminLoginPage: React.FC = () => {
 
       if (data.success) {
         console.log('Login successful, redirecting...'); // Debug log
-        router.push('/admin/subscribers');
+        router.push('/csskro/admin');
       } else {
         setError(data.message || 'Login failed');
       }
