@@ -2,26 +2,46 @@
   "pdfs": [
     {
       "id": "1",
-      "title": "July 31 Dawn Editorial And Opinion Summary",
-      "date": "2024-07-31",
-      "fileUrl": "/pdfs/newspapers/July 31 Dawn Editorial And Opinion Summary.pdf",
+      "title": "August 18 Dawn Newspaper",
+      "date": "2024-08-18",
+      "fileUrl": "/pdfs/newspapers/Dawn Newspaper 18 August 2025 by 03229117651.pdf",
       "category": "newspapers"
     },
     {
       "id": "2",
-      "title": "July 31 Dawn Editorial And Opinion Summary",
-      "date": "2024-07-31",
-      "fileUrl": "/pdfs/editorials/July 31 Dawn Editorial And Opinion Summary.pdf",
+      "title": "August 18 Dawn Editorial With Urdu Translation",
+      "date": "2024-08-18",
+      "fileUrl": "/pdfs/editorials/Aug 18 Dawn Editorial With Urdu Translation.pdf",
       "category": "editorials",
       "authorName": "Sobaan Saeed",
       "newspaper": "Dawn"
     },
     {
       "id": "3",
-      "title": "Testing Heading",
-      "date": "2024-01-20",
-      "fileUrl": "/pdfs/newspapers/sample-newspaper-2.pdf",
-      "category": "newspapers"
-    }
+     "title": "August 18 Dawn Opinion With Urdu Translation",
+      "date": "2024-08-18",
+      "fileUrl": "/pdfs/editorials/Aug 18 Dawn Opinion With Urdu Translation.pdf",
+      "category": "editorials",
+      "authorName": "Sobaan Saeed",
+      "newspaper": "Dawn"
+    },
+    {
+       "id": "4",
+     "title": "August 18 Dawn Vocabulary",
+      "date": "2024-08-18",
+      "fileUrl": "/pdfs/editorials/Aug 18 Dawn Vocabulary.pdf",
+      "category": "editorials",
+      "authorName": "Sobaan Saeed",
+      "newspaper": "Dawn"
+     },
+     {
+       "id": "5",
+     "title": "August 18 Dawn Editorial And Opinion Summary",
+      "date": "2024-08-18",
+      "fileUrl": "/pdfs/editorials/Aug 18 Dawn Editorial And Opinion Summary.pdf",
+      "category": "editorials",
+      "authorName": "Sobaan Saeed",
+      "newspaper": "Dawn"
+     }
   ]
 }
