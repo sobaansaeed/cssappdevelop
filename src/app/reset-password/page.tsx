@@ -48,7 +48,7 @@ const ResetPasswordPage: React.FC = () => {
           router.push('/');
         }, 2000);
       }
-    } catch (error) {
+    } catch {
       setMessage('An unexpected error occurred');
       setMessageType('error');
     } finally {

@@ -97,7 +97,7 @@ ANALYZE NOW:`;
     }
   }
 
-  private isValidAnalysisResult(result: any): boolean {
+  private isValidAnalysisResult(result: EssayAnalysisResult): boolean {
     return (
       typeof result === 'object' &&
       result !== null &&

@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
         setAuthPassword('');
         setAuthError('');
       }
-    } catch (error) {
+    } catch {
       setAuthError('An unexpected error occurred');
     } finally {
       setIsAuthLoading(false);
@@ -73,7 +73,7 @@ const Navbar: React.FC = () => {
       if (error) {
         setAuthError(error.message);
       }
-    } catch (error) {
+    } catch {
       setAuthError('An unexpected error occurred');
     } finally {
       setIsAuthLoading(false);
@@ -95,7 +95,7 @@ const Navbar: React.FC = () => {
         setForgotPasswordStatus('success');
         setForgotPasswordMessage('Password reset email sent! Check your inbox.');
       }
-    } catch (error) {
+    } catch {
       setForgotPasswordStatus('error');
       setForgotPasswordMessage('An unexpected error occurred');
     }
@@ -414,7 +414,7 @@ const Navbar: React.FC = () => {
                 <div className="text-center mb-6">
                   <h4 className="text-lg font-semibold text-gray-900 mb-2">Reset Password</h4>
                   <p className="text-gray-600 text-sm">
-                    Enter your email address and we'll send you a link to reset your password.
+                    Enter your email address and we&apos;ll send you a link to reset your password.
                   </p>
                 </div>
 
