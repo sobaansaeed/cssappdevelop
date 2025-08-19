@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  const next = requestUrl.searchParams.get('next') || '/';
 
   if (code) {
     const cookieStore = await cookies();
@@ -32,9 +33,17 @@ export async function GET(request: NextRequest) {
       }
     );
     
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    
+    if (error) {
+      console.error('OAuth callback error:', error);
+      // Redirect to sign-in page with error
+      return NextResponse.redirect(`${requestUrl.origin}/auth/signin?error=oauth_failed`);
+    }
   }
 
   // URL to redirect to after sign in process completes
-  return NextResponse.redirect(requestUrl.origin);
+  // Use the 'next' parameter if available, otherwise go to home
+  const redirectUrl = next.startsWith('/') ? `${requestUrl.origin}${next}` : requestUrl.origin;
+  return NextResponse.redirect(redirectUrl);
 }

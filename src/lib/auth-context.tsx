@@ -75,13 +75,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const signInWithGoogle = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    return { error };
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
+        },
+      });
+      
+      if (error) {
+        console.error('Google OAuth error:', error);
+        return { error };
+      }
+      
+      // The OAuth flow will redirect the user to Google
+      // The callback route will handle the return
+      return { error: null };
+    } catch (err) {
+      console.error('Google OAuth exception:', err);
+      return { error: err as Error };
+    }
   };
 
   const signOut = async () => {
