@@ -62,7 +62,7 @@ const SignUpPage: React.FC = () => {
           window.location.href = '/essay-checker';
         }, 2000);
       }
-    } catch (err) {
+    } catch {
       setError('An error occurred during signup. Please try again.');
     } finally {
       setIsLoading(false);
@@ -79,7 +79,7 @@ const SignUpPage: React.FC = () => {
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Account Created Successfully!</h1>
             <p className="text-gray-600 mb-4">
-              Welcome to CSSKRO Essay Checker. You'll be redirected to the essay checker in a moment.
+              Welcome to CSSKRO Essay Checker. You&apos;ll be redirected to the essay checker in a moment.
             </p>
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
           </div>
@@ -271,7 +271,7 @@ const SignUpPage: React.FC = () => {
                     setError(error.message || 'Google sign up failed. Please try again.');
                   }
                   // Google OAuth will redirect automatically, so no need to redirect here
-                } catch (err) {
+                } catch {
                   setError('An error occurred during Google sign up. Please try again.');
                 } finally {
                   setIsLoading(false);

@@ -124,7 +124,7 @@ const PricingPage: React.FC = () => {
 
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {pricingPlans.map((plan, index) => {
+          {pricingPlans.map((plan) => {
             const Icon = getIconComponent(plan.icon);
             return (
               <div

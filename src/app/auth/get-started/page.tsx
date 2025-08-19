@@ -26,7 +26,7 @@ const GetStartedPage: React.FC = () => {
           
           <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">Get Started with CSSKRO</h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Choose how you'd like to access the AI-powered essay checker and transform your CSS exam preparation
+            Choose how you&apos;d like to access the AI-powered essay checker and transform your CSS exam preparation
           </p>
         </div>
 

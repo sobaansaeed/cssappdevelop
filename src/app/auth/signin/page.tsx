@@ -34,7 +34,7 @@ const SignInPage: React.FC = () => {
         // Redirect to essay checker after successful login
         window.location.href = '/essay-checker';
       }
-    } catch (err) {
+    } catch {
       setError('An error occurred during sign in. Please try again.');
     } finally {
       setIsLoading(false);
@@ -173,7 +173,7 @@ const SignInPage: React.FC = () => {
                     setError(error.message || 'Google sign in failed. Please try again.');
                   }
                   // Google OAuth will redirect automatically, so no need to redirect here
-                } catch (err) {
+                } catch {
                   setError('An error occurred during Google sign in. Please try again.');
                 } finally {
                   setIsLoading(false);
@@ -189,7 +189,7 @@ const SignInPage: React.FC = () => {
 
           <div className="mt-6 text-center">
             <p className="text-gray-600">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link
                 href="/auth/signup"
                 className="text-blue-600 hover:text-blue-700 font-medium transition-colors"

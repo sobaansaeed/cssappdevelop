@@ -30,7 +30,7 @@ const ForgotPasswordPage: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       setSuccess(true);
-    } catch (err) {
+    } catch {
       setError('An error occurred. Please try again.');
     } finally {
       setIsLoading(false);
@@ -47,7 +47,7 @@ const ForgotPasswordPage: React.FC = () => {
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Check Your Email</h1>
             <p className="text-gray-600 mb-4">
-              We've sent a password reset link to <strong>{email}</strong>. 
+              We&apos;ve sent a password reset link to <strong>{email}</strong>. 
               Please check your email and follow the instructions to reset your password.
             </p>
             <Link
@@ -82,7 +82,7 @@ const ForgotPasswordPage: React.FC = () => {
           </div>
           
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Forgot Password?</h1>
-          <p className="text-gray-600">Enter your email and we'll send you a reset link</p>
+          <p className="text-gray-600">Enter your email and we&apos;ll send you a reset link</p>
         </div>
 
         {/* Forgot Password Form */}

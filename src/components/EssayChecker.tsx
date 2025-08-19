@@ -156,7 +156,7 @@ const EssayChecker: React.FC<EssayCheckerProps> = ({ onAnalysisComplete }) => {
       if (onAnalysisComplete) {
         onAnalysisComplete(data);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to connect to the server. Please try again.');
     } finally {
       setIsAnalyzing(false);
@@ -443,11 +443,11 @@ Date: ${new Date().toLocaleDateString()}`;
                         {index + 1}
                       </div>
                       <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <span className="text-red-700 font-medium">"{mistake.original}"</span>
-                          <span className="text-gray-400">→</span>
-                          <span className="text-green-700 font-medium">"{mistake.correction}"</span>
-                        </div>
+                                                 <div className="flex items-center space-x-2 mb-2">
+                           <span className="text-red-700 font-medium">&ldquo;{mistake.original}&rdquo;</span>
+                           <span className="text-gray-400">→</span>
+                           <span className="text-green-700 font-medium">&ldquo;{mistake.correction}&rdquo;</span>
+                         </div>
                         <p className="text-gray-700 text-sm">{mistake.explanation}</p>
                       </div>
                     </div>
