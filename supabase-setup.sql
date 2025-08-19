@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS public.subscription_plans (
 CREATE TABLE IF NOT EXISTS public.user_profiles (
     id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
     email TEXT NOT NULL,
+    display_name TEXT,
     subscription_status TEXT DEFAULT 'active' CHECK (subscription_status IN ('active', 'inactive', 'expired')),
     subscription_expiry TIMESTAMP WITH TIME ZONE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -98,8 +99,8 @@ CREATE POLICY "Anyone can view subscription plans" ON public.subscription_plans
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO public.user_profiles (id, email)
-    VALUES (NEW.id, NEW.email);
+    INSERT INTO public.user_profiles (id, email, display_name)
+    VALUES (NEW.id, NEW.email, COALESCE(NEW.raw_user_meta_data->>'full_name', SPLIT_PART(NEW.email, '@', 1)));
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

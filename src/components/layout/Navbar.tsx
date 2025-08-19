@@ -163,15 +163,15 @@ const Navbar: React.FC = () => {
                   >
                     <User className="h-4 w-4" />
                     <span className="text-sm font-medium">
-                      {user?.email?.split('@')[0] || 'User'}
+                      {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
                     </span>
                   </button>
 
                   {/* User Dropdown */}
                   {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-2">
+                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2">
                       <div className="px-4 py-2 border-b border-gray-100">
-                        <p className="text-sm font-medium text-gray-900">{user?.email}</p>
+                        <p className="text-sm font-medium text-gray-900 break-words">{user?.email}</p>
                         <p className="text-xs text-gray-500">Free User</p>
                       </div>
                       <button
@@ -259,7 +259,7 @@ const Navbar: React.FC = () => {
                 {isAuthenticated ? (
                   <div className="space-y-2">
                     <div className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg">
-                      <p className="text-sm font-medium">{user?.email}</p>
+                      <p className="text-sm font-medium break-words">{user?.email}</p>
                       <p className="text-xs text-purple-100">Free User</p>
                     </div>
                     <button

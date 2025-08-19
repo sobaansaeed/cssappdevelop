@@ -3,6 +3,7 @@ import { supabase } from './supabase';
 export interface UserProfile {
   id: string;
   email: string;
+  display_name: string | null;
   subscription_status: 'active' | 'inactive' | 'expired';
   subscription_expiry: string | null;
   created_at: string;
@@ -11,6 +12,7 @@ export interface UserProfile {
 
 export interface CreateUserProfileData {
   email: string;
+  display_name?: string | null;
   subscription_status?: 'active' | 'inactive' | 'expired';
   subscription_expiry?: string | null;
 }
@@ -40,6 +42,7 @@ export const userProfileService = {
         {
           id: userId,
           email: data.email,
+          display_name: data.display_name || null,
           subscription_status: data.subscription_status || 'inactive',
           subscription_expiry: data.subscription_expiry || null,
         }

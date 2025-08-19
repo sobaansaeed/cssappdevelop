@@ -1,14 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { FileText, Brain, Target, CheckSquare, Zap, TrendingUp, Award, Shield, Clock, Users, ArrowRight, Crown, Sparkles, Lock } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
-import EssayChecker from '@/components/EssayChecker';
 
 const EssayCheckerPage: React.FC = () => {
   const { user, session } = useAuth();
-  const [showTool, setShowTool] = useState(false);
 
   // Check if user has pro subscription (simplified check)
   const isProUser = user && session; // In real app, check subscription status from user profile
@@ -59,16 +57,16 @@ const EssayCheckerPage: React.FC = () => {
               </div>
             ) : (
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                <button
-                  onClick={() => setShowTool(true)}
+                <Link
+                  href="/essay-checker/tool"
                   className="group bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center space-x-2"
                 >
                   <Sparkles className="h-5 w-5" />
                   <span>Access Essay Checker</span>
-                </button>
+                </Link>
                 <Link
                   href="/pricing"
-                  className="group border-2 border-white/30 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white/10 transition-all duration-300 backdrop-blur-sm flex items-center space-x-2"
+                  className="group border-2 border-white/30 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:white/10 transition-all duration-300 backdrop-blur-sm flex items-center space-x-2"
                 >
                   <Crown className="h-5 w-5" />
                   <span>Manage Subscription</span>
@@ -94,43 +92,33 @@ const EssayCheckerPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Pro User Tool Access */}
-      {isProUser && showTool && (
-        <div className="py-12 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-8">
-              <div className="flex items-center justify-center space-x-2 mb-4">
-                <Crown className="h-8 w-8 text-yellow-500" />
-                <h2 className="text-3xl font-bold text-gray-900">Pro Essay Checker Tool</h2>
+      {/* Pro User Welcome Section */}
+      {isProUser && (
+        <div className="py-16 bg-white">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-3xl p-12 border border-yellow-200">
+              <div className="flex items-center justify-center mb-6">
+                <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full p-4 mr-4">
+                  <Crown className="h-12 w-12 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome, Pro User!</h2>
+                  <p className="text-lg text-gray-600">You have access to our advanced essay checker tool.</p>
+                </div>
               </div>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Welcome to your exclusive essay checker tool. Analyze your essays with advanced AI technology 
-                and get detailed feedback to improve your CSS exam performance.
+              
+              <p className="text-gray-700 mb-8 max-w-2xl mx-auto">
+                Click the button above to access your exclusive essay checker tool. 
+                Get instant AI-powered analysis, grammar corrections, and writing suggestions to improve your CSS exam preparation.
               </p>
-            </div>
-            <EssayChecker />
-          </div>
-        </div>
-      )}
-
-      {/* Pro User CTA */}
-      {isProUser && !showTool && (
-        <div className="py-12 bg-white">
-          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-200">
-              <Crown className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Welcome, Pro User!</h2>
-              <p className="text-lg text-gray-600 mb-6">
-                You have access to our advanced essay checker tool. Click below to start analyzing your essays 
-                and improving your writing skills.
-              </p>
-              <button
-                onClick={() => setShowTool(true)}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              
+              <Link
+                href="/essay-checker/tool"
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
               >
-                <Sparkles className="h-5 w-5 inline mr-2" />
-                Access Essay Checker
-              </button>
+                <Sparkles className="h-5 w-5" />
+                <span>Access Essay Checker</span>
+              </Link>
             </div>
           </div>
         </div>
@@ -327,13 +315,13 @@ const EssayCheckerPage: React.FC = () => {
                 </Link>
               </>
             ) : (
-              <button
-                onClick={() => setShowTool(true)}
+              <Link
+                href="/essay-checker/tool"
                 className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center space-x-2"
               >
                 <Sparkles className="h-5 w-5" />
                 <span>Access Essay Checker</span>
-              </button>
+              </Link>
             )}
           </div>
         </div>
