@@ -1,0 +1,505 @@
+'use client';
+
+import React, { useState, useRef } from 'react';
+import { 
+  FileText, 
+  Upload, 
+  CheckCircle, 
+  AlertCircle, 
+  Loader2, 
+  Download, 
+  Copy, 
+  Trash2,
+  Star,
+  TrendingUp,
+  Target,
+  Lightbulb,
+  BookOpen,
+  FileUp,
+  X
+} from 'lucide-react';
+import { useAuth } from '@/lib/auth-context';
+import { PDFTextExtractor } from '@/lib/pdf-utils';
+
+interface EssayAnalysisResult {
+  corrected_text: string;
+  mistakes: Array<{
+    original: string;
+    correction: string;
+    explanation: string;
+  }>;
+  suggestions: string[];
+  score: number;
+  userType: string;
+  stored: boolean;
+}
+
+interface EssayCheckerProps {
+  onAnalysisComplete?: (result: EssayAnalysisResult) => void;
+}
+
+const EssayChecker: React.FC<EssayCheckerProps> = ({ onAnalysisComplete }) => {
+  const { user, session } = useAuth();
+  const [inputType, setInputType] = useState<'text' | 'pdf'>('text');
+  const [essayText, setEssayText] = useState('');
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<EssayAnalysisResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [wordCount, setWordCount] = useState(0);
+  const [charCount, setCharCount] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleTextChange = (text: string) => {
+    setEssayText(text);
+    setWordCount(text.trim() ? text.trim().split(/\s+/).length : 0);
+    setCharCount(text.length);
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const validation = PDFTextExtractor.validateFile(file);
+      if (validation.valid) {
+        setPdfFile(file);
+        setError(null);
+      } else {
+        setError(validation.error || 'Invalid PDF file');
+      }
+    }
+  };
+
+  const removePdfFile = () => {
+    setPdfFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const extractTextFromPDF = async (file: File): Promise<string> => {
+    try {
+      const result = await PDFTextExtractor.extractText(file);
+      if (result.success) {
+        return result.text;
+      } else {
+        throw new Error(result.error || 'Failed to extract text from PDF');
+      }
+    } catch (error) {
+      throw new Error(`PDF text extraction failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
+  const analyzeEssay = async () => {
+    if (!user || !session) {
+      setError('Please sign in to use the essay checker');
+      return;
+    }
+
+    let content = '';
+    let type: 'text' | 'pdf' = 'text';
+
+    if (inputType === 'text') {
+      if (!essayText.trim()) {
+        setError('Please enter your essay text');
+        return;
+      }
+      content = essayText;
+      type = 'text';
+    } else {
+      if (!pdfFile) {
+        setError('Please select a PDF file');
+        return;
+      }
+      content = await extractTextFromPDF(pdfFile);
+      type = 'pdf';
+    }
+
+    if (content.length < 100) {
+      setError('Essay is too short. Minimum 100 characters required.');
+      return;
+    }
+
+    if (content.length > 15000) {
+      setError('Essay is too long. Maximum 15,000 characters allowed.');
+      return;
+    }
+
+    setIsAnalyzing(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/check-essay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({
+          type,
+          essay: type === 'text' ? content : undefined,
+          pdfContent: type === 'pdf' ? content : undefined,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 403) {
+          setError('Pro subscription required. Please upgrade to access the essay checker.');
+        } else {
+          setError(data.error || 'Failed to analyze essay');
+        }
+        return;
+      }
+
+      setAnalysisResult(data);
+      if (onAnalysisComplete) {
+        onAnalysisComplete(data);
+      }
+    } catch (err) {
+      setError('Failed to connect to the server. Please try again.');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+  };
+
+  const downloadResult = () => {
+    if (!analysisResult) return;
+    
+    const content = `Essay Analysis Report
+
+Score: ${analysisResult.score}/100
+
+CORRECTED ESSAY:
+${analysisResult.corrected_text}
+
+MISTAKES FOUND:
+${analysisResult.mistakes.map((mistake, index) => 
+  `${index + 1}. Original: "${mistake.original}"
+   Correction: "${mistake.correction}"
+   Explanation: ${mistake.explanation}`
+).join('\n\n')}
+
+SUGGESTIONS FOR IMPROVEMENT:
+${analysisResult.suggestions.map((suggestion, index) => 
+  `${index + 1}. ${suggestion}`
+).join('\n')}
+
+Generated by CSSKRO Essay Checker
+Date: ${new Date().toLocaleDateString()}`;
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'essay-analysis-report.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const resetForm = () => {
+    setEssayText('');
+    setPdfFile(null);
+    setAnalysisResult(null);
+    setError(null);
+    setWordCount(0);
+    setCharCount(0);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  if (!user || !session) {
+    return (
+      <div className="text-center py-12">
+        <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">Sign In Required</h3>
+        <p className="text-gray-600 mb-6">Please sign in to access the essay checker tool.</p>
+        <a
+          href="/auth/signin"
+          className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Sign In
+        </a>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-6xl mx-auto">
+      {/* Input Section */}
+      <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 mb-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-gray-900">Essay Checker</h2>
+          <div className="flex items-center space-x-2">
+            <span className="text-sm text-gray-500">Pro User</span>
+            <Star className="h-5 w-5 text-yellow-500 fill-current" />
+          </div>
+        </div>
+
+        {/* Input Type Toggle */}
+        <div className="flex space-x-2 mb-6">
+          <button
+            onClick={() => setInputType('text')}
+            className={`px-4 py-2 rounded-lg font-medium transition-all ${
+              inputType === 'text'
+                ? 'bg-blue-100 text-blue-700 border-2 border-blue-300'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            <FileText className="h-4 w-4 inline mr-2" />
+            Text Input
+          </button>
+          <button
+            onClick={() => setInputType('pdf')}
+            className={`px-4 py-2 rounded-lg font-medium transition-all ${
+              inputType === 'pdf'
+                ? 'bg-blue-100 text-blue-700 border-2 border-blue-300'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            <FileUp className="h-4 w-4 inline mr-2" />
+            PDF Upload
+          </button>
+        </div>
+
+        {/* Text Input */}
+        {inputType === 'text' && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Essay Text
+              </label>
+              <textarea
+                value={essayText}
+                onChange={(e) => handleTextChange(e.target.value)}
+                placeholder="Paste your essay here... (100-15,000 characters)"
+                className="w-full h-64 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              />
+            </div>
+            <div className="flex justify-between text-sm text-gray-500">
+              <span>Words: {wordCount}</span>
+              <span>Characters: {charCount}</span>
+            </div>
+          </div>
+        )}
+
+        {/* PDF Upload */}
+        {inputType === 'pdf' && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Upload PDF
+              </label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors">
+                                 {pdfFile ? (
+                   <div className="space-y-4">
+                     <div className="flex items-center justify-center space-x-2">
+                       <FileText className="h-8 w-8 text-blue-500" />
+                       <div className="text-center">
+                         <div className="font-medium text-gray-900">{pdfFile.name}</div>
+                         <div className="text-sm text-gray-500">{PDFTextExtractor.formatFileSize(pdfFile.size)}</div>
+                       </div>
+                     </div>
+                     <button
+                       onClick={removePdfFile}
+                       className="inline-flex items-center px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+                     >
+                       <Trash2 className="h-4 w-4 mr-2" />
+                       Remove
+                     </button>
+                   </div>
+                 ) : (
+                  <div>
+                    <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600 mb-2">
+                      Click to upload or drag and drop your PDF file
+                    </p>
+                    <p className="text-sm text-gray-500">Maximum file size: 10MB</p>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".pdf"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                    <button
+                      onClick={() => fileInputRef.current?.click()}
+                      className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Choose PDF
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Error Display */}
+        {error && (
+          <div className="flex items-center space-x-2 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <AlertCircle className="h-5 w-5 text-red-500" />
+            <span className="text-red-700">{error}</span>
+          </div>
+        )}
+
+        {/* Analyze Button */}
+        <div className="mt-6">
+          <button
+            onClick={analyzeEssay}
+            disabled={isAnalyzing || (inputType === 'text' && !essayText.trim()) || (inputType === 'pdf' && !pdfFile)}
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105 shadow-lg"
+          >
+            {isAnalyzing ? (
+              <div className="flex items-center justify-center space-x-2">
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <span>Analyzing Essay...</span>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center space-x-2">
+                <CheckCircle className="h-5 w-5" />
+                <span>Analyze Essay</span>
+              </div>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Analysis Results */}
+      {analysisResult && (
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-2xl font-bold text-gray-900">Analysis Results</h3>
+            <div className="flex space-x-2">
+              <button
+                onClick={downloadResult}
+                className="inline-flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download Report
+              </button>
+              <button
+                onClick={resetForm}
+                className="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <X className="h-4 w-4 mr-2" />
+                New Analysis
+              </button>
+            </div>
+          </div>
+
+          {/* Score Display */}
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 mb-8">
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-4">
+                <span className="text-3xl font-bold text-white">{analysisResult.score}</span>
+              </div>
+              <h4 className="text-xl font-semibold text-gray-900 mb-2">Overall Score</h4>
+              <p className="text-gray-600">out of 100 points</p>
+            </div>
+          </div>
+
+          {/* Corrected Essay */}
+          <div className="mb-8">
+            <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+              Corrected Essay
+            </h4>
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm text-gray-500">Click to copy</span>
+                <button
+                  onClick={() => copyToClipboard(analysisResult.corrected_text)}
+                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                >
+                  <Copy className="h-4 w-4 inline mr-1" />
+                  Copy
+                </button>
+              </div>
+              <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">
+                {analysisResult.corrected_text}
+              </p>
+            </div>
+          </div>
+
+          {/* Mistakes */}
+          {analysisResult.mistakes.length > 0 && (
+            <div className="mb-8">
+              <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
+                Mistakes Found ({analysisResult.mistakes.length})
+              </h4>
+              <div className="space-y-3">
+                {analysisResult.mistakes.map((mistake, index) => (
+                  <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                        {index + 1}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <span className="text-red-700 font-medium">"{mistake.original}"</span>
+                          <span className="text-gray-400">→</span>
+                          <span className="text-green-700 font-medium">"{mistake.correction}"</span>
+                        </div>
+                        <p className="text-gray-700 text-sm">{mistake.explanation}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Suggestions */}
+          {analysisResult.suggestions.length > 0 && (
+            <div className="mb-8">
+              <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                <Lightbulb className="h-5 w-5 text-yellow-500 mr-2" />
+                Suggestions for Improvement ({analysisResult.suggestions.length})
+              </h4>
+              <div className="space-y-3">
+                {analysisResult.suggestions.map((suggestion, index) => (
+                  <div key={index} className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0 w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
+                        {index + 1}
+                      </div>
+                      <p className="text-gray-800">{suggestion}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Analysis Info */}
+          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div className="flex items-center space-x-2">
+                <TrendingUp className="h-4 w-4 text-blue-500" />
+                <span className="text-gray-600">User Type: <span className="font-medium text-gray-900">{analysisResult.userType}</span></span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Target className="h-4 w-4 text-green-500" />
+                <span className="text-gray-600">Stored: <span className="font-medium text-gray-900">{analysisResult.stored ? 'Yes' : 'No'}</span></span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="h-4 w-4 text-purple-500" />
+                <span className="text-gray-600">Analysis Complete</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default EssayChecker;

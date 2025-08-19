@@ -3,7 +3,9 @@ import { createServerClient } from '@/lib/supabase';
 import { geminiAIService } from '@/lib/gemini-ai';
 
 interface EssayRequest {
-  essay: string;
+  essay?: string;
+  pdfContent?: string;
+  type: 'text' | 'pdf';
 }
 
 export async function POST(request: NextRequest) {
@@ -30,62 +32,114 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check user's subscription status
+    const { data: profile, error: profileError } = await supabase
+      .from('user_profiles')
+      .select('subscription_status, subscription_expiry')
+      .eq('id', user.id)
+      .single();
+
+    if (profileError) {
+      console.error('Error fetching user profile:', profileError);
+      return NextResponse.json(
+        { error: 'Failed to verify subscription status' },
+        { status: 500 }
+      );
+    }
+
+    // Check if user has active pro subscription
+    const isProUser = profile.subscription_status === 'active' && 
+                     profile.subscription_expiry && 
+                     new Date(profile.subscription_expiry) > new Date();
+
+    if (!isProUser) {
+      return NextResponse.json(
+        { 
+          error: 'Pro subscription required',
+          message: 'This feature is only available for pro users. Please upgrade your subscription to access the essay checker.',
+          upgradeUrl: '/pricing'
+        },
+        { status: 403 }
+      );
+    }
+
     // Parse request body
     const body: EssayRequest = await request.json();
     
-    if (!body.essay || typeof body.essay !== 'string') {
+    if (!body.type || !['text', 'pdf'].includes(body.type)) {
       return NextResponse.json(
-        { error: 'Essay text is required' },
+        { error: 'Invalid request type. Must be either "text" or "pdf"' },
         { status: 400 }
       );
     }
 
-    if (body.essay.trim().length === 0) {
+    let essayText = '';
+
+    if (body.type === 'text') {
+      if (!body.essay || typeof body.essay !== 'string') {
+        return NextResponse.json(
+          { error: 'Essay text is required for text type requests' },
+          { status: 400 }
+        );
+      }
+      essayText = body.essay;
+    } else if (body.type === 'pdf') {
+      if (!body.pdfContent || typeof body.pdfContent !== 'string') {
+        return NextResponse.json(
+          { error: 'PDF content is required for pdf type requests' },
+          { status: 400 }
+        );
+      }
+      essayText = body.pdfContent;
+    }
+
+    if (essayText.trim().length === 0) {
       return NextResponse.json(
-        { error: 'Essay text cannot be empty' },
+        { error: 'Essay content cannot be empty' },
         { status: 400 }
       );
     }
 
     // Check essay length limits
-    if (body.essay.length > 10000) {
+    if (essayText.length > 15000) {
       return NextResponse.json(
-        { error: 'Essay is too long. Maximum 10,000 characters allowed.' },
+        { error: 'Essay is too long. Maximum 15,000 characters allowed.' },
         { status: 400 }
       );
     }
 
-    if (body.essay.length < 100) {
+    if (essayText.length < 100) {
       return NextResponse.json(
         { error: 'Essay is too short. Minimum 100 characters required for meaningful analysis.' },
         { status: 400 }
       );
     }
 
-    // TODO: Check subscription status here
-    // For now, allow all authenticated users
-
     // Analyze the essay using Gemini AI
-    const result = await geminiAIService.analyzeEssay(body.essay);
+    const result = await geminiAIService.analyzeEssay(essayText);
 
-    // TODO: Store essay in database for history
-    // const { error: dbError } = await supabase
-    //   .from('essays')
-    //   .insert({
-    //     user_id: user.id,
-    //     original_text: body.essay,
-    //     corrected_text: result.corrected_text,
-    //     score: result.score,
-    //     mistakes: result.mistakes,
-    //     suggestions: result.suggestions
-    //   });
+    // Store essay in database for pro users
+    const { error: dbError } = await supabase
+      .from('essays')
+      .insert({
+        user_id: user.id,
+        original_text: essayText,
+        corrected_text: result.corrected_text,
+        score: result.score,
+        mistakes: result.mistakes,
+        suggestions: result.suggestions
+      });
 
-    // if (dbError) {
-    //   console.error('Error storing essay:', dbError);
-    //   // Don't fail the request if storage fails
-    // }
+    if (dbError) {
+      console.error('Error storing essay:', dbError);
+      // Don't fail the request if storage fails
+    }
 
-    return NextResponse.json(result);
+    return NextResponse.json({
+      ...result,
+      userType: 'pro',
+      stored: !dbError
+    });
 
   } catch (error) {
     console.error('Error processing essay:', error);
