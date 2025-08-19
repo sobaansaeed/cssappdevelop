@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { GraduationCap, Home, Newspaper, Book, Calendar, Menu, X, FileText, User, LogOut, Crown, LogIn, UserPlus, Mail } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
+import { userProfileService } from '@/lib/user-profile';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -163,7 +164,7 @@ const Navbar: React.FC = () => {
                   >
                     <User className="h-4 w-4" />
                     <span className="text-sm font-medium">
-                      {user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User'}
+                      {userProfileService.getDisplayName(user)}
                     </span>
                   </button>
 

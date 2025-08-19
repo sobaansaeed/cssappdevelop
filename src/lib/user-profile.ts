@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { User } from '@supabase/supabase-js';
 
 export interface UserProfile {
   id: string;
@@ -32,6 +33,29 @@ export const userProfileService = {
     }
 
     return data;
+  },
+
+  // Get user-friendly display name
+  getDisplayName(user: User | null): string {
+    // Priority: 1. Google OAuth full name, 2. Profile display name, 3. Email username, 4. Fallback
+    const fullName = user?.user_metadata?.full_name;
+    const profileName = user?.user_metadata?.display_name;
+    const email = user?.email;
+    
+    if (fullName) {
+      // Return only the first name to keep navbar clean
+      return fullName.split(' ')[0];
+    }
+    
+    if (profileName) {
+      return profileName.split(' ')[0];
+    }
+    
+    if (email) {
+      return email.split('@')[0];
+    }
+    
+    return 'User';
   },
 
   // Create new user profile
