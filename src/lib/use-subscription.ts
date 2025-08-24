@@ -70,6 +70,7 @@ export function useSubscription() {
           
           // If profile doesn't exist, create it
           if (profileError.code === 'PGRST116') {
+            console.log('Profile not found, creating new profile for user:', user.id);
             const { data: newProfile, error: createError } = await supabase
               .from('user_profiles')
               .insert({
@@ -83,7 +84,7 @@ export function useSubscription() {
 
             if (createError) {
               console.error('Error creating profile:', createError);
-              setError('Failed to create user profile');
+              setError('Failed to create user profile: ' + createError.message);
               return;
             }
 
@@ -94,7 +95,7 @@ export function useSubscription() {
             return;
           }
           
-          setError('Failed to fetch subscription status');
+          setError('Failed to fetch subscription status: ' + profileError.message);
           return;
         }
 

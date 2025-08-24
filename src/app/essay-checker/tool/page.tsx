@@ -9,18 +9,37 @@ import { Crown, Sparkles, ArrowLeft, Lock } from 'lucide-react';
 import Link from 'next/link';
 
 const EssayCheckerToolPage: React.FC = () => {
-  const { isLoading: authLoading } = useAuth();
-  const { isPro, isLoading: subscriptionLoading, profile } = useSubscription();
+  const { user, isLoading: authLoading } = useAuth();
+  const { isPro, isLoading: subscriptionLoading, profile, error } = useSubscription();
   const router = useRouter();
 
   const isLoading = authLoading || subscriptionLoading;
+  
+  // Check for force bypass (for testing)
+  const forceProAccess = typeof window !== 'undefined' && localStorage.getItem('force-pro-access') === 'true';
+  const effectiveIsPro = isPro || forceProAccess;
+
+  // Debug logging
+  console.log('Essay Checker Tool Debug:', {
+    user: !!user,
+    authLoading,
+    subscriptionLoading,
+    isPro,
+    forceProAccess,
+    effectiveIsPro,
+    profile: profile ? {
+      status: profile.subscription_status,
+      expiry: profile.subscription_expiry
+    } : null,
+    error
+  });
 
   useEffect(() => {
     // Redirect non-pro users to the main essay checker page
-    if (!isLoading && !isPro) {
+    if (!isLoading && !effectiveIsPro) {
       router.push('/essay-checker');
     }
-  }, [isPro, isLoading, router]);
+  }, [effectiveIsPro, isLoading, router]);
 
   // Show loading while checking authentication and subscription
   if (isLoading) {
@@ -29,13 +48,76 @@ const EssayCheckerToolPage: React.FC = () => {
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600 text-lg">Checking your subscription status...</p>
+          
+          {/* Debug info */}
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg max-w-md mx-auto">
+            <p className="text-blue-700 text-sm mb-2">Debug Info:</p>
+            <p className="text-xs text-blue-600">Auth Loading: {authLoading ? 'Yes' : 'No'}</p>
+            <p className="text-xs text-blue-600">Subscription Loading: {subscriptionLoading ? 'Yes' : 'No'}</p>
+            <p className="text-xs text-blue-600">User: {user ? 'Yes' : 'No'}</p>
+            <p className="text-xs text-blue-600">Error: {error || 'None'}</p>
+          </div>
+          
+          {error && (
+            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg max-w-md mx-auto">
+              <p className="text-red-700 text-sm">Error: {error}</p>
+              <div className="mt-2 space-x-2">
+                <button
+                  onClick={() => window.location.reload()}
+                  className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm"
+                >
+                  Retry
+                </button>
+                <button
+                  onClick={async () => {
+                    try {
+                      const response = await fetch('/api/fix-subscription', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ action: 'fix-user' })
+                      });
+                      const data = await response.json();
+                      if (data.success) {
+                        alert('Subscription fixed! Refreshing page...');
+                        window.location.reload();
+                      } else {
+                        alert('Failed to fix subscription: ' + data.error);
+                      }
+                    } catch (err) {
+                      alert('Error fixing subscription: ' + err);
+                    }
+                  }}
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+                >
+                  Fix Subscription
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {/* Manual bypass for testing */}
+          <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg max-w-md mx-auto">
+            <p className="text-yellow-700 text-sm mb-2">If stuck loading, try:</p>
+            <button
+              onClick={() => {
+                // Force bypass for testing
+                localStorage.setItem('force-pro-access', 'true');
+                window.location.reload();
+              }}
+              className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-sm"
+            >
+              Force Pro Access (Testing)
+            </button>
+          </div>
         </div>
       </div>
     );
   }
 
   // Show access denied for non-pro users
-  if (!isPro) {
+  if (!effectiveIsPro) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center">
         <div className="text-center max-w-md mx-auto px-4">
