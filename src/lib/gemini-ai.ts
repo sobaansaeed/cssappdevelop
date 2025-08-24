@@ -65,6 +65,12 @@ export class GeminiAIService {
 
   async analyzeEssay(essay: string): Promise<EssayAnalysisResult> {
     try {
+      // Check if API key is available
+      if (!process.env.GOOGLE_AI_API_KEY && !process.env.AI_API_KEY) {
+        console.error('Gemini AI API key not found. Using fallback analysis.');
+        return this.createFallbackAnalysis(essay);
+      }
+
       const prompt = this.buildPrompt(essay);
       
       const result = await this.model.generateContent(prompt);
@@ -74,7 +80,28 @@ export class GeminiAIService {
       return this.parseGeminiResponse(text, essay);
     } catch (error) {
       console.error('Gemini AI Error:', error);
-      throw new Error('Failed to analyze essay with AI');
+      
+      // Check for specific error types
+      if (error instanceof Error) {
+        if (error.message.includes('API_KEY') || error.message.includes('authentication')) {
+          console.error('API key issue detected. Using fallback analysis.');
+          return this.createFallbackAnalysis(essay);
+        }
+        
+        if (error.message.includes('quota') || error.message.includes('limit')) {
+          console.error('Rate limit/quota exceeded. Using fallback analysis.');
+          return this.createFallbackAnalysis(essay);
+        }
+        
+        if (error.message.includes('network') || error.message.includes('fetch')) {
+          console.error('Network issue detected. Using fallback analysis.');
+          return this.createFallbackAnalysis(essay);
+        }
+      }
+      
+      // For any other errors, use fallback instead of throwing
+      console.error('Unknown Gemini AI error. Using fallback analysis.');
+      return this.createFallbackAnalysis(essay);
     }
   }
 
@@ -243,30 +270,83 @@ ANALYZE NOW:`;
   }
 
   private createFallbackAnalysis(essay: string): EssayAnalysisResult {
-    // Basic fallback analysis if AI fails
-    const words = essay.split(' ');
-    const score = Math.max(50, Math.min(90, 70 + (words.length / 10)));
+    // Enhanced fallback analysis if AI fails
+    const words = essay.split(' ').filter(word => word.length > 0);
+    const wordCount = words.length;
+    const sentences = essay.split(/[.!?]+/).filter(s => s.trim().length > 0);
+    const paragraphs = essay.split('\n\n').filter(p => p.trim().length > 0);
+    
+    // Calculate a basic score based on essay structure
+    let baseScore = 60;
+    
+    // Word count scoring
+    if (wordCount >= 800) baseScore += 10;
+    else if (wordCount >= 500) baseScore += 5;
+    else if (wordCount < 200) baseScore -= 10;
+    
+    // Paragraph structure
+    if (paragraphs.length >= 4) baseScore += 5;
+    else if (paragraphs.length < 3) baseScore -= 5;
+    
+    // Basic checks
+    const hasIntroduction = essay.toLowerCase().includes('introduction') || 
+                           paragraphs[0]?.length > 100;
+    const hasConclusion = essay.toLowerCase().includes('conclusion') || 
+                         essay.toLowerCase().includes('to conclude') ||
+                         paragraphs[paragraphs.length - 1]?.length > 50;
+    
+    if (hasIntroduction) baseScore += 5;
+    if (hasConclusion) baseScore += 5;
+    
+    const finalScore = Math.max(40, Math.min(85, baseScore));
     
     return {
       corrected_text: essay,
       mistakes: [
         {
-          original: 'Sample',
-          correction: 'Sample',
-          explanation: 'AI analysis temporarily unavailable. Please try again.'
+          original: 'Note',
+          correction: 'Note',
+          explanation: '⚠️ AI analysis is temporarily unavailable. This is a basic structural analysis. Please try again later for detailed AI feedback.'
         }
       ],
       suggestions: [
-        'Ensure your essay has a clear introduction, body, and conclusion',
-        'Use topic sentences for each paragraph',
-        'Include specific examples to support your arguments',
-        'Maintain consistent formatting and structure'
+        'Ensure your essay has a clear thesis statement in the introduction',
+        'Use topic sentences to begin each body paragraph',
+        'Include specific examples and evidence to support your arguments',
+        'Maintain logical flow between paragraphs with transition words',
+        'Write a strong conclusion that summarizes your main points',
+        `Current word count: ${wordCount} words (recommended: 800-1200 for CSS essays)`
       ],
-      score: Math.round(score),
-      evaluation: this.createDefaultEvaluation(),
-      totalMarks: Math.round(score),
-      isOutlineOnly: false,
-      examinerRemarks: this.createDefaultRemarks()
+      score: Math.round(finalScore),
+      evaluation: {
+        thesisStatement: { score: Math.round(finalScore * 0.15), comment: 'Basic structural analysis - AI unavailable' },
+        outline: { score: Math.round(finalScore * 0.1), comment: 'Please try again for detailed AI feedback' },
+        structure: { score: Math.round(finalScore * 0.2), comment: `${paragraphs.length} paragraphs detected` },
+        content: { score: Math.round(finalScore * 0.25), comment: 'Content analysis requires AI service' },
+        language: { score: Math.round(finalScore * 0.15), comment: 'Language analysis requires AI service' },
+        criticalThinking: { score: Math.round(finalScore * 0.1), comment: 'Critical thinking analysis requires AI service' },
+        conclusion: { score: Math.round(finalScore * 0.05), comment: hasConclusion ? 'Conclusion detected' : 'No clear conclusion found' },
+        wordCount: { score: wordCount >= 800 ? 10 : wordCount >= 500 ? 7 : 5, comment: `${wordCount} words` }
+      },
+      totalMarks: Math.round(finalScore),
+      isOutlineOnly: wordCount < 100,
+      examinerRemarks: {
+        strengths: [
+          hasIntroduction ? 'Clear introduction structure' : '',
+          hasConclusion ? 'Conclusion present' : '',
+          wordCount >= 500 ? 'Adequate length' : ''
+        ].filter(Boolean),
+        weaknesses: [
+          '⚠️ Detailed AI analysis unavailable',
+          wordCount < 500 ? 'Essay length could be improved' : '',
+          paragraphs.length < 3 ? 'More paragraph structure needed' : ''
+        ].filter(Boolean),
+        suggestions: [
+          'Try again later for detailed AI-powered analysis',
+          'Focus on clear paragraph structure and transitions',
+          'Ensure strong thesis statement and conclusion'
+        ]
+      }
     };
   }
 }
