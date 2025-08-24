@@ -139,6 +139,7 @@ const CSSKROAdminPage: React.FC = () => {
   const quickUpgrade = async (userId: string) => {
     try {
       const token = getCookie('admin-token');
+      console.log('admin-token:', token);
       const response = await fetch('/api/update-user-subscription', {
         method: 'POST',
         headers: {
