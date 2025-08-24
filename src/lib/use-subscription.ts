@@ -15,10 +15,13 @@ export const useSubscription = (): SubscriptionStatus => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [isPro, setIsPro] = useState(false);
+
   useEffect(() => {
     const checkSubscription = async () => {
       if (!user || !session) {
         setProfile(null);
+        setIsPro(false);
         setIsLoading(false);
         return;
       }
@@ -31,6 +34,8 @@ export const useSubscription = (): SubscriptionStatus => {
         
         if (userProfile) {
           setProfile(userProfile);
+          const active = await userProfileService.hasActiveSubscription(user.id);
+          setIsPro(active);
         } else {
           // If no profile exists, create one with inactive status
           const newProfile = await userProfileService.createProfile(user.id, {
@@ -39,6 +44,7 @@ export const useSubscription = (): SubscriptionStatus => {
             subscription_status: 'inactive'
           });
           setProfile(newProfile);
+          setIsPro(false);
         }
       } catch (err) {
         console.error('Error checking subscription:', err);
@@ -50,8 +56,6 @@ export const useSubscription = (): SubscriptionStatus => {
 
     checkSubscription();
   }, [user, session]);
-
-  const isPro = profile?.subscription_status === 'active';
 
   return {
     isPro,
