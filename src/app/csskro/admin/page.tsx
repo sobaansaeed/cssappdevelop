@@ -16,7 +16,7 @@ import {
   X,
   UserX
 } from 'lucide-react';
-import { useAuth } from '@/lib/auth-context';
+
 
 interface UserProfile {
   id: string;
@@ -27,7 +27,6 @@ interface UserProfile {
 }
 
 const CSSKROAdminPage: React.FC = () => {
-  const { revalidate } = useAuth();
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<string | null>(null);
@@ -187,7 +186,7 @@ const CSSKROAdminPage: React.FC = () => {
 
       setMessage('User downgraded to Free successfully!');
       setMessageType('success');
-      revalidate();
+      window.location.reload();
       setTimeout(() => setMessage(''), 3000);
     } catch (e) {
       console.error('Failed to downgrade user:', e);
