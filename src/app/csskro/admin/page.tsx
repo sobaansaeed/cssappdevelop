@@ -299,6 +299,74 @@ const CSSKROAdminPage: React.FC = () => {
     setEditExpiry('');
   };
 
+  const handleQuickUpgrade = async (userId: string) => {
+    try {
+      const response = await fetch('/api/update-user-subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          status: 'active',
+          expiryDate: null // No expiry date
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to upgrade user');
+
+      // Update local state
+      setUsers(users.map(user => 
+        user.id === userId 
+          ? { ...user, subscription_status: 'active', subscription_expiry: null }
+          : user
+      ));
+
+      setMessage('User upgraded to Pro successfully!');
+      setMessageType('success');
+      setTimeout(() => setMessage(''), 3000);
+    } catch (error) {
+      console.error('Error upgrading user:', error);
+      setMessage('Failed to upgrade user');
+      setMessageType('error');
+      setTimeout(() => setMessage(''), 3000);
+    }
+  };
+
+  const handleQuickDowngrade = async (userId: string) => {
+    try {
+      const response = await fetch('/api/update-user-subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId,
+          status: 'inactive',
+          expiryDate: null
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to downgrade user');
+
+      // Update local state
+      setUsers(users.map(user => 
+        user.id === userId 
+          ? { ...user, subscription_status: 'inactive', subscription_expiry: null }
+          : user
+      ));
+
+      setMessage('User downgraded to Free successfully!');
+      setMessageType('success');
+      setTimeout(() => setMessage(''), 3000);
+    } catch (error) {
+      console.error('Error downgrading user:', error);
+      setMessage('Failed to downgrade user');
+      setMessageType('error');
+      setTimeout(() => setMessage(''), 3000);
+    }
+  };
+
   const toggleUserSelection = (userId: string) => {
     const newSelection = new Set(selectedUsers);
     if (newSelection.has(userId)) {
@@ -730,6 +798,9 @@ const CSSKROAdminPage: React.FC = () => {
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-600">Active Pro</p>
                     <p className="text-2xl font-bold text-gray-900">{subscriptionStats.active}</p>
+                    <p className="text-xs text-green-600 font-medium">
+                      {subscriptionStats.total > 0 ? `${Math.round((subscriptionStats.active / subscriptionStats.total) * 100)}%` : '0%'} of total
+                    </p>
                   </div>
                 </div>
               </div>
@@ -742,6 +813,9 @@ const CSSKROAdminPage: React.FC = () => {
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-600">Free Users</p>
                     <p className="text-2xl font-bold text-gray-900">{subscriptionStats.inactive}</p>
+                    <p className="text-xs text-gray-600 font-medium">
+                      {subscriptionStats.total > 0 ? `${Math.round((subscriptionStats.inactive / subscriptionStats.total) * 100)}%` : '0%'} of total
+                    </p>
                   </div>
                 </div>
               </div>
@@ -754,6 +828,9 @@ const CSSKROAdminPage: React.FC = () => {
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-600">Expired</p>
                     <p className="text-2xl font-bold text-gray-900">{subscriptionStats.expired}</p>
+                    <p className="text-xs text-red-600 font-medium">
+                      {subscriptionStats.total > 0 ? `${Math.round((subscriptionStats.expired / subscriptionStats.total) * 100)}%` : '0%'} of total
+                    </p>
                   </div>
                 </div>
               </div>
@@ -963,12 +1040,34 @@ const CSSKROAdminPage: React.FC = () => {
                                   </button>
                                 </div>
                               ) : (
-                                <button
-                                  onClick={() => handleEdit(user)}
-                                  className="text-blue-600 hover:text-blue-900"
-                                >
-                                  <Edit className="h-5 w-5" />
-                                </button>
+                                <div className="flex items-center space-x-2">
+                                  <button
+                                    onClick={() => handleEdit(user)}
+                                    className="text-blue-600 hover:text-blue-900"
+                                    title="Edit Subscription"
+                                  >
+                                    <Edit className="h-5 w-5" />
+                                  </button>
+                                  
+                                  {/* Quick Actions */}
+                                  {user.subscription_status === 'inactive' ? (
+                                    <button
+                                      onClick={() => handleQuickUpgrade(user.id)}
+                                      className="text-green-600 hover:text-green-900"
+                                      title="Quick Upgrade to Pro"
+                                    >
+                                      <Crown className="h-4 w-4" />
+                                    </button>
+                                  ) : (
+                                    <button
+                                      onClick={() => handleQuickDowngrade(user.id)}
+                                      className="text-orange-600 hover:text-orange-900"
+                                      title="Quick Downgrade to Free"
+                                    >
+                                      <Users className="h-4 w-4" />
+                                    </button>
+                                  )}
+                                </div>
                               )}
                             </td>
                           </tr>
