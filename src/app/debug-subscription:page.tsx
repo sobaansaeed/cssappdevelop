@@ -8,7 +8,7 @@ import { useSubscription } from '@/lib/use-subscription';
 const DebugSubscriptionPage: React.FC = () => {
   const { user, session } = useAuth();
   const { isPro, isLoading, profile, error, refreshSubscription } = useSubscription();
-  const [debugData, setDebugData] = useState<any>(null);
+  const [debugData, setDebugData] = useState<Record<string, unknown> | null>(null);
   const [testing, setTesting] = useState(false);
 
   const testSubscriptionAPI = async () => {
@@ -167,7 +167,7 @@ const DebugSubscriptionPage: React.FC = () => {
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Manual Database Check</h2>
           <p className="text-gray-700 mb-4">
-            Go to your Supabase dashboard and run this query to check the user's subscription status:
+            Go to your Supabase dashboard and run this query to check the user&apos;s subscription status:
           </p>
           <div className="bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm">
             SELECT * FROM user_profiles WHERE id = &apos;{user.id}&apos;;

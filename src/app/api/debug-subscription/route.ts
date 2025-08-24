@@ -47,18 +47,31 @@ export async function GET(request: NextRequest) {
 
     // Check subscription logic
     let isProUser = false;
-    let subscriptionCheck = {
+    const subscriptionCheck: {
+      status: string;
+      expiry: string | null;
+      hasExpiry: boolean;
+      currentDate: string;
+      expiryDate: string | null;
+      isExpired: boolean;
+      isProUser: boolean;
+      logic: {
+        statusCheck: boolean;
+        expiryCheck: boolean;
+        dateComparison: boolean | null;
+      };
+    } = {
       status: profile.subscription_status,
       expiry: profile.subscription_expiry,
       hasExpiry: !!profile.subscription_expiry,
       currentDate: new Date().toISOString(),
-      expiryDate: null as string | null,
+      expiryDate: null,
       isExpired: false,
       isProUser: false,
       logic: {
         statusCheck: profile.subscription_status === 'active',
         expiryCheck: !profile.subscription_expiry,
-        dateComparison: null as boolean | null
+        dateComparison: null
       }
     };
     

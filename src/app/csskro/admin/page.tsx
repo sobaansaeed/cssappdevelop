@@ -110,7 +110,7 @@ const CSSKROAdminPage: React.FC = () => {
       setEditingUser(null);
       setMessage('User subscription updated successfully!');
       setMessageType('success');
-      revalidate();
+      fetchUsers(); // Refresh the data
       
       setTimeout(() => setMessage(''), 3000);
     } catch (e) {
@@ -152,7 +152,7 @@ const CSSKROAdminPage: React.FC = () => {
 
       setMessage('User upgraded to Pro successfully!');
       setMessageType('success');
-      revalidate();
+      fetchUsers(); // Refresh the data
       setTimeout(() => setMessage(''), 3000);
     } catch (e) {
       console.error('Failed to upgrade user:', e);
