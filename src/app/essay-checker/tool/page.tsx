@@ -190,6 +190,33 @@ const EssayCheckerToolPage: React.FC = () => {
               
               <button
                 onClick={async () => {
+                  try {
+                    const response = await fetch('/api/debug-subscription-real', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ email: 'sobaanzoho@gmail.com' })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                      console.log('REAL Debug info:', data);
+                      const analysis = data.analysis;
+                      alert(`REAL DEBUG - Check Console!\n\nProfile Exists: ${analysis.profileExists}\nFrontend Pro: ${analysis.frontendLogic.isPro}\nBackend Pro: ${analysis.backendLogic.isPro}\nShould Work: ${analysis.shouldWork}\n\nReason: ${analysis.frontendLogic.reason}`);
+                    } else {
+                      alert('Failed to debug user: ' + data.error);
+                    }
+                  } catch (err) {
+                    alert('Error debugging user: ' + err);
+                  }
+                }}
+                className="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm font-bold"
+              >
+                🔍 REAL DEBUG sobaanzoho
+              </button>
+              
+              <button
+                onClick={async () => {
                   if (!confirm('This will fix ALL users to Pro status. Are you sure?')) {
                     return;
                   }
