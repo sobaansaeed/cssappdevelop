@@ -174,7 +174,7 @@ const CSSKROAdminPage: React.FC = () => {
     try {
       const token = getCookie('admin-token');
       const response = await fetch('/api/update-user-subscription', {
-        method: 'POST',.
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
