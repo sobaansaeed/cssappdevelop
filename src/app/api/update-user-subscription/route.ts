@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
 
     // Parse request body
     const body: UpdateSubscriptionRequest = await request.json();
+    console.log('update-user-subscription: body', body);
     const { userId, status, expiryDate } = body;
 
     if (!userId) {
