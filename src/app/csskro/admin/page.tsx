@@ -48,7 +48,7 @@ const CSSKROAdminPage: React.FC = () => {
         if (data.users) {
           setUsers(data.users);
         } else {
-          setUsers(data || []);
+        setUsers(data || []);
         }
         setMessage('');
         setMessageType('');
@@ -83,14 +83,22 @@ const CSSKROAdminPage: React.FC = () => {
     setEditExpiry(user.subscription_expiry ? user.subscription_expiry.split('T')[0] : '');
   };
 
+  const getCookie = (name: string): string | undefined => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift();
+  };
+
   const handleSave = async (userId: string) => {
     try {
       const expiryDate = editExpiry ? new Date(editExpiry).toISOString() : null;
-      
+      const token = getCookie('admin-token');
+
       const response = await fetch('/api/update-user-subscription', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           userId,
@@ -130,10 +138,12 @@ const CSSKROAdminPage: React.FC = () => {
   // Quick actions for fast user management
   const quickUpgrade = async (userId: string) => {
     try {
+      const token = getCookie('admin-token');
       const response = await fetch('/api/update-user-subscription', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           userId,
@@ -162,10 +172,12 @@ const CSSKROAdminPage: React.FC = () => {
 
   const quickDowngrade = async (userId: string) => {
     try {
+      const token = getCookie('admin-token');
       const response = await fetch('/api/update-user-subscription', {
-        method: 'POST',
+        method: 'POST',.
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           userId,
@@ -193,7 +205,7 @@ const CSSKROAdminPage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
+      fetchUsers();
   }, []);
 
   // Simple statistics calculation
@@ -285,74 +297,74 @@ const CSSKROAdminPage: React.FC = () => {
         )}
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Users className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Users</p>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                <div className="flex items-center">
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <Users className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Total Users</p>
                 <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-2 bg-green-100 rounded-lg">
+              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                <div className="flex items-center">
+                  <div className="p-2 bg-green-100 rounded-lg">
                 <Crown className="h-6 w-6 text-green-600" />
-              </div>
-              <div className="ml-4">
+                  </div>
+                  <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Pro Users</p>
                 <p className="text-2xl font-bold text-green-600">{stats.pro}</p>
                 <p className="text-xs text-green-600 font-medium">
                   {stats.total > 0 ? `${Math.round((stats.pro / stats.total) * 100)}%` : '0%'} of total
                 </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-2 bg-gray-100 rounded-lg">
+              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                <div className="flex items-center">
+                  <div className="p-2 bg-gray-100 rounded-lg">
                 <UserX className="h-6 w-6 text-gray-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Free Users</p>
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Free Users</p>
                 <p className="text-2xl font-bold text-gray-900">{stats.free}</p>
                 <p className="text-xs text-gray-600 font-medium">
                   {stats.total > 0 ? `${Math.round((stats.free / stats.total) * 100)}%` : '0%'} of total
                 </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
-            <div className="flex items-center">
-              <div className="p-2 bg-red-100 rounded-lg">
-                <Clock className="h-6 w-6 text-red-600" />
-              </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Expired</p>
+              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+                <div className="flex items-center">
+                  <div className="p-2 bg-red-100 rounded-lg">
+                    <Clock className="h-6 w-6 text-red-600" />
+                  </div>
+                  <div className="ml-4">
+                    <p className="text-sm font-medium text-gray-600">Expired</p>
                 <p className="text-2xl font-bold text-red-600">{stats.expired}</p>
                 <p className="text-xs text-red-600 font-medium">
                   {stats.total > 0 ? `${Math.round((stats.expired / stats.total) * 100)}%` : '0%'} of total
                 </p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Users Table */}
-        {users.length === 0 && !loading && messageType === 'error' ? (
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8 text-center">
-            <div className="max-w-md mx-auto">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Crown className="h-8 w-8 text-blue-600" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Database Not Ready</h3>
-              <p className="text-gray-600 mb-6">
+            {/* Users Table */}
+            {users.length === 0 && !loading && messageType === 'error' ? (
+              <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8 text-center">
+                <div className="max-w-md mx-auto">
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Crown className="h-8 w-8 text-blue-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Database Not Ready</h3>
+                  <p className="text-gray-600 mb-6">
                 {message}
               </p>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-left">
@@ -367,57 +379,57 @@ const CSSKROAdminPage: React.FC = () => {
                   <li>Refresh this page after setup is complete</li>
                 </ol>
               </div>
-              <button
-                onClick={fetchUsers}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Check Again
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      User
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Expiry Date
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Created
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                  <button
+                    onClick={fetchUsers}
+                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Check Again
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          User
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Status
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Expiry Date
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Created
+                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
                   {users.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10">
-                            <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
-                              <span className="text-white font-semibold text-sm">
-                                {user.email.charAt(0).toUpperCase()}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">{user.email}</div>
-                            <div className="text-sm text-gray-500">ID: {user.id.slice(0, 8)}...</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
+                          <tr key={user.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
+                                <div className="flex-shrink-0 h-10 w-10">
+                                  <div className="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                                    <span className="text-white font-semibold text-sm">
+                                      {user.email.charAt(0).toUpperCase()}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="ml-4">
+                                  <div className="text-sm font-medium text-gray-900">{user.email}</div>
+                                  <div className="text-sm text-gray-500">ID: {user.id.slice(0, 8)}...</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                              <div className="flex items-center">
                           {user.subscription_status === 'active' ? (
                             <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
                           ) : user.subscription_status === 'expired' ? (
@@ -434,45 +446,45 @@ const CSSKROAdminPage: React.FC = () => {
                           }`}>
                             {user.subscription_status === 'active' ? '👑 Pro' : 
                              user.subscription_status === 'expired' ? '⏰ Expired' : '👤 Free'}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {user.subscription_expiry 
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                              {user.subscription_expiry 
                           ? formatDate(user.subscription_expiry)
                           : user.subscription_status === 'active' ? 'No Expiry' : 'N/A'
-                        }
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                              }
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {formatDate(user.created_at)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        {editingUser === user.id ? (
-                          <div className="flex space-x-2">
-                            <button
-                              onClick={() => handleSave(user.id)}
-                              className="text-green-600 hover:text-green-900"
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                              {editingUser === user.id ? (
+                                <div className="flex space-x-2">
+                                  <button
+                                    onClick={() => handleSave(user.id)}
+                                    className="text-green-600 hover:text-green-900"
                               title="Save Changes"
-                            >
-                              <Save className="h-5 w-5" />
-                            </button>
-                            <button
-                              onClick={handleCancel}
-                              className="text-gray-600 hover:text-gray-900"
+                                  >
+                                    <Save className="h-5 w-5" />
+                                  </button>
+                                  <button
+                                    onClick={handleCancel}
+                                    className="text-gray-600 hover:text-gray-900"
                               title="Cancel"
-                            >
-                              <X className="h-5 w-5" />
-                            </button>
-                          </div>
-                        ) : (
+                                  >
+                                    <X className="h-5 w-5" />
+                                  </button>
+                                </div>
+                              ) : (
                           <div className="flex items-center space-x-2">
-                            <button
-                              onClick={() => handleEdit(user)}
-                              className="text-blue-600 hover:text-blue-900"
+                                <button
+                                  onClick={() => handleEdit(user)}
+                                  className="text-blue-600 hover:text-blue-900"
                               title="Edit Subscription"
-                            >
-                              <Edit className="h-5 w-5" />
-                            </button>
+                                >
+                                  <Edit className="h-5 w-5" />
+                                </button>
                             
                             {/* Quick Actions */}
                             {user.subscription_status === 'inactive' ? (
@@ -493,14 +505,14 @@ const CSSKROAdminPage: React.FC = () => {
                               </button>
                             )}
                           </div>
-                        )}
-                      </td>
-                    </tr>
+                              )}
+                            </td>
+                          </tr>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
         )}
 
         {/* Footer */}
