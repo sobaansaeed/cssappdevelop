@@ -11,7 +11,7 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
   }
 });
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // TEMPORARY: Remove authentication for testing
     // TODO: Add proper admin authentication later

@@ -9,7 +9,7 @@ import { Crown, Sparkles, ArrowLeft, Lock } from 'lucide-react';
 import Link from 'next/link';
 
 const EssayCheckerToolPage: React.FC = () => {
-  const { user, session, isLoading: authLoading } = useAuth();
+  const { isLoading: authLoading } = useAuth();
   const { isPro, isLoading: subscriptionLoading, profile } = useSubscription();
   const router = useRouter();
 

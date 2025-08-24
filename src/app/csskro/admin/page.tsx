@@ -185,7 +185,8 @@ const CSSKROAdminPage: React.FC = () => {
       setMessage('User downgraded to Free successfully!');
       setMessageType('success');
       setTimeout(() => setMessage(''), 3000);
-    } catch (error) {
+    } catch (e) {
+      console.error('Failed to downgrade user:', e);
       setMessage('Failed to downgrade user');
       setMessageType('error');
       setTimeout(() => setMessage(''), 3000);
