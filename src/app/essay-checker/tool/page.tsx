@@ -119,7 +119,8 @@ const EssayCheckerToolPage: React.FC = () => {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
-                      }
+                      },
+                      body: JSON.stringify({ email: '2020ch237@student.uet.edu.pk' })
                     });
                     const data = await response.json();
                     if (data.success) {
@@ -134,6 +135,57 @@ const EssayCheckerToolPage: React.FC = () => {
                 className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
               >
                 Fix 2020ch237@student.uet.edu.pk
+              </button>
+              
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/fix-specific-user', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ email: 'sobaanzoho@gmail.com' })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                      alert('User subscription fixed! Please sign out and sign back in.');
+                    } else {
+                      alert('Failed to fix subscription: ' + data.error);
+                    }
+                  } catch (err) {
+                    alert('Error fixing subscription: ' + err);
+                  }
+                }}
+                className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+              >
+                Fix sobaanzoho@gmail.com
+              </button>
+              
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/debug-user', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ email: 'sobaanzoho@gmail.com' })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                      console.log('Debug info:', data);
+                      alert(`Debug info logged to console.\n\nUser: ${data.user.email}\nPro Status: ${data.subscription.isPro}\nReason: ${data.subscription.reason}\nStatus: ${data.subscription.status}`);
+                    } else {
+                      alert('Failed to debug user: ' + data.error);
+                    }
+                  } catch (err) {
+                    alert('Error debugging user: ' + err);
+                  }
+                }}
+                className="w-full px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 text-sm"
+              >
+                Debug sobaanzoho@gmail.com
               </button>
               
               <button

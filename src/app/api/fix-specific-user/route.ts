@@ -1,9 +1,13 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
-    const targetEmail = '2020ch237@student.uet.edu.pk';
+    const body = await request.json();
+    const { email } = body;
+    
+    // Default to the original user, but allow custom email
+    const targetEmail = email || '2020ch237@student.uet.edu.pk';
     
     console.log(`🔧 Fixing specific user: ${targetEmail}`);
     
@@ -24,7 +28,7 @@ export async function POST() {
     
     if (!user) {
       return NextResponse.json(
-        { error: `User ${targetEmail} not found` },
+        { error: `User ${targetEmail} not found in auth system` },
         { status: 404 }
       );
     }
@@ -32,11 +36,14 @@ export async function POST() {
     console.log(`Found user: ${user.email} (ID: ${user.id})`);
 
     // Step 2: Check current profile
-    const { error: profileError } = await supabase
+    const { data: currentProfile, error: profileError } = await supabase
       .from('user_profiles')
       .select('*')
       .eq('id', user.id)
       .single();
+
+    console.log('Current profile:', currentProfile);
+    console.log('Profile error:', profileError);
 
     let result;
     
@@ -80,6 +87,24 @@ export async function POST() {
 
     console.log('Profile updated successfully:', result.data);
 
+    // Step 3: Verify the fix
+    const { data: verifyProfile, error: verifyError } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+
+    if (verifyError) {
+      console.error('Error verifying profile:', verifyError);
+      return NextResponse.json(
+        { error: 'Failed to verify profile', details: verifyError.message },
+        { status: 500 }
+      );
+    }
+
+    const isPro = verifyProfile.subscription_status === 'active' && 
+                  (!verifyProfile.subscription_expiry || new Date(verifyProfile.subscription_expiry) > new Date());
+
     return NextResponse.json({
       success: true,
       message: `Successfully fixed subscription for ${targetEmail}`,
@@ -87,7 +112,12 @@ export async function POST() {
         id: user.id,
         email: user.email
       },
-      profile: result.data
+      profile: result.data,
+      verification: {
+        isPro,
+        status: verifyProfile.subscription_status,
+        expiry: verifyProfile.subscription_expiry
+      }
     });
 
   } catch (error) {
