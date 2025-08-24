@@ -21,6 +21,7 @@ export function useSubscription() {
 
   useEffect(() => {
     let mounted = true;
+    let timeoutId: NodeJS.Timeout;
 
     async function checkSubscriptionStatus() {
       if (!user || !session?.access_token) {
@@ -34,6 +35,16 @@ export function useSubscription() {
       try {
         setIsLoading(true);
         setError(null);
+
+        // Add timeout to prevent infinite loading
+        timeoutId = setTimeout(() => {
+          if (mounted) {
+            console.error('Subscription check timeout');
+            setError('Subscription check timed out');
+            setIsLoading(false);
+            setIsPro(false);
+          }
+        }, 10000); // 10 second timeout
 
         // Create Supabase client
         const supabase = createClient(
@@ -125,6 +136,7 @@ export function useSubscription() {
         }
       } finally {
         if (mounted) {
+          clearTimeout(timeoutId);
           setIsLoading(false);
         }
       }
@@ -134,6 +146,7 @@ export function useSubscription() {
 
     return () => {
       mounted = false;
+      clearTimeout(timeoutId);
     };
   }, [user, session]);
 

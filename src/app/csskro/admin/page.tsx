@@ -86,6 +86,9 @@ const CSSKROAdminPage: React.FC = () => {
     try {
       const expiryDate = editExpiry ? new Date(editExpiry).toISOString() : null;
       
+      setMessage('Updating user subscription...');
+      setMessageType('success');
+      
       const response = await fetch('/api/update-user-subscription', {
         method: 'POST',
         headers: {
@@ -98,9 +101,13 @@ const CSSKROAdminPage: React.FC = () => {
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to update user');
+      const data = await response.json();
 
-      // Update local state
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to update user');
+      }
+
+      // Update local state immediately for better UX
       setUsers(users.map(user => 
         user.id === userId 
           ? { ...user, subscription_status: editStatus, subscription_expiry: expiryDate }
@@ -110,14 +117,15 @@ const CSSKROAdminPage: React.FC = () => {
       setEditingUser(null);
       setMessage('User subscription updated successfully!');
       setMessageType('success');
-      fetchUsers(); // Refresh the data
       
+      // Refresh data from server
+      setTimeout(() => fetchUsers(), 1000);
       setTimeout(() => setMessage(''), 3000);
     } catch (e) {
       console.error('Error updating user:', e);
-      setMessage('Failed to update user subscription');
+      setMessage(`Failed to update user subscription: ${e instanceof Error ? e.message : 'Unknown error'}`);
       setMessageType('error');
-      setTimeout(() => setMessage(''), 3000);
+      setTimeout(() => setMessage(''), 5000);
     }
   };
 
@@ -130,6 +138,9 @@ const CSSKROAdminPage: React.FC = () => {
   // Quick actions for fast user management
   const quickUpgrade = async (userId: string) => {
     try {
+      setMessage('Upgrading user...');
+      setMessageType('success');
+      
       const response = await fetch('/api/update-user-subscription', {
         method: 'POST',
         headers: {
@@ -142,8 +153,13 @@ const CSSKROAdminPage: React.FC = () => {
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to upgrade user');
+      const data = await response.json();
 
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to upgrade user');
+      }
+
+      // Update local state immediately for better UX
       setUsers(users.map(user => 
         user.id === userId 
           ? { ...user, subscription_status: 'active', subscription_expiry: null }
@@ -152,18 +168,23 @@ const CSSKROAdminPage: React.FC = () => {
 
       setMessage('User upgraded to Pro successfully!');
       setMessageType('success');
-      fetchUsers(); // Refresh the data
+      
+      // Refresh data from server
+      setTimeout(() => fetchUsers(), 1000);
       setTimeout(() => setMessage(''), 3000);
     } catch (e) {
       console.error('Failed to upgrade user:', e);
-      setMessage('Failed to upgrade user');
+      setMessage(`Failed to upgrade user: ${e instanceof Error ? e.message : 'Unknown error'}`);
       setMessageType('error');
-      setTimeout(() => setMessage(''), 3000);
+      setTimeout(() => setMessage(''), 5000);
     }
   };
 
   const quickDowngrade = async (userId: string) => {
     try {
+      setMessage('Downgrading user...');
+      setMessageType('success');
+      
       const response = await fetch('/api/update-user-subscription', {
         method: 'POST',
         headers: {
@@ -176,8 +197,13 @@ const CSSKROAdminPage: React.FC = () => {
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to downgrade user');
+      const data = await response.json();
 
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to downgrade user');
+      }
+
+      // Update local state immediately for better UX
       setUsers(users.map(user => 
         user.id === userId 
           ? { ...user, subscription_status: 'inactive', subscription_expiry: null }
@@ -186,13 +212,15 @@ const CSSKROAdminPage: React.FC = () => {
 
       setMessage('User downgraded to Free successfully!');
       setMessageType('success');
-      window.location.reload();
+      
+      // Refresh data from server
+      setTimeout(() => fetchUsers(), 1000);
       setTimeout(() => setMessage(''), 3000);
     } catch (e) {
       console.error('Failed to downgrade user:', e);
-      setMessage('Failed to downgrade user');
+      setMessage(`Failed to downgrade user: ${e instanceof Error ? e.message : 'Unknown error'}`);
       setMessageType('error');
-      setTimeout(() => setMessage(''), 3000);
+      setTimeout(() => setMessage(''), 5000);
     }
   };
 
@@ -249,6 +277,22 @@ const CSSKROAdminPage: React.FC = () => {
               >
                 <RefreshCw className="h-4 w-4" />
                 <span>Refresh</span>
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/admin/debug');
+                    const data = await response.json();
+                    console.log('Admin Debug Info:', data);
+                    alert('Debug info logged to console. Check browser console for details.');
+                  } catch (error) {
+                    console.error('Debug failed:', error);
+                    alert('Debug failed. Check console for details.');
+                  }
+                }}
+                className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                <span>Debug</span>
               </button>
               <button
                 onClick={handleLogout}

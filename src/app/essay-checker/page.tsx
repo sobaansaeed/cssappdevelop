@@ -5,10 +5,11 @@ import { FileText, Brain, Target, CheckSquare, Zap, TrendingUp, Award, Shield, C
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { useSubscription } from '@/lib/use-subscription';
+import SubscriptionDebugger from '@/components/SubscriptionDebugger';
 
 const EssayCheckerPage: React.FC = () => {
-  const { user, session } = useAuth();
-  const { isPro, isLoading, profile } = useSubscription();
+  const { user } = useAuth();
+  const { isPro, isLoading } = useSubscription();
 
   // Show loading state while checking subscription
   if (isLoading) {
@@ -168,21 +169,7 @@ const EssayCheckerPage: React.FC = () => {
       {user && (
         <div className="py-8 bg-gray-50">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-lg p-6 border border-gray-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Debug Info (Remove in Production)</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                <div>
-                  <p><strong>User ID:</strong> {user.id}</p>
-                  <p><strong>Email:</strong> {user.email}</p>
-                  <p><strong>Authenticated:</strong> {session ? 'Yes' : 'No'}</p>
-                </div>
-                <div>
-                  <p><strong>Profile Status:</strong> {profile?.subscription_status || 'No Profile'}</p>
-                  <p><strong>Is Pro:</strong> {isPro ? 'Yes' : 'No'}</p>
-                  <p><strong>Expiry:</strong> {profile?.subscription_expiry || 'No Expiry'}</p>
-                </div>
-              </div>
-            </div>
+            <SubscriptionDebugger />
           </div>
         </div>
       )}
