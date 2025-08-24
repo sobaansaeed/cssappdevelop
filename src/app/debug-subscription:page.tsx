@@ -170,10 +170,10 @@ const DebugSubscriptionPage: React.FC = () => {
             Go to your Supabase dashboard and run this query to check the user's subscription status:
           </p>
           <div className="bg-gray-800 text-green-400 p-4 rounded-lg font-mono text-sm">
-            SELECT * FROM user_profiles WHERE id = '{user.id}';
+            SELECT * FROM user_profiles WHERE id = &apos;{user.id}&apos;;
           </div>
           <p className="text-sm text-gray-600 mt-2">
-            Make sure the subscription_status is 'active' and subscription_expiry is either null or in the future.
+            Make sure the subscription_status is &apos;active&apos; and subscription_expiry is either null or in the future.
           </p>
         </div>
       </div>

@@ -16,7 +16,7 @@ import {
   X,
   UserX
 } from 'lucide-react';
-import { useAuth } from '@/lib/auth-context';
+
 
 interface UserProfile {
   id: string;
