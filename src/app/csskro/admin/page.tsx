@@ -47,6 +47,15 @@ interface UserProfile {
   updated_at: string;
 }
 
+interface PaginationInfo {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
 interface SubscriberStats {
   total: number;
   active: number;
@@ -71,6 +80,16 @@ const CSSKROAdminPage: React.FC = () => {
   const [editExpiry, setEditExpiry] = useState('');
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('');
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pagination, setPagination] = useState<PaginationInfo | null>(null);
+  const [isLoadingPage, setIsLoadingPage] = useState(false);
+  
+  // Cache state
+  const [lastFetch, setLastFetch] = useState<number>(0);
+  const [cachedUsers, setCachedUsers] = useState<UserProfile[]>([]);
+  
   const router = useRouter();
 
   // Placeholder functions - will be implemented next
@@ -94,20 +113,48 @@ const CSSKROAdminPage: React.FC = () => {
     }
   }, [router]);
 
-  const fetchUsers = useCallback(async () => {
+  const fetchUsers = useCallback(async (page: number = 1, forceRefresh: boolean = false) => {
     try {
-      setLoading(true);
-      const response = await fetch('/api/user-profiles');
+      // Check if we can use cached data (cache for 5 minutes)
+      const cacheAge = Date.now() - lastFetch;
+      const canUseCache = !forceRefresh && cacheAge < 5 * 60 * 1000 && page === 1;
+      
+      if (canUseCache && cachedUsers.length > 0) {
+        setUsers(cachedUsers);
+        setLoading(false);
+        return;
+      }
+
+      setIsLoadingPage(true);
+      if (page === 1) setLoading(true);
+      
+      const response = await fetch(`/api/user-profiles?page=${page}&limit=50`);
       if (response.ok) {
         const data = await response.json();
-        setUsers(data || []);
-        setMessage('');
-        setMessageType('');
+        
+        if (data.users) {
+          setUsers(data.users);
+          setPagination(data.pagination);
+          
+          // Cache first page data
+          if (page === 1) {
+            setCachedUsers(data.users);
+            setLastFetch(Date.now());
+          }
+          
+          setMessage('');
+          setMessageType('');
+        } else {
+          // Handle legacy response format
+          setUsers(data || []);
+          setPagination(null);
+        }
       } else {
         if (response.status === 404) {
           setMessage('Database tables not set up yet. Please run the SQL script in Supabase first.');
           setMessageType('error');
           setUsers([]);
+          setPagination(null);
         } else {
           throw new Error('Failed to fetch users');
         }
@@ -117,10 +164,12 @@ const CSSKROAdminPage: React.FC = () => {
       setMessage('Failed to fetch users. Please check your database connection.');
       setMessageType('error');
       setUsers([]);
+      setPagination(null);
     } finally {
       setLoading(false);
+      setIsLoadingPage(false);
     }
-  }, []);
+  }, [lastFetch, cachedUsers]);
 
   const handleLogout = () => {
     document.cookie = 'admin-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
@@ -272,7 +321,8 @@ const CSSKROAdminPage: React.FC = () => {
     if (activeTab === 'subscribers') {
       fetchSubscribers();
     } else {
-      fetchUsers();
+      setCurrentPage(1);
+      fetchUsers(1);
     }
   }, [activeTab, fetchSubscribers, fetchUsers]);
 
@@ -725,7 +775,7 @@ const CSSKROAdminPage: React.FC = () => {
                   </div>
                 </div>
                 <button
-                  onClick={fetchUsers}
+                  onClick={() => fetchUsers(1, true)}
                   className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   Refresh
@@ -788,7 +838,7 @@ const CSSKROAdminPage: React.FC = () => {
                     The database tables haven&apos;t been created yet. Follow the setup instructions above to get started.
                   </p>
                   <button
-                    onClick={fetchUsers}
+                    onClick={() => fetchUsers(1, true)}
                     className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                   >
                     Check Again
@@ -833,6 +883,15 @@ const CSSKROAdminPage: React.FC = () => {
                             <div className="flex items-center justify-center">
                               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                               <span className="ml-2">Loading users...</span>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : isLoadingPage ? (
+                        <tr>
+                          <td colSpan={6} className="px-6 py-4 text-center">
+                            <div className="flex items-center justify-center">
+                              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                              <span className="ml-2">Loading page {currentPage}...</span>
                             </div>
                           </td>
                         </tr>
@@ -919,8 +978,68 @@ const CSSKROAdminPage: React.FC = () => {
                   </table>
                 </div>
               </div>
+              
             )}
           </>
+        )}
+        
+        {/* Pagination Controls for Subscriptions */}
+        {activeTab === 'subscriptions' && pagination && pagination.totalPages > 1 && (
+          <div className="mt-6 bg-white rounded-xl shadow-lg border border-gray-100 p-6">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-gray-700">
+                Showing {((pagination.page - 1) * pagination.limit) + 1} to {Math.min(pagination.page * pagination.limit, pagination.total)} of {pagination.total} users
+              </div>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => {
+                    setCurrentPage(pagination.page - 1);
+                    fetchUsers(pagination.page - 1);
+                  }}
+                  disabled={!pagination.hasPrev || isLoadingPage}
+                  className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Previous
+                </button>
+                
+                <div className="flex items-center space-x-1">
+                  {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
+                    const pageNum = i + 1;
+                    return (
+                      <button
+                        key={pageNum}
+                        onClick={() => {
+                          setCurrentPage(pageNum);
+                          fetchUsers(pageNum);
+                        }}
+                        className={`px-3 py-2 text-sm font-medium rounded-md ${
+                          pageNum === pagination.page
+                            ? 'bg-blue-600 text-white'
+                            : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {pageNum}
+                      </button>
+                    );
+                  })}
+                  {pagination.totalPages > 5 && (
+                    <span className="px-3 py-2 text-sm text-gray-500">...</span>
+                  )}
+                </div>
+                
+                <button
+                  onClick={() => {
+                    setCurrentPage(pagination.page + 1);
+                    fetchUsers(pagination.page + 1);
+                  }}
+                  disabled={!pagination.hasNext || isLoadingPage}
+                  className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Footer */}

@@ -25,10 +25,17 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Fetch all user profiles from database
-    const { data: profiles, error: profileError } = await supabase
+    // Get pagination parameters from query string
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const limit = parseInt(searchParams.get('limit') || '50');
+    const offset = (page - 1) * limit;
+
+    // Fetch user profiles with pagination and optimized columns
+    const { data: profiles, error: profileError, count } = await supabase
       .from('user_profiles')
-      .select('*')
+      .select('id, email, subscription_status, subscription_expiry, created_at, updated_at', { count: 'exact' })
+      .range(offset, offset + limit - 1)
       .order('created_at', { ascending: false });
 
     if (profileError) {
@@ -48,7 +55,22 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json(profiles || []);
+    // Return paginated results with metadata
+    return NextResponse.json({
+      users: profiles || [],
+      pagination: {
+        page,
+        limit,
+        total: count || 0,
+        totalPages: Math.ceil((count || 0) / limit),
+        hasNext: offset + limit < (count || 0),
+        hasPrev: page > 1
+      }
+    }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600'
+      }
+    });
   } catch (error) {
     console.error('Error processing request:', error);
     return NextResponse.json(
