@@ -267,25 +267,31 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
 
   private parseGeminiResponse(response: string, originalEssay: string): EssayAnalysisResult {
     try {
+      console.log('Raw AI response:', response.substring(0, 500) + '...');
+      
       // Clean the response to extract JSON
       const jsonMatch = response.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
+        console.error('No JSON found in AI response');
         throw new Error('Invalid response format from AI');
       }
 
       const parsed = JSON.parse(jsonMatch[0]);
+      console.log('Parsed AI response:', JSON.stringify(parsed, null, 2));
       
       // Validate the response structure
       if (!this.isValidAnalysisResult(parsed)) {
+        console.error('Invalid analysis result structure:', parsed);
         throw new Error('Invalid analysis result structure');
       }
 
       // Handle outline-only submissions
       if (parsed.isOutlineOnly) {
+        console.log('Detected outline-only submission');
         return this.createOutlineOnlyAnalysis(parsed, originalEssay);
       }
 
-      return {
+      const result = {
         corrected_text: parsed.corrected_text || originalEssay,
         mistakes: parsed.mistakes || [],
         suggestions: parsed.suggestions || [],
@@ -295,10 +301,15 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
         isOutlineOnly: parsed.isOutlineOnly || false,
         examinerRemarks: parsed.examinerRemarks || this.createDefaultRemarks()
       };
+      
+      console.log('Successfully parsed AI response with total marks:', result.totalMarks);
+      return result;
     } catch (error) {
       console.error('Error parsing Gemini response:', error);
+      console.error('Response that caused error:', response);
       
       // Fallback to basic analysis if parsing fails
+      console.log('Using fallback analysis due to parsing error');
       return this.createFallbackAnalysis(originalEssay);
     }
   }
@@ -363,52 +374,84 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
   }
 
   private createFallbackAnalysis(essay: string): EssayAnalysisResult {
-    // Enhanced CSS examiner fallback analysis with better content detection
+    // Intelligent CSS examiner fallback analysis with content-based scoring
     const words = essay.split(' ').filter(word => word.length > 0);
     const wordCount = words.length;
     const paragraphs = essay.split('\n\n').filter(p => p.trim().length > 0);
+    const sentences = essay.split(/[.!?]+/).filter(s => s.trim().length > 10);
     
-    // Enhanced outline detection - look for specific signals
-    const hasExplicitOutline = essay.toLowerCase().includes('outline') || 
-                              essay.toLowerCase().includes('structure') ||
+    // Advanced content analysis
+    const essayLower = essay.toLowerCase();
+    
+    // Enhanced outline detection with multiple signals
+    const hasExplicitOutline = essayLower.includes('outline') || 
+                              essayLower.includes('structure') ||
                               /^[ivxlcdm]+\./i.test(essay) || // Roman numerals
                               /^\d+\./i.test(essay) || // Numbers
-                              /^[a-z]\./i.test(essay); // Letters
+                              /^[a-z]\./i.test(essay) || // Letters
+                              /^•/i.test(essay) || // Bullet points
+                              /^[-*]/i.test(essay); // Dashes/asterisks
     
-    // Enhanced type detection
-    const isOutlineOnly = hasExplicitOutline && wordCount < 300 && !essay.toLowerCase().includes('introduction');
-    const isFragmentary = wordCount < 200 && !isOutlineOnly;
+    // Enhanced type detection with better logic
+    const hasIntroduction = essayLower.includes('introduction') || 
+                           essayLower.includes('thesis') ||
+                           essayLower.includes('argument') ||
+                           essayLower.includes('topic') ||
+                           paragraphs[0]?.length > 150;
+    
+    const hasConclusion = essayLower.includes('conclusion') || 
+                         essayLower.includes('to conclude') ||
+                         essayLower.includes('in conclusion') ||
+                         essayLower.includes('therefore') ||
+                         essayLower.includes('thus') ||
+                         paragraphs[paragraphs.length - 1]?.length > 100;
+    
+    // Content quality indicators
+    const hasSpecificExamples = essayLower.includes('example') || 
+                               essayLower.includes('instance') ||
+                               essayLower.includes('case') ||
+                               essayLower.includes('such as') ||
+                               essayLower.includes('for instance');
+    
+    const hasAnalysis = essayLower.includes('analysis') || 
+                       essayLower.includes('examine') ||
+                       essayLower.includes('discuss') ||
+                       essayLower.includes('argue') ||
+                       essayLower.includes('consider') ||
+                       essayLower.includes('evaluate');
+    
+    const hasEvidence = essayLower.includes('evidence') || 
+                       essayLower.includes('data') ||
+                       essayLower.includes('statistics') ||
+                       essayLower.includes('research') ||
+                       essayLower.includes('study') ||
+                       essayLower.includes('report');
+    
+    const hasTransitionWords = essayLower.includes('however') || 
+                              essayLower.includes('moreover') ||
+                              essayLower.includes('furthermore') ||
+                              essayLower.includes('additionally') ||
+                              essayLower.includes('consequently') ||
+                              essayLower.includes('therefore');
+    
+    // Language quality indicators
+    const hasComplexSentences = sentences.some(s => s.split(' ').length > 15);
+    const hasVariedVocabulary = new Set(words.map(w => w.toLowerCase())).size > wordCount * 0.6;
+    const hasProperGrammar = !essayLower.includes('u ') && !essayLower.includes('ur ') && !essayLower.includes('r ');
+    
+    // Determine essay type
+    const isOutlineOnly = hasExplicitOutline && wordCount < 500 && !hasIntroduction;
+    const isFragmentary = wordCount < 300 && !isOutlineOnly;
     const isShortEssay = wordCount < 800 && !isOutlineOnly && !isFragmentary;
+    const isFullEssay = wordCount >= 800;
     
-    // Strict scoring based on CSS examiner rules
+    // Dynamic scoring based on content quality
     let thesisScore = 0, outlineScore = 0, structureScore = 0, contentScore = 0;
     let languageScore = 0, criticalThinkingScore = 0, conclusionScore = 0, wordCountScore = 0;
     
-    // Enhanced structure analysis
-    const hasIntroduction = essay.toLowerCase().includes('introduction') || 
-                           paragraphs[0]?.length > 100 ||
-                           essay.toLowerCase().includes('thesis') ||
-                           essay.toLowerCase().includes('argument');
-    
-    const hasConclusion = essay.toLowerCase().includes('conclusion') || 
-                         essay.toLowerCase().includes('to conclude') ||
-                         essay.toLowerCase().includes('in conclusion') ||
-                         paragraphs[paragraphs.length - 1]?.length > 50;
-    
-    // Content quality analysis
-    const hasSpecificExamples = essay.toLowerCase().includes('example') || 
-                               essay.toLowerCase().includes('instance') ||
-                               essay.toLowerCase().includes('case');
-    
-    const hasAnalysis = essay.toLowerCase().includes('analysis') || 
-                       essay.toLowerCase().includes('examine') ||
-                       essay.toLowerCase().includes('discuss') ||
-                       essay.toLowerCase().includes('argue');
-    
-    // Apply type-specific rules
     if (isOutlineOnly) {
       // Type A: Outline-Only
-      outlineScore = hasExplicitOutline ? Math.min(10, Math.max(0, Math.round(wordCount / 20))) : 0;
+      outlineScore = hasExplicitOutline ? Math.min(10, Math.max(2, Math.round(wordCount / 30))) : 0;
       thesisScore = 0;
       structureScore = 0;
       contentScore = 0;
@@ -418,7 +461,7 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
       wordCountScore = 0;
     } else if (isFragmentary) {
       // Type D: Intro-Only / Fragment
-      thesisScore = hasIntroduction ? Math.min(10, Math.max(0, Math.round(wordCount / 15))) : 0;
+      thesisScore = hasIntroduction ? Math.min(10, Math.max(1, Math.round(wordCount / 25))) : 0;
       outlineScore = 0;
       structureScore = 0;
       contentScore = 0;
@@ -428,31 +471,33 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
       wordCountScore = 0;
     } else if (isShortEssay) {
       // Type E: Short Essay
-      thesisScore = hasIntroduction ? 6 : 2;
-      outlineScore = hasExplicitOutline ? 5 : 0;
+      thesisScore = hasIntroduction ? (hasAnalysis ? 7 : 5) : 2;
+      outlineScore = hasExplicitOutline ? 4 : 0;
       structureScore = paragraphs.length >= 4 ? 8 : paragraphs.length >= 2 ? 5 : 2;
-      contentScore = hasSpecificExamples ? 8 : 4;
-      languageScore = 6;
-      criticalThinkingScore = hasAnalysis ? 3 : 1;
-      conclusionScore = hasConclusion ? 5 : 2;
+      contentScore = hasSpecificExamples ? (hasEvidence ? 9 : 7) : 4;
+      languageScore = hasComplexSentences ? 7 : 5;
+      criticalThinkingScore = hasAnalysis ? 4 : 2;
+      conclusionScore = hasConclusion ? 6 : 3;
       wordCountScore = 0; // MANDATORY 0 for short essays
     } else {
       // Type B/C: Full Essay
-      thesisScore = hasIntroduction ? 7 : 3;
+      thesisScore = hasIntroduction ? (hasAnalysis ? 8 : 6) : 3;
       outlineScore = hasExplicitOutline ? 6 : 0;
-      structureScore = paragraphs.length >= 5 ? 12 : paragraphs.length >= 3 ? 8 : 4;
-      contentScore = hasSpecificExamples ? 14 : 8;
-      languageScore = 9;
-      criticalThinkingScore = hasAnalysis ? 4 : 2;
-      conclusionScore = hasConclusion ? 7 : 3;
+      structureScore = paragraphs.length >= 6 ? 13 : paragraphs.length >= 4 ? 10 : 6;
+      contentScore = hasSpecificExamples ? (hasEvidence ? 16 : 12) : 8;
+      languageScore = hasComplexSentences ? (hasVariedVocabulary ? 12 : 9) : 7;
+      criticalThinkingScore = hasAnalysis ? (hasEvidence ? 5 : 3) : 2;
+      conclusionScore = hasConclusion ? 8 : 4;
       
       // Word count scoring (strict)
       if (wordCount < 800) {
         wordCountScore = 0;
       } else if (wordCount >= 2500) {
         wordCountScore = 15;
+      } else if (wordCount >= 2000) {
+        wordCountScore = 13;
       } else if (wordCount >= 1500) {
-        wordCountScore = 12;
+        wordCountScore = 11;
       } else if (wordCount >= 1000) {
         wordCountScore = 8;
       } else {
@@ -481,7 +526,7 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
       evaluation: {
         thesisStatement: { 
           score: thesisScore, 
-          comment: hasIntroduction ? 'Basic thesis structure present' : 'No clear thesis statement' 
+          comment: hasIntroduction ? (hasAnalysis ? 'Strong thesis with analysis' : 'Basic thesis structure present') : 'No clear thesis statement' 
         },
         outline: { 
           score: outlineScore, 
@@ -489,19 +534,19 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
         },
         structure: { 
           score: structureScore, 
-          comment: `${paragraphs.length} paragraphs detected` 
+          comment: `${paragraphs.length} paragraphs detected${hasTransitionWords ? ' with good transitions' : ''}` 
         },
         content: { 
           score: contentScore, 
-          comment: hasSpecificExamples ? 'Some specific examples present' : 'Content depth needs improvement' 
+          comment: hasSpecificExamples ? (hasEvidence ? 'Good examples with evidence' : 'Some specific examples present') : 'Content depth needs improvement' 
         },
         language: { 
           score: languageScore, 
-          comment: 'Basic language proficiency' 
+          comment: hasComplexSentences ? (hasVariedVocabulary ? 'Good language variety' : 'Adequate language proficiency') : 'Basic language proficiency' 
         },
         criticalThinking: { 
           score: criticalThinkingScore, 
-          comment: hasAnalysis ? 'Some analytical thinking demonstrated' : 'Limited critical analysis' 
+          comment: hasAnalysis ? (hasEvidence ? 'Strong analytical thinking' : 'Some analytical thinking demonstrated') : 'Limited critical analysis' 
         },
         conclusion: { 
           score: conclusionScore, 
@@ -520,7 +565,10 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
           hasConclusion ? 'Conclusion present' : '',
           hasExplicitOutline ? 'Outline structure present' : '',
           hasSpecificExamples ? 'Specific examples included' : '',
-          hasAnalysis ? 'Some analytical content' : ''
+          hasEvidence ? 'Evidence-based arguments' : '',
+          hasAnalysis ? 'Analytical content' : '',
+          hasTransitionWords ? 'Good paragraph transitions' : '',
+          hasComplexSentences ? 'Varied sentence structure' : ''
         ].filter(Boolean),
         weaknesses: [
           wordCount < 800 ? 'Too short; CSS essays require 2500-3000 words. Fail.' : '',
@@ -529,7 +577,9 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
           !hasIntroduction ? 'Introduction needs improvement' : '',
           !hasConclusion ? 'Conclusion needs improvement' : '',
           !hasSpecificExamples ? 'Lack of specific examples' : '',
+          !hasEvidence ? 'Insufficient evidence' : '',
           !hasAnalysis ? 'Limited critical analysis' : '',
+          !hasTransitionWords ? 'Poor paragraph transitions' : '',
           isFail ? 'Overall performance below CSS passing standards' : ''
         ].filter(Boolean),
         suggestions: [
@@ -537,7 +587,8 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
           'Focus on clear paragraph structure and transitions',
           'Ensure strong thesis statement and conclusion',
           'Include more specific examples to support your arguments',
-          'Develop deeper critical analysis of the topic'
+          'Develop deeper critical analysis of the topic',
+          'Use transition words to improve flow between paragraphs'
         ]
       }
     };
