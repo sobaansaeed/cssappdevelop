@@ -9,16 +9,14 @@ interface UpdateSubscriptionRequest {
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if user is authenticated
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const token = request.cookies.get('admin-token')?.value;
+
+    if (!token) {
       return NextResponse.json(
         { error: 'Authentication required' },
         { status: 401 }
       );
     }
-
-    const token = authHeader.substring(7);
 
     // Verify the token with Supabase
     const supabase = createServerClient();

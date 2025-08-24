@@ -83,22 +83,14 @@ const CSSKROAdminPage: React.FC = () => {
     setEditExpiry(user.subscription_expiry ? user.subscription_expiry.split('T')[0] : '');
   };
 
-  const getCookie = (name: string): string | undefined => {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop()?.split(';').shift();
-  };
-
   const handleSave = async (userId: string) => {
     try {
       const expiryDate = editExpiry ? new Date(editExpiry).toISOString() : null;
-      const token = getCookie('admin-token');
-
+      
       const response = await fetch('/api/update-user-subscription', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           userId,
@@ -138,13 +130,10 @@ const CSSKROAdminPage: React.FC = () => {
   // Quick actions for fast user management
   const quickUpgrade = async (userId: string) => {
     try {
-      const token = getCookie('admin-token');
-      console.log('admin-token:', token);
       const response = await fetch('/api/update-user-subscription', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           userId,
@@ -173,12 +162,10 @@ const CSSKROAdminPage: React.FC = () => {
 
   const quickDowngrade = async (userId: string) => {
     try {
-      const token = getCookie('admin-token');
       const response = await fetch('/api/update-user-subscription', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
           userId,
