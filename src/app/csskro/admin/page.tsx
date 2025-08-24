@@ -30,7 +30,6 @@ interface UserProfile {
 import { useAuth } from '@/lib/auth-context';
 
 const CSSKROAdminPage: React.FC = () => {
-  const { revalidate } = useAuth();
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<string | null>(null);
@@ -85,8 +84,6 @@ const CSSKROAdminPage: React.FC = () => {
     setEditStatus(user.subscription_status);
     setEditExpiry(user.subscription_expiry ? user.subscription_expiry.split('T')[0] : '');
   };
-
-  const { revalidate } = useAuth();
 
   const handleSave = async (userId: string) => {
     try {
@@ -157,6 +154,7 @@ const CSSKROAdminPage: React.FC = () => {
 
       setMessage('User upgraded to Pro successfully!');
       setMessageType('success');
+      revalidate();
       setTimeout(() => setMessage(''), 3000);
     } catch (error) {
       setMessage('Failed to upgrade user');
