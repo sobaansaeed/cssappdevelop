@@ -4,12 +4,23 @@ import React from 'react';
 import { FileText, Brain, Target, CheckSquare, Zap, TrendingUp, Award, Shield, Clock, Users, ArrowRight, Crown, Sparkles, Lock } from 'lucide-react';
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
+import { useSubscription } from '@/lib/use-subscription';
 
 const EssayCheckerPage: React.FC = () => {
   const { user, session } = useAuth();
+  const { isPro, isLoading, profile } = useSubscription();
 
-  // Check if user has pro subscription (simplified check)
-  const isProUser = user && session; // In real app, check subscription status from user profile
+  // Show loading state while checking subscription
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Checking your subscription status...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
@@ -38,7 +49,7 @@ const EssayCheckerPage: React.FC = () => {
               Get instant, intelligent feedback that transforms your writing skills.
             </p>
 
-            {!isProUser ? (
+            {!isPro ? (
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
                 <Link
                   href="/auth/get-started"
@@ -93,39 +104,91 @@ const EssayCheckerPage: React.FC = () => {
       </div>
 
       {/* Pro User Welcome Section */}
-      {isProUser && (
+      {isPro && (
         <div className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-3xl p-12 border border-yellow-200">
               <div className="flex items-center justify-center mb-6">
-                <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full p-4 mr-4">
-                  <Crown className="h-12 w-12 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome, Pro User!</h2>
-                  <p className="text-lg text-gray-600">You have access to our advanced essay checker tool.</p>
+                <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full p-4">
+                  <Crown className="h-8 w-8 text-white" />
                 </div>
               </div>
               
-              <p className="text-gray-700 mb-8 max-w-2xl mx-auto">
-                Click the button above to access your exclusive essay checker tool. 
-                Get instant AI-powered analysis, grammar corrections, and writing suggestions to improve your CSS exam preparation.
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                Welcome, Pro User! 👑
+              </h2>
+              
+              <p className="text-lg text-gray-700 mb-8">
+                You have full access to the CSSKRO Essay Checker. Your subscription is active and ready to use.
               </p>
               
-              <Link
-                href="/essay-checker/tool"
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
-              >
-                <Sparkles className="h-5 w-5" />
-                <span>Access Essay Checker</span>
-              </Link>
+              <div className="bg-white rounded-2xl p-6 shadow-lg">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                  <div>
+                    <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                      <FileText className="h-8 w-8 text-blue-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Unlimited Essays</h3>
+                    <p className="text-sm text-gray-600">Check as many essays as you need</p>
+                  </div>
+                  
+                  <div>
+                    <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                      <Brain className="h-8 w-8 text-green-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Advanced AI</h3>
+                    <p className="text-sm text-gray-600">Get detailed CSS exam feedback</p>
+                  </div>
+                  
+                  <div>
+                    <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                      <TrendingUp className="h-8 w-8 text-purple-600" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Progress Tracking</h3>
+                    <p className="text-sm text-gray-600">Monitor your improvement over time</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-8">
+                <Link
+                  href="/essay-checker/tool"
+                  className="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 shadow-2xl"
+                >
+                  <Sparkles className="h-5 w-5" />
+                  <span>Start Using Essay Checker Now</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Subscription Status Debug (remove in production) */}
+      {user && (
+        <div className="py-8 bg-gray-50">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-lg p-6 border border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Debug Info (Remove in Production)</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p><strong>User ID:</strong> {user.id}</p>
+                  <p><strong>Email:</strong> {user.email}</p>
+                  <p><strong>Authenticated:</strong> {session ? 'Yes' : 'No'}</p>
+                </div>
+                <div>
+                  <p><strong>Profile Status:</strong> {profile?.subscription_status || 'No Profile'}</p>
+                  <p><strong>Is Pro:</strong> {isPro ? 'Yes' : 'No'}</p>
+                  <p><strong>Expiry:</strong> {profile?.subscription_expiry || 'No Expiry'}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
 
       {/* Non-Pro User CTA */}
-      {!isProUser && (
+      {!isPro && (
         <div className="py-12 bg-white">
           <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
             <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-8 border border-gray-200">
@@ -297,7 +360,7 @@ const EssayCheckerPage: React.FC = () => {
             with AI-powered feedback. Start your journey to exam success today.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {!isProUser ? (
+            {!isPro ? (
               <>
                 <Link
                   href="/auth/get-started"
