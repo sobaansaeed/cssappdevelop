@@ -7,7 +7,6 @@ import {
   CheckCircle, 
   AlertCircle, 
   Loader2, 
-  Copy, 
   Trash2,
   Star,
   TrendingUp,
@@ -179,9 +178,7 @@ const EssayChecker: React.FC<EssayCheckerProps> = ({ onAnalysisComplete }) => {
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-  };
+
 
 
 
@@ -554,28 +551,7 @@ const EssayChecker: React.FC<EssayCheckerProps> = ({ onAnalysisComplete }) => {
             </div>
           )}
 
-          {/* Corrected Essay */}
-          <div className="mb-8">
-            <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
-              Corrected Essay
-            </h4>
-            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-gray-500">Click to copy</span>
-                <button
-                  onClick={() => copyToClipboard(analysisResult.corrected_text)}
-                  className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-                >
-                  <Copy className="h-4 w-4 inline mr-1" />
-                  Copy
-                </button>
-              </div>
-              <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">
-                {analysisResult.corrected_text}
-              </p>
-            </div>
-          </div>
+
 
           {/* Mistakes */}
           {analysisResult.mistakes.length > 0 && (
