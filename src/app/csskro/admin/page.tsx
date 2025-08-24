@@ -14,10 +14,9 @@ import {
   Edit,
   Save,
   X,
-  TrendingUp,
-  UserCheck,
   UserX
 } from 'lucide-react';
+import { useAuth } from '@/lib/auth-context';
 
 interface UserProfile {
   id: string;
@@ -27,9 +26,8 @@ interface UserProfile {
   created_at: string;
 }
 
-import { useAuth } from '@/lib/auth-context';
-
 const CSSKROAdminPage: React.FC = () => {
+  const { revalidate } = useAuth();
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingUser, setEditingUser] = useState<string | null>(null);
@@ -64,8 +62,8 @@ const CSSKROAdminPage: React.FC = () => {
           throw new Error('Failed to fetch users');
         }
       }
-    } catch (error) {
-      console.error('Error fetching users:', error);
+    } catch (e) {
+      console.error('Error fetching users:', e);
       setMessage('Failed to fetch users. Please check your database connection.');
       setMessageType('error');
       setUsers([]);
@@ -113,10 +111,11 @@ const CSSKROAdminPage: React.FC = () => {
       setEditingUser(null);
       setMessage('User subscription updated successfully!');
       setMessageType('success');
+      revalidate();
       
       setTimeout(() => setMessage(''), 3000);
-    } catch (error) {
-      console.error('Error updating user:', error);
+    } catch (e) {
+      console.error('Error updating user:', e);
       setMessage('Failed to update user subscription');
       setMessageType('error');
       setTimeout(() => setMessage(''), 3000);
@@ -156,7 +155,8 @@ const CSSKROAdminPage: React.FC = () => {
       setMessageType('success');
       revalidate();
       setTimeout(() => setMessage(''), 3000);
-    } catch (error) {
+    } catch (e) {
+      console.error('Failed to upgrade user:', e);
       setMessage('Failed to upgrade user');
       setMessageType('error');
       setTimeout(() => setMessage(''), 3000);
