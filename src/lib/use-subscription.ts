@@ -14,7 +14,6 @@ export const useSubscription = (): SubscriptionStatus => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [isPro, setIsPro] = useState(false);
 
   useEffect(() => {
@@ -30,22 +29,18 @@ export const useSubscription = (): SubscriptionStatus => {
         setIsLoading(true);
         setError(null);
         
-        const userProfile = await userProfileService.getProfile(user.id);
-        
-        if (userProfile) {
-          setProfile(userProfile);
-          const active = await userProfileService.hasActiveSubscription(user.id);
-          setIsPro(active);
+        const response = await fetch(`/api/subscription-status?userId=${user.id}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setIsPro(data.isPro);
         } else {
-          // If no profile exists, create one with inactive status
-          const newProfile = await userProfileService.createProfile(user.id, {
-            email: user.email || '',
-            display_name: userProfileService.getDisplayName(user),
-            subscription_status: 'inactive'
-          });
-          setProfile(newProfile);
-          setIsPro(false);
+          setError(data.error || 'Failed to fetch subscription status');
         }
+
+        const userProfile = await userProfileService.getProfile(user.id);
+        setProfile(userProfile);
+
       } catch (err) {
         console.error('Error checking subscription:', err);
         setError('Failed to check subscription status');
