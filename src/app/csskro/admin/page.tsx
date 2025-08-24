@@ -303,6 +303,82 @@ const CSSKROAdminPage: React.FC = () => {
     }
   };
 
+  const diagnoseAllUsers = async () => {
+    try {
+      setMessage('Diagnosing all users...');
+      setMessageType('success');
+      
+      const response = await fetch('/api/fix-all-subscriptions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'diagnose-all-users'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to diagnose users');
+      }
+
+      console.log('Diagnosis results:', data.diagnosis);
+      
+      const proUsers = data.diagnosis.users.filter((u: { isPro: boolean }) => u.isPro).length;
+      const freeUsers = data.diagnosis.users.filter((u: { isPro: boolean }) => !u.isPro).length;
+      const usersWithIssues = data.diagnosis.users.filter((u: { issues: string[] }) => u.issues.length > 0).length;
+
+      setMessage(`Diagnosis complete! Pro: ${proUsers}, Free: ${freeUsers}, Issues: ${usersWithIssues}. Check console for details.`);
+      setMessageType('success');
+      
+      setTimeout(() => setMessage(''), 8000);
+    } catch (e) {
+      console.error('Failed to diagnose users:', e);
+      setMessage(`Failed to diagnose users: ${e instanceof Error ? e.message : 'Unknown error'}`);
+      setMessageType('error');
+      setTimeout(() => setMessage(''), 5000);
+    }
+  };
+
+  const ensureAllUsersPro = async () => {
+    if (!confirm('This will ensure ALL users have Pro access permanently. This is the comprehensive backend fix. Continue?')) {
+      return;
+    }
+
+    try {
+      setMessage('Applying comprehensive backend fix...');
+      setMessageType('success');
+      
+      const response = await fetch('/api/ensure-all-users-pro', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to apply comprehensive fix');
+      }
+
+      const { verification } = data.results;
+      setMessage(`✅ Backend fixed! All ${verification.proUsers} users now have Pro access. Created: ${data.results.created}, Updated: ${data.results.updated}`);
+      setMessageType('success');
+      
+      // Refresh data from server
+      setTimeout(() => fetchUsers(), 2000);
+      setTimeout(() => setMessage(''), 10000);
+    } catch (e) {
+      console.error('Failed to apply comprehensive fix:', e);
+      setMessage(`Failed to apply comprehensive fix: ${e instanceof Error ? e.message : 'Unknown error'}`);
+      setMessageType('error');
+      setTimeout(() => setMessage(''), 5000);
+    }
+  };
+
   useEffect(() => {
       fetchUsers();
   }, []);
@@ -360,6 +436,18 @@ const CSSKROAdminPage: React.FC = () => {
               
               {/* Bulk Fix Buttons */}
               <div className="flex items-center space-x-2">
+                <button
+                  onClick={diagnoseAllUsers}
+                  className="flex items-center space-x-2 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors text-sm"
+                >
+                  <span>Diagnose All</span>
+                </button>
+                <button
+                  onClick={ensureAllUsersPro}
+                  className="flex items-center space-x-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors text-sm font-bold"
+                >
+                  <span>🔧 Fix Backend</span>
+                </button>
                 <button
                   onClick={bulkFixAllUsers}
                   className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm"

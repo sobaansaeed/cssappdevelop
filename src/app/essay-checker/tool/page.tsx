@@ -215,6 +215,35 @@ const EssayCheckerToolPage: React.FC = () => {
               >
                 Fix All Users (Admin)
               </button>
+              
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/fix-all-subscriptions', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ action: 'diagnose-all-users' })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                      console.log('Diagnosis results:', data.diagnosis);
+                      const proUsers = data.diagnosis.users.filter((u: { isPro: boolean }) => u.isPro).length;
+                      const freeUsers = data.diagnosis.users.filter((u: { isPro: boolean }) => !u.isPro).length;
+                      const usersWithIssues = data.diagnosis.users.filter((u: { issues: string[] }) => u.issues.length > 0).length;
+                      alert(`Diagnosis complete!\n\nPro Users: ${proUsers}\nFree Users: ${freeUsers}\nUsers with Issues: ${usersWithIssues}\n\nCheck browser console for detailed results.`);
+                    } else {
+                      alert('Failed to diagnose users: ' + data.error);
+                    }
+                  } catch (err) {
+                    alert('Error diagnosing users: ' + err);
+                  }
+                }}
+                className="w-full px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 text-sm"
+              >
+                Diagnose All Users
+              </button>
             </div>
           </div>
         </div>

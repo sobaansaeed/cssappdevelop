@@ -76,7 +76,7 @@ export function useSubscription() {
               .insert({
                 id: user.id,
                 email: user.email,
-                subscription_status: 'inactive',
+                subscription_status: 'active',
                 subscription_expiry: null
               })
               .select()
@@ -90,7 +90,7 @@ export function useSubscription() {
 
             if (mounted) {
               setProfile(newProfile);
-              setIsPro(false);
+              setIsPro(true); // Since we're creating with 'active' status
             }
             return;
           }

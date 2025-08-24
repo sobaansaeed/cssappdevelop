@@ -145,6 +145,7 @@ export async function POST(request: NextRequest) {
       // List of emails that should be paid (you can modify this)
       const paidEmails = [
         '2020ch237@student.uet.edu.pk',
+        'sobaanzoho@gmail.com',
         // Add other paid user emails here
       ];
 
@@ -235,9 +236,96 @@ export async function POST(request: NextRequest) {
         results
       });
 
+    } else if (action === 'diagnose-all-users') {
+      // Diagnose all users to see their current status
+      const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers();
+      
+      if (authError) {
+        return NextResponse.json(
+          { error: 'Failed to fetch users' },
+          { status: 500 }
+        );
+      }
+
+      const diagnosis = {
+        total: authUsers.users.length,
+        users: [] as Array<{
+          email: string;
+          hasProfile: boolean;
+          subscriptionStatus: string;
+          isPro: boolean;
+          issues: string[];
+        }>
+      };
+
+      for (const user of authUsers.users) {
+        try {
+          const { data: profile, error: profileError } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .eq('id', user.id)
+            .single();
+
+          const issues: string[] = [];
+          let isPro = false;
+          let subscriptionStatus = 'unknown';
+
+          if (profileError) {
+            if (profileError.code === 'PGRST116') {
+              issues.push('No profile found');
+              subscriptionStatus = 'no_profile';
+            } else {
+              issues.push(`Profile error: ${profileError.message}`);
+              subscriptionStatus = 'error';
+            }
+          } else {
+            subscriptionStatus = profile.subscription_status;
+            
+            if (profile.subscription_status === 'active') {
+              if (!profile.subscription_expiry) {
+                isPro = true;
+              } else {
+                const expiryDate = new Date(profile.subscription_expiry);
+                const currentDate = new Date();
+                if (expiryDate > currentDate) {
+                  isPro = true;
+                } else {
+                  issues.push('Subscription expired');
+                }
+              }
+            } else {
+              issues.push(`Wrong status: ${profile.subscription_status}`);
+            }
+          }
+
+          diagnosis.users.push({
+            email: user.email || 'unknown',
+            hasProfile: !profileError,
+            subscriptionStatus,
+            isPro,
+            issues
+          });
+
+        } catch (error) {
+          diagnosis.users.push({
+            email: user.email || 'unknown',
+            hasProfile: false,
+            subscriptionStatus: 'error',
+            isPro: false,
+            issues: [error instanceof Error ? error.message : 'Unknown error']
+          });
+        }
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: `Diagnosed ${diagnosis.total} users`,
+        diagnosis
+      });
+
     } else {
       return NextResponse.json(
-        { error: 'Invalid action. Use "fix-all-users" or "fix-paid-users"' },
+        { error: 'Invalid action. Use "fix-all-users", "fix-paid-users", or "diagnose-all-users"' },
         { status: 400 }
       );
     }
