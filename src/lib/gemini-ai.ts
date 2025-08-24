@@ -106,70 +106,79 @@ export class GeminiAIService {
   }
 
   private buildPrompt(essay: string): string {
-    return `You are an expert CSS (Central Superior Services) exam essay evaluator. Analyze the following essay according to the official CSS exam evaluation criteria.
+    return `You are a Senior CSS Essay Examiner (FPSC Pakistan). Evaluate strictly. High marks must be earned, not granted.
+
+RULES:
+1. If only outline is submitted: evaluate only Outline Quality (10 marks). All other sections = 0. Final = /10 only (not scaled). Remarks must state: "Outline without essay body is incomplete; CSS failure."
+
+2. If only introduction or a fragment is submitted (no outline + no body): evaluate only Thesis (10 marks). All other sections = 0. Remarks: "Fragmentary essay; CSS considers this a failure."
+
+3. If essay has no outline: Outline Quality = 0, evaluate rest normally, note absence.
+
+4. If essay is <800 words: Word Count = 0/15. Remarks: "Too short; CSS essays require ~2500–3000 words. Fail."
+
+5. If thesis misinterprets topic: Thesis = 0–2. Remarks must note disqualification risk.
+
+6. If body is repetitive or incoherent: penalize in Structure + Content.
+
+7. If filler, clichés, or irrelevant text dominate: penalize in Language + Critical Thinking.
+
+8. If nonsense or irrelevant text is submitted: assign 0 overall.
+
+SCORING THRESHOLDS (apply strictly):
+- Above 50 = Excellent (rare, exceptional attempt)
+- 40–50 = Passable (borderline success)  
+- Below 40 = Fail (most common outcome in CSS)
+
+MARKING SCHEME (Total = 100):
+1. Thesis & Topic Understanding — 10
+2. Outline Quality — 10
+3. Structure & Coherence — 15
+4. Content Depth, Balance & Relevance — 20
+5. Language Proficiency & Expression — 15
+6. Critical Thinking & Analytical Reasoning — 5
+7. Conclusion — 10
+8. Word Count & Length Control — 15
 
 ESSAY TO ANALYZE:
 ${essay}
 
-EVALUATION CRITERIA:
-1. Thesis Statement & Topic Understanding (10 marks)
-2. Outline: Clarity, Logic, and Direction (10 marks)
-3. Structure & Coherence (15 marks)
-4. Content Depth, Balance & Relevance (20 marks)
-5. Language Proficiency & Expression (15 marks)
-6. Critical Thinking & Analytical Reasoning (5 marks)
-7. Conclusion (10 marks)
-8. Word Count & Length Control (15 marks)
-
-SPECIAL RULE: If the submission contains only an outline without a full essay body, evaluate ONLY Section 2 (Outline Quality) out of 10 marks. All other sections = 0 marks.
-
-Please provide your analysis in the following JSON format ONLY (no other text):
+Provide analysis in this exact JSON format:
 
 {
-  "corrected_text": "The corrected version of the essay with proper grammar, spelling, and structure",
+  "corrected_text": "The corrected version of the essay with minor grammatical fixes",
   "mistakes": [
     {
       "original": "incorrect text",
       "correction": "corrected text", 
-      "explanation": "Brief explanation of the mistake and why it's wrong"
+      "explanation": "Brief explanation of the error"
     }
   ],
   "suggestions": [
-    "Specific suggestion for improvement 1",
-    "Specific suggestion for improvement 2",
-    "Specific suggestion for improvement 3"
+    "Specific suggestion for improvement",
+    "Another suggestion"
   ],
-  "score": 85,
+  "score": 45,
   "evaluation": {
-    "thesisStatement": { "score": 8, "comment": "Clear and focused thesis statement" },
-    "outline": { "score": 9, "comment": "Well-structured outline with logical flow" },
-    "structure": { "score": 13, "comment": "Good paragraph organization and coherence" },
-    "content": { "score": 17, "comment": "Relevant content with good depth" },
-    "language": { "score": 13, "comment": "Good language proficiency with minor errors" },
-    "criticalThinking": { "score": 4, "comment": "Demonstrates analytical reasoning" },
-    "conclusion": { "score": 8, "comment": "Effective conclusion that ties ideas together" },
-    "wordCount": { "score": 13, "comment": "Appropriate length for the topic" }
+    "thesisStatement": { "score": 6, "comment": "Clear thesis statement with good topic understanding" },
+    "outline": { "score": 5, "comment": "Basic outline structure present" },
+    "structure": { "score": 10, "comment": "Some organization but needs improvement" },
+    "content": { "score": 12, "comment": "Relevant content but lacks depth" },
+    "language": { "score": 9, "comment": "Adequate language proficiency" },
+    "criticalThinking": { "score": 3, "comment": "Some analytical thinking demonstrated" },
+    "conclusion": { "score": 6, "comment": "Basic conclusion present" },
+    "wordCount": { "score": 8, "comment": "Length needs improvement" }
   },
-  "totalMarks": 85,
+  "totalMarks": 45,
   "isOutlineOnly": false,
   "examinerRemarks": {
-    "strengths": ["Clear argument structure", "Good use of examples", "Logical flow"],
-    "weaknesses": ["Some grammatical errors", "Could use more specific evidence"],
-    "suggestions": ["Proofread for grammar", "Include more concrete examples", "Strengthen conclusion"]
+    "strengths": ["Clear thesis statement", "Relevant content"],
+    "weaknesses": ["Insufficient depth", "Poor structure"],
+    "suggestions": ["Expand content depth", "Improve organization"]
   }
 }
 
-IMPORTANT GUIDELINES:
-1. Score each section according to the marks allocation above
-2. If it's outline-only: set isOutlineOnly=true, score only outline section, others=0, totalMarks=outline score
-3. Focus on CSS exam writing standards and requirements
-4. Provide specific, actionable feedback for each section
-5. Corrected text should maintain the original meaning while fixing errors
-6. Mistakes should include common CSS exam writing errors
-7. Return ONLY valid JSON, no markdown or additional text
-8. Word count should be appropriate for CSS exam essays (typically 1000-1500 words)
-
-ANALYZE NOW:`;
+Be extremely strict. Most essays should score below 50. Only award high marks for exceptional work. Return ONLY valid JSON.`;
   }
 
   private parseGeminiResponse(response: string, originalEssay: string): EssayAnalysisResult {
@@ -270,35 +279,75 @@ ANALYZE NOW:`;
   }
 
   private createFallbackAnalysis(essay: string): EssayAnalysisResult {
-    // Enhanced fallback analysis if AI fails
+    // Strict CSS examiner fallback analysis
     const words = essay.split(' ').filter(word => word.length > 0);
     const wordCount = words.length;
-    const sentences = essay.split(/[.!?]+/).filter(s => s.trim().length > 0);
     const paragraphs = essay.split('\n\n').filter(p => p.trim().length > 0);
     
-    // Calculate a basic score based on essay structure
-    let baseScore = 60;
+    // Check if it's outline-only or fragmentary
+    const isOutlineOnly = wordCount < 100 || essay.toLowerCase().includes('outline') && !essay.toLowerCase().includes('introduction');
+    const isFragmentary = wordCount < 200 && !isOutlineOnly;
     
-    // Word count scoring
-    if (wordCount >= 800) baseScore += 10;
-    else if (wordCount >= 500) baseScore += 5;
-    else if (wordCount < 200) baseScore -= 10;
+    // Strict scoring based on CSS examiner rules
+    let thesisScore = 0, outlineScore = 0, structureScore = 0, contentScore = 0;
+    let languageScore = 0, criticalThinkingScore = 0, conclusionScore = 0, wordCountScore = 0;
     
-    // Paragraph structure
-    if (paragraphs.length >= 4) baseScore += 5;
-    else if (paragraphs.length < 3) baseScore -= 5;
+    // Word count scoring (strict)
+    if (wordCount < 800) {
+      wordCountScore = 0; // CSS failure for short essays
+    } else if (wordCount >= 2500) {
+      wordCountScore = 15;
+    } else if (wordCount >= 1500) {
+      wordCountScore = 12;
+    } else if (wordCount >= 1000) {
+      wordCountScore = 8;
+    } else {
+      wordCountScore = 5;
+    }
     
-    // Basic checks
-    const hasIntroduction = essay.toLowerCase().includes('introduction') || 
-                           paragraphs[0]?.length > 100;
+    // Basic structure analysis
+    const hasIntroduction = essay.toLowerCase().includes('introduction') || paragraphs[0]?.length > 100;
     const hasConclusion = essay.toLowerCase().includes('conclusion') || 
                          essay.toLowerCase().includes('to conclude') ||
                          paragraphs[paragraphs.length - 1]?.length > 50;
+    const hasOutline = essay.toLowerCase().includes('outline') || essay.toLowerCase().includes('structure');
     
-    if (hasIntroduction) baseScore += 5;
-    if (hasConclusion) baseScore += 5;
+    if (isOutlineOnly) {
+      // Only evaluate outline quality
+      outlineScore = Math.min(10, Math.max(0, Math.round(wordCount / 10)));
+      thesisScore = 0;
+      structureScore = 0;
+      contentScore = 0;
+      languageScore = 0;
+      criticalThinkingScore = 0;
+      conclusionScore = 0;
+      wordCountScore = 0;
+    } else if (isFragmentary) {
+      // Only evaluate thesis
+      thesisScore = hasIntroduction ? Math.min(10, Math.max(0, Math.round(wordCount / 20))) : 0;
+      outlineScore = 0;
+      structureScore = 0;
+      contentScore = 0;
+      languageScore = 0;
+      criticalThinkingScore = 0;
+      conclusionScore = 0;
+      wordCountScore = 0;
+    } else {
+      // Full evaluation with strict scoring
+      thesisScore = hasIntroduction ? 6 : 2;
+      outlineScore = hasOutline ? 5 : 0;
+      structureScore = paragraphs.length >= 4 ? 10 : paragraphs.length >= 2 ? 7 : 3;
+      contentScore = wordCount >= 1000 ? 12 : wordCount >= 500 ? 8 : 4;
+      languageScore = 8; // Basic language assessment
+      criticalThinkingScore = 2; // Minimal for fallback
+      conclusionScore = hasConclusion ? 6 : 2;
+    }
     
-    const finalScore = Math.max(40, Math.min(85, baseScore));
+    const totalMarks = thesisScore + outlineScore + structureScore + contentScore + 
+                      languageScore + criticalThinkingScore + conclusionScore + wordCountScore;
+    
+    // Determine if it's a fail based on CSS standards
+    const isFail = totalMarks < 40 || wordCount < 800;
     
     return {
       corrected_text: essay,
@@ -309,39 +358,42 @@ ANALYZE NOW:`;
         'Include specific examples and evidence to support your arguments',
         'Maintain logical flow between paragraphs with transition words',
         'Write a strong conclusion that summarizes your main points',
-        `Current word count: ${wordCount} words (recommended: 800-1200 for CSS essays)`
+        `Current word count: ${wordCount} words (CSS requires 2500-3000 words)`
       ],
-      score: Math.round(finalScore),
+      score: totalMarks,
       evaluation: {
-        thesisStatement: { score: Math.round(finalScore * 0.15), comment: 'Basic structural analysis performed' },
-        outline: { score: Math.round(finalScore * 0.1), comment: 'Outline structure evaluated' },
-        structure: { score: Math.round(finalScore * 0.2), comment: `${paragraphs.length} paragraphs detected` },
-        content: { score: Math.round(finalScore * 0.25), comment: 'Content structure analyzed' },
-        language: { score: Math.round(finalScore * 0.15), comment: 'Language structure reviewed' },
-        criticalThinking: { score: Math.round(finalScore * 0.1), comment: 'Critical thinking structure assessed' },
-        conclusion: { score: Math.round(finalScore * 0.05), comment: hasConclusion ? 'Conclusion detected' : 'No clear conclusion found' },
-        wordCount: { score: wordCount >= 800 ? 10 : wordCount >= 500 ? 7 : 5, comment: `${wordCount} words` }
+        thesisStatement: { score: thesisScore, comment: hasIntroduction ? 'Basic thesis structure present' : 'No clear thesis statement' },
+        outline: { score: outlineScore, comment: hasOutline ? 'Outline structure detected' : 'No clear outline present' },
+        structure: { score: structureScore, comment: `${paragraphs.length} paragraphs detected` },
+        content: { score: contentScore, comment: 'Content depth needs improvement' },
+        language: { score: languageScore, comment: 'Basic language proficiency' },
+        criticalThinking: { score: criticalThinkingScore, comment: 'Limited critical analysis' },
+        conclusion: { score: conclusionScore, comment: hasConclusion ? 'Conclusion present' : 'No clear conclusion' },
+        wordCount: { score: wordCountScore, comment: `${wordCount} words (CSS requires 2500-3000)` }
       },
-      totalMarks: Math.round(finalScore),
-      isOutlineOnly: wordCount < 100,
+      totalMarks: totalMarks,
+      isOutlineOnly: isOutlineOnly,
       examinerRemarks: {
         strengths: [
           hasIntroduction ? 'Clear introduction structure' : '',
           hasConclusion ? 'Conclusion present' : '',
-          wordCount >= 500 ? 'Adequate length' : '',
-          paragraphs.length >= 3 ? 'Good paragraph structure' : ''
+          hasOutline ? 'Outline structure present' : '',
+          wordCount >= 1000 ? 'Adequate length for basic analysis' : ''
         ].filter(Boolean),
         weaknesses: [
-          wordCount < 500 ? 'Essay length could be improved' : '',
-          paragraphs.length < 3 ? 'More paragraph structure needed' : '',
-          !hasIntroduction ? 'Introduction could be stronger' : '',
-          !hasConclusion ? 'Conclusion needs improvement' : ''
+          wordCount < 800 ? 'Too short; CSS essays require 2500-3000 words. Fail.' : '',
+          wordCount < 1500 ? 'Essay length needs significant improvement' : '',
+          paragraphs.length < 3 ? 'Insufficient paragraph structure' : '',
+          !hasIntroduction ? 'Introduction needs improvement' : '',
+          !hasConclusion ? 'Conclusion needs improvement' : '',
+          isFail ? 'Overall performance below CSS passing standards' : ''
         ].filter(Boolean),
         suggestions: [
+          'Aim for 2500-3000 words for CSS exam standards',
           'Focus on clear paragraph structure and transitions',
           'Ensure strong thesis statement and conclusion',
           'Include more specific examples to support your arguments',
-          'Aim for 800-1200 words for comprehensive coverage'
+          'Develop deeper critical analysis of the topic'
         ]
       }
     };

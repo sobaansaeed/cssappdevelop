@@ -398,6 +398,57 @@ const EssayChecker: React.FC<EssayCheckerProps> = ({ onAnalysisComplete }) => {
             </div>
           </div>
 
+          {/* Strengths and Weaknesses */}
+          {analysisResult.examinerRemarks && (
+            <div className="mb-8">
+              <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                <BookOpen className="h-5 w-5 text-purple-500 mr-2" />
+                Examiner&apos;s Remarks
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Strengths */}
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <h5 className="font-semibold text-green-900 mb-3 flex items-center">
+                    <CheckCircle className="h-5 w-5 text-green-500 mr-2" />
+                    Strengths
+                  </h5>
+                  {analysisResult.examinerRemarks.strengths.length > 0 ? (
+                    <ul className="space-y-2">
+                      {analysisResult.examinerRemarks.strengths.map((strength, index) => (
+                        <li key={index} className="flex items-start space-x-2">
+                          <span className="text-green-600 mt-1">•</span>
+                          <span className="text-green-800">{strength}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-green-700 italic">No significant strengths identified</p>
+                  )}
+                </div>
+
+                {/* Weaknesses */}
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <h5 className="font-semibold text-red-900 mb-3 flex items-center">
+                    <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
+                    Areas for Improvement
+                  </h5>
+                  {analysisResult.examinerRemarks.weaknesses.length > 0 ? (
+                    <ul className="space-y-2">
+                      {analysisResult.examinerRemarks.weaknesses.map((weakness, index) => (
+                        <li key={index} className="flex items-start space-x-2">
+                          <span className="text-red-600 mt-1">•</span>
+                          <span className="text-red-800">{weakness}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-red-700 italic">No major weaknesses identified</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Detailed Evaluation */}
           {analysisResult.evaluation && (
             <div className="mb-8">
