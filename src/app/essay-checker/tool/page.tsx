@@ -100,16 +100,42 @@ const EssayCheckerToolPage: React.FC = () => {
           {/* Manual bypass for testing */}
           <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg max-w-md mx-auto">
             <p className="text-yellow-700 text-sm mb-2">If stuck loading, try:</p>
-            <button
-              onClick={() => {
-                // Force bypass for testing
-                localStorage.setItem('force-pro-access', 'true');
-                window.location.reload();
-              }}
-              className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-sm"
-            >
-              Force Pro Access (Testing)
-            </button>
+            <div className="space-y-2">
+              <button
+                onClick={() => {
+                  // Force bypass for testing
+                  localStorage.setItem('force-pro-access', 'true');
+                  window.location.reload();
+                }}
+                className="w-full px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-sm"
+              >
+                Force Pro Access (Testing)
+              </button>
+              
+              <button
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/fix-specific-user', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      }
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                      alert('User subscription fixed! Please sign out and sign back in.');
+                    } else {
+                      alert('Failed to fix subscription: ' + data.error);
+                    }
+                  } catch (err) {
+                    alert('Error fixing subscription: ' + err);
+                  }
+                }}
+                className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+              >
+                Fix 2020ch237@student.uet.edu.pk
+              </button>
+            </div>
           </div>
         </div>
       </div>
