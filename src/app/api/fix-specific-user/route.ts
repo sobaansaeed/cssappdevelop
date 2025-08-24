@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createServerClient } from '@/lib/supabase';
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const targetEmail = '2020ch237@student.uet.edu.pk';
     
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     console.log(`Found user: ${user.email} (ID: ${user.id})`);
 
     // Step 2: Check current profile
-    const { data: profile, error: profileError } = await supabase
+    const { error: profileError } = await supabase
       .from('user_profiles')
       .select('*')
       .eq('id', user.id)

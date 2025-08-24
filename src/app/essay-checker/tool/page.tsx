@@ -135,6 +135,34 @@ const EssayCheckerToolPage: React.FC = () => {
               >
                 Fix 2020ch237@student.uet.edu.pk
               </button>
+              
+              <button
+                onClick={async () => {
+                  if (!confirm('This will fix ALL users to Pro status. Are you sure?')) {
+                    return;
+                  }
+                  try {
+                    const response = await fetch('/api/fix-all-subscriptions', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ action: 'fix-all-users' })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                      alert(`Fixed ${data.results.processed} users! Please sign out and sign back in.`);
+                    } else {
+                      alert('Failed to fix all users: ' + data.error);
+                    }
+                  } catch (err) {
+                    alert('Error fixing all users: ' + err);
+                  }
+                }}
+                className="w-full px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 text-sm"
+              >
+                Fix All Users (Admin)
+              </button>
             </div>
           </div>
         </div>

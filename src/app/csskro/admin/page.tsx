@@ -224,6 +224,85 @@ const CSSKROAdminPage: React.FC = () => {
     }
   };
 
+  const bulkFixAllUsers = async () => {
+    if (!confirm('This will set ALL users to Pro status. Are you sure?')) {
+      return;
+    }
+
+    try {
+      setMessage('Fixing all user subscriptions...');
+      setMessageType('success');
+      
+      const response = await fetch('/api/fix-all-subscriptions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'fix-all-users',
+          targetStatus: 'active'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fix all users');
+      }
+
+      setMessage(`Successfully processed ${data.results.processed} users!`);
+      setMessageType('success');
+      
+      // Refresh data from server
+      setTimeout(() => fetchUsers(), 2000);
+      setTimeout(() => setMessage(''), 5000);
+    } catch (e) {
+      console.error('Failed to fix all users:', e);
+      setMessage(`Failed to fix all users: ${e instanceof Error ? e.message : 'Unknown error'}`);
+      setMessageType('error');
+      setTimeout(() => setMessage(''), 5000);
+    }
+  };
+
+  const bulkFixPaidUsers = async () => {
+    if (!confirm('This will fix only the specified paid users. Continue?')) {
+      return;
+    }
+
+    try {
+      setMessage('Fixing paid user subscriptions...');
+      setMessageType('success');
+      
+      const response = await fetch('/api/fix-all-subscriptions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'fix-paid-users'
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fix paid users');
+      }
+
+      setMessage(`Successfully processed ${data.results.processed} paid users!`);
+      setMessageType('success');
+      
+      // Refresh data from server
+      setTimeout(() => fetchUsers(), 2000);
+      setTimeout(() => setMessage(''), 5000);
+    } catch (e) {
+      console.error('Failed to fix paid users:', e);
+      setMessage(`Failed to fix paid users: ${e instanceof Error ? e.message : 'Unknown error'}`);
+      setMessageType('error');
+      setTimeout(() => setMessage(''), 5000);
+    }
+  };
+
   useEffect(() => {
       fetchUsers();
   }, []);
@@ -278,6 +357,23 @@ const CSSKROAdminPage: React.FC = () => {
                 <RefreshCw className="h-4 w-4" />
                 <span>Refresh</span>
               </button>
+              
+              {/* Bulk Fix Buttons */}
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={bulkFixAllUsers}
+                  className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors text-sm"
+                >
+                  <span>Fix All Users</span>
+                </button>
+                <button
+                  onClick={bulkFixPaidUsers}
+                  className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm"
+                >
+                  <span>Fix Paid Users</span>
+                </button>
+              </div>
+              
               <button
                 onClick={async () => {
                   try {
