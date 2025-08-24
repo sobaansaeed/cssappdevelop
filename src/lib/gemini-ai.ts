@@ -73,11 +73,23 @@ export class GeminiAIService {
 
       const prompt = this.buildPrompt(essay);
       
+      console.log('Sending essay to Gemini AI for analysis...');
       const result = await this.model.generateContent(prompt);
       const response = await result.response;
       const text = response.text();
       
-      return this.parseGeminiResponse(text, essay);
+      console.log('Received AI response, parsing...');
+      const parsedResult = this.parseGeminiResponse(text, essay);
+      
+      // Log the analysis result for debugging
+      console.log('Analysis completed:', {
+        totalMarks: parsedResult.totalMarks,
+        outlineScore: parsedResult.evaluation.outline.score,
+        isOutlineOnly: parsedResult.isOutlineOnly,
+        wordCount: essay.split(' ').length
+      });
+      
+      return parsedResult;
     } catch (error) {
       console.error('Gemini AI Error:', error);
       
@@ -136,6 +148,7 @@ You MUST check for outline explicitly. Outline is ONLY present if:
 👉 If ANY of these signals exist → evaluate Outline (0–10).
 👉 If NONE exist → mark Outline = 0 and classify as Type C.
 👉 NEVER give outline marks unless these signals are present.
+👉 IMPORTANT: Most essays will NOT have outlines. Only give outline marks if you see explicit outline signals.
 
 ---
 
@@ -242,13 +255,14 @@ Step 7 — Special Instructions
 7. Be extremely strict. Most essays should score below 50
 8. Only award high marks for exceptional work
 9. Return ONLY valid JSON - no other text
+10. IMPORTANT: Most essays will NOT have outlines. Only give outline marks if you see explicit outline signals.
 
 ---
 
 ESSAY TO ANALYZE:
 ${essay}
 
-REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are present, outline score MUST be 0.`;
+REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are present, outline score MUST be 0. Most essays will NOT have outlines.`;
   }
 
   private parseGeminiResponse(response: string, originalEssay: string): EssayAnalysisResult {
@@ -349,42 +363,52 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
   }
 
   private createFallbackAnalysis(essay: string): EssayAnalysisResult {
-    // Strict CSS examiner fallback analysis
+    // Enhanced CSS examiner fallback analysis with better content detection
     const words = essay.split(' ').filter(word => word.length > 0);
     const wordCount = words.length;
     const paragraphs = essay.split('\n\n').filter(p => p.trim().length > 0);
     
-    // Check if it's outline-only or fragmentary
-    const isOutlineOnly = wordCount < 100 || essay.toLowerCase().includes('outline') && !essay.toLowerCase().includes('introduction');
+    // Enhanced outline detection - look for specific signals
+    const hasExplicitOutline = essay.toLowerCase().includes('outline') || 
+                              essay.toLowerCase().includes('structure') ||
+                              /^[ivxlcdm]+\./i.test(essay) || // Roman numerals
+                              /^\d+\./i.test(essay) || // Numbers
+                              /^[a-z]\./i.test(essay); // Letters
+    
+    // Enhanced type detection
+    const isOutlineOnly = hasExplicitOutline && wordCount < 300 && !essay.toLowerCase().includes('introduction');
     const isFragmentary = wordCount < 200 && !isOutlineOnly;
+    const isShortEssay = wordCount < 800 && !isOutlineOnly && !isFragmentary;
     
     // Strict scoring based on CSS examiner rules
     let thesisScore = 0, outlineScore = 0, structureScore = 0, contentScore = 0;
     let languageScore = 0, criticalThinkingScore = 0, conclusionScore = 0, wordCountScore = 0;
     
-    // Word count scoring (strict)
-    if (wordCount < 800) {
-      wordCountScore = 0; // CSS failure for short essays
-    } else if (wordCount >= 2500) {
-      wordCountScore = 15;
-    } else if (wordCount >= 1500) {
-      wordCountScore = 12;
-    } else if (wordCount >= 1000) {
-      wordCountScore = 8;
-    } else {
-      wordCountScore = 5;
-    }
+    // Enhanced structure analysis
+    const hasIntroduction = essay.toLowerCase().includes('introduction') || 
+                           paragraphs[0]?.length > 100 ||
+                           essay.toLowerCase().includes('thesis') ||
+                           essay.toLowerCase().includes('argument');
     
-    // Basic structure analysis
-    const hasIntroduction = essay.toLowerCase().includes('introduction') || paragraphs[0]?.length > 100;
     const hasConclusion = essay.toLowerCase().includes('conclusion') || 
                          essay.toLowerCase().includes('to conclude') ||
+                         essay.toLowerCase().includes('in conclusion') ||
                          paragraphs[paragraphs.length - 1]?.length > 50;
-    const hasOutline = essay.toLowerCase().includes('outline') || essay.toLowerCase().includes('structure');
     
+    // Content quality analysis
+    const hasSpecificExamples = essay.toLowerCase().includes('example') || 
+                               essay.toLowerCase().includes('instance') ||
+                               essay.toLowerCase().includes('case');
+    
+    const hasAnalysis = essay.toLowerCase().includes('analysis') || 
+                       essay.toLowerCase().includes('examine') ||
+                       essay.toLowerCase().includes('discuss') ||
+                       essay.toLowerCase().includes('argue');
+    
+    // Apply type-specific rules
     if (isOutlineOnly) {
-      // Only evaluate outline quality
-      outlineScore = Math.min(10, Math.max(0, Math.round(wordCount / 10)));
+      // Type A: Outline-Only
+      outlineScore = hasExplicitOutline ? Math.min(10, Math.max(0, Math.round(wordCount / 20))) : 0;
       thesisScore = 0;
       structureScore = 0;
       contentScore = 0;
@@ -393,8 +417,8 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
       conclusionScore = 0;
       wordCountScore = 0;
     } else if (isFragmentary) {
-      // Only evaluate thesis
-      thesisScore = hasIntroduction ? Math.min(10, Math.max(0, Math.round(wordCount / 20))) : 0;
+      // Type D: Intro-Only / Fragment
+      thesisScore = hasIntroduction ? Math.min(10, Math.max(0, Math.round(wordCount / 15))) : 0;
       outlineScore = 0;
       structureScore = 0;
       contentScore = 0;
@@ -402,15 +426,38 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
       criticalThinkingScore = 0;
       conclusionScore = 0;
       wordCountScore = 0;
-    } else {
-      // Full evaluation with strict scoring
+    } else if (isShortEssay) {
+      // Type E: Short Essay
       thesisScore = hasIntroduction ? 6 : 2;
-      outlineScore = hasOutline ? 5 : 0;
-      structureScore = paragraphs.length >= 4 ? 10 : paragraphs.length >= 2 ? 7 : 3;
-      contentScore = wordCount >= 1000 ? 12 : wordCount >= 500 ? 8 : 4;
-      languageScore = 8; // Basic language assessment
-      criticalThinkingScore = 2; // Minimal for fallback
-      conclusionScore = hasConclusion ? 6 : 2;
+      outlineScore = hasExplicitOutline ? 5 : 0;
+      structureScore = paragraphs.length >= 4 ? 8 : paragraphs.length >= 2 ? 5 : 2;
+      contentScore = hasSpecificExamples ? 8 : 4;
+      languageScore = 6;
+      criticalThinkingScore = hasAnalysis ? 3 : 1;
+      conclusionScore = hasConclusion ? 5 : 2;
+      wordCountScore = 0; // MANDATORY 0 for short essays
+    } else {
+      // Type B/C: Full Essay
+      thesisScore = hasIntroduction ? 7 : 3;
+      outlineScore = hasExplicitOutline ? 6 : 0;
+      structureScore = paragraphs.length >= 5 ? 12 : paragraphs.length >= 3 ? 8 : 4;
+      contentScore = hasSpecificExamples ? 14 : 8;
+      languageScore = 9;
+      criticalThinkingScore = hasAnalysis ? 4 : 2;
+      conclusionScore = hasConclusion ? 7 : 3;
+      
+      // Word count scoring (strict)
+      if (wordCount < 800) {
+        wordCountScore = 0;
+      } else if (wordCount >= 2500) {
+        wordCountScore = 15;
+      } else if (wordCount >= 1500) {
+        wordCountScore = 12;
+      } else if (wordCount >= 1000) {
+        wordCountScore = 8;
+      } else {
+        wordCountScore = 5;
+      }
     }
     
     const totalMarks = thesisScore + outlineScore + structureScore + contentScore + 
@@ -432,14 +479,38 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
       ],
       score: totalMarks,
       evaluation: {
-        thesisStatement: { score: thesisScore, comment: hasIntroduction ? 'Basic thesis structure present' : 'No clear thesis statement' },
-        outline: { score: outlineScore, comment: hasOutline ? 'Outline structure detected' : 'No clear outline present' },
-        structure: { score: structureScore, comment: `${paragraphs.length} paragraphs detected` },
-        content: { score: contentScore, comment: 'Content depth needs improvement' },
-        language: { score: languageScore, comment: 'Basic language proficiency' },
-        criticalThinking: { score: criticalThinkingScore, comment: 'Limited critical analysis' },
-        conclusion: { score: conclusionScore, comment: hasConclusion ? 'Conclusion present' : 'No clear conclusion' },
-        wordCount: { score: wordCountScore, comment: `${wordCount} words (CSS requires 2500-3000)` }
+        thesisStatement: { 
+          score: thesisScore, 
+          comment: hasIntroduction ? 'Basic thesis structure present' : 'No clear thesis statement' 
+        },
+        outline: { 
+          score: outlineScore, 
+          comment: hasExplicitOutline ? 'Outline structure detected' : 'No clear outline present' 
+        },
+        structure: { 
+          score: structureScore, 
+          comment: `${paragraphs.length} paragraphs detected` 
+        },
+        content: { 
+          score: contentScore, 
+          comment: hasSpecificExamples ? 'Some specific examples present' : 'Content depth needs improvement' 
+        },
+        language: { 
+          score: languageScore, 
+          comment: 'Basic language proficiency' 
+        },
+        criticalThinking: { 
+          score: criticalThinkingScore, 
+          comment: hasAnalysis ? 'Some analytical thinking demonstrated' : 'Limited critical analysis' 
+        },
+        conclusion: { 
+          score: conclusionScore, 
+          comment: hasConclusion ? 'Conclusion present' : 'No clear conclusion' 
+        },
+        wordCount: { 
+          score: wordCountScore, 
+          comment: wordCount < 800 ? `${wordCount} words (CSS requires 2500-3000)` : `${wordCount} words` 
+        }
       },
       totalMarks: totalMarks,
       isOutlineOnly: isOutlineOnly,
@@ -447,8 +518,9 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
         strengths: [
           hasIntroduction ? 'Clear introduction structure' : '',
           hasConclusion ? 'Conclusion present' : '',
-          hasOutline ? 'Outline structure present' : '',
-          wordCount >= 1000 ? 'Adequate length for basic analysis' : ''
+          hasExplicitOutline ? 'Outline structure present' : '',
+          hasSpecificExamples ? 'Specific examples included' : '',
+          hasAnalysis ? 'Some analytical content' : ''
         ].filter(Boolean),
         weaknesses: [
           wordCount < 800 ? 'Too short; CSS essays require 2500-3000 words. Fail.' : '',
@@ -456,6 +528,8 @@ REMEMBER: Follow the type detection rules EXACTLY. If no outline signals are pre
           paragraphs.length < 3 ? 'Insufficient paragraph structure' : '',
           !hasIntroduction ? 'Introduction needs improvement' : '',
           !hasConclusion ? 'Conclusion needs improvement' : '',
+          !hasSpecificExamples ? 'Lack of specific examples' : '',
+          !hasAnalysis ? 'Limited critical analysis' : '',
           isFail ? 'Overall performance below CSS passing standards' : ''
         ].filter(Boolean),
         suggestions: [

@@ -5,7 +5,7 @@ import { FileText, Brain, Target, CheckSquare, Zap, TrendingUp, Award, Shield, C
 import Link from 'next/link';
 import { useAuth } from '@/lib/auth-context';
 import { useSubscription } from '@/lib/use-subscription';
-import SubscriptionDebugger from '@/components/SubscriptionDebugger';
+
 
 const EssayCheckerPage: React.FC = () => {
   const { user } = useAuth();
@@ -165,14 +165,7 @@ const EssayCheckerPage: React.FC = () => {
         </div>
       )}
 
-      {/* Subscription Status Debug (remove in production) */}
-      {user && (
-        <div className="py-8 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <SubscriptionDebugger />
-          </div>
-        </div>
-      )}
+
 
       {/* Non-Pro User CTA */}
       {!isPro && (
