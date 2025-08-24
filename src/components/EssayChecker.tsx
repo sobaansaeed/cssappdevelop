@@ -367,34 +367,103 @@ const EssayChecker: React.FC<EssayCheckerProps> = ({ onAnalysisComplete }) => {
           </div>
 
           {/* Score Display */}
-          <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 rounded-2xl p-8 mb-8 border border-gray-200 shadow-lg">
-            <div className="text-center">
-              <div className="relative inline-flex items-center justify-center w-32 h-32 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full mb-6 shadow-2xl animate-pulse">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-full animate-ping opacity-20"></div>
-                <div className="absolute inset-2 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-full"></div>
-                <span className="relative text-4xl font-bold text-white drop-shadow-lg animate-bounce">
+          <div className="bg-gradient-to-r from-blue-50 via-purple-50 to-pink-50 rounded-2xl p-8 mb-8 border border-gray-200 shadow-lg relative overflow-hidden">
+            {/* Animated background particles */}
+            <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute top-4 left-4 w-2 h-2 bg-blue-400 rounded-full animate-ping opacity-60" style={{ animationDelay: '0s' }}></div>
+              <div className="absolute top-8 right-8 w-3 h-3 bg-purple-400 rounded-full animate-ping opacity-50" style={{ animationDelay: '0.5s' }}></div>
+              <div className="absolute bottom-6 left-12 w-2 h-2 bg-pink-400 rounded-full animate-ping opacity-70" style={{ animationDelay: '1s' }}></div>
+              <div className="absolute bottom-12 right-4 w-2 h-2 bg-blue-300 rounded-full animate-ping opacity-40" style={{ animationDelay: '1.5s' }}></div>
+            </div>
+            
+            <div className="text-center relative z-10">
+              {/* Main score circle with advanced animations */}
+              <div className="relative inline-flex items-center justify-center w-36 h-36 mb-6">
+                {/* Outer rotating ring */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full animate-spin" style={{ animationDuration: '8s' }}></div>
+                
+                {/* Middle pulsing ring */}
+                <div className="absolute inset-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-full animate-pulse" style={{ animationDuration: '2s' }}></div>
+                
+                {/* Inner core */}
+                <div className="absolute inset-4 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 rounded-full shadow-2xl transform hover:scale-105 transition-transform duration-300"></div>
+                
+                {/* Floating particles around the circle */}
+                <div className="absolute -top-2 -left-2 w-3 h-3 bg-yellow-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                <div className="absolute -top-2 -right-2 w-2 h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                <div className="absolute -bottom-2 -left-2 w-2 h-2 bg-red-400 rounded-full animate-bounce" style={{ animationDelay: '0.6s' }}></div>
+                <div className="absolute -bottom-2 -right-2 w-3 h-3 bg-orange-400 rounded-full animate-bounce" style={{ animationDelay: '0.8s' }}></div>
+                
+                {/* Score number with typewriter effect */}
+                <span className="relative text-5xl font-bold text-white drop-shadow-lg animate-pulse" style={{ animationDuration: '1.5s' }}>
                   {analysisResult.totalMarks || analysisResult.score}
                 </span>
+                
+                {/* Glowing effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-full opacity-30 blur-xl animate-pulse"></div>
               </div>
-              <h4 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-3 animate-pulse">
+              
+              {/* Animated title */}
+              <h4 className="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-3 animate-pulse" style={{ animationDuration: '2s' }}>
                 Score
               </h4>
-              <p className="text-xl text-gray-700 font-semibold">
+              
+              {/* Subtitle with slide-in animation */}
+              <p className="text-xl text-gray-700 font-semibold animate-bounce" style={{ animationDelay: '0.5s' }}>
                 out of 100 points
               </p>
-              <div className="mt-4 flex justify-center">
-                <div className="w-48 h-2 bg-gray-200 rounded-full overflow-hidden">
+              
+              {/* Advanced progress bar */}
+              <div className="mt-6 flex justify-center">
+                <div className="w-56 h-3 bg-gray-200 rounded-full overflow-hidden shadow-inner relative">
+                  {/* Background gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-gray-300 to-gray-400 rounded-full"></div>
+                  
+                  {/* Animated progress fill */}
                   <div 
-                    className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full transition-all duration-2000 ease-out"
+                    className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full relative overflow-hidden transition-all duration-3000 ease-out"
                     style={{ width: `${(analysisResult.totalMarks || analysisResult.score)}%` }}
-                  ></div>
+                  >
+                    {/* Shimmer effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-pulse" style={{ animationDuration: '2s' }}></div>
+                    
+                    {/* Moving dots */}
+                    <div className="absolute top-1 left-2 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '0s' }}></div>
+                    <div className="absolute top-1 left-8 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+                    <div className="absolute top-1 left-14 w-1 h-1 bg-white rounded-full animate-ping" style={{ animationDelay: '1s' }}></div>
+                  </div>
+                  
+                  {/* Progress percentage */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-xs font-bold text-white drop-shadow-sm">
+                      {Math.round(analysisResult.totalMarks || analysisResult.score)}%
+                    </span>
+                  </div>
                 </div>
               </div>
-              <p className="text-sm text-gray-500 mt-2">
-                {analysisResult.totalMarks || analysisResult.score >= 80 ? 'Excellent!' : 
-                 analysisResult.totalMarks || analysisResult.score >= 70 ? 'Good!' : 
-                 analysisResult.totalMarks || analysisResult.score >= 60 ? 'Fair' : 'Needs Improvement'}
-              </p>
+              
+              {/* Animated performance indicator */}
+              <div className="mt-4">
+                <p className={`text-lg font-bold animate-bounce ${analysisResult.totalMarks || analysisResult.score >= 80 ? 'text-green-600' : 
+                 analysisResult.totalMarks || analysisResult.score >= 70 ? 'text-blue-600' : 
+                 analysisResult.totalMarks || analysisResult.score >= 60 ? 'text-yellow-600' : 'text-red-600'}`} style={{ animationDelay: '1s' }}>
+                  {analysisResult.totalMarks || analysisResult.score >= 80 ? '🌟 Excellent!' : 
+                   analysisResult.totalMarks || analysisResult.score >= 70 ? '👍 Good!' : 
+                   analysisResult.totalMarks || analysisResult.score >= 60 ? '⚡ Fair' : '💪 Needs Improvement'}
+                </p>
+              </div>
+              
+              {/* Floating achievement badges */}
+              {(analysisResult.totalMarks || analysisResult.score) >= 80 && (
+                <div className="mt-4 flex justify-center space-x-2">
+                  <div className="bg-yellow-100 border border-yellow-300 rounded-full px-3 py-1 text-yellow-800 text-sm font-medium animate-bounce" style={{ animationDelay: '1.5s' }}>
+                    🏆 Top Performer
+                  </div>
+                  <div className="bg-blue-100 border border-blue-300 rounded-full px-3 py-1 text-blue-800 text-sm font-medium animate-bounce" style={{ animationDelay: '2s' }}>
+                    ⭐ Outstanding
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
