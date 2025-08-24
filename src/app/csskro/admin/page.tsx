@@ -17,7 +17,6 @@ import {
   UserX
 } from 'lucide-react';
 
-
 interface UserProfile {
   id: string;
   email: string;
@@ -110,7 +109,7 @@ const CSSKROAdminPage: React.FC = () => {
       setEditingUser(null);
       setMessage('User subscription updated successfully!');
       setMessageType('success');
-      revalidate();
+      window.location.reload();
       
       setTimeout(() => setMessage(''), 3000);
     } catch (e) {
@@ -152,7 +151,7 @@ const CSSKROAdminPage: React.FC = () => {
 
       setMessage('User upgraded to Pro successfully!');
       setMessageType('success');
-      revalidate();
+      window.location.reload();
       setTimeout(() => setMessage(''), 3000);
     } catch (e) {
       console.error('Failed to upgrade user:', e);
