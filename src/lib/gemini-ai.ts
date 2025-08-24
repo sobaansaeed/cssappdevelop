@@ -246,7 +246,7 @@ Return ONLY this JSON format:
         score: parsed.totalMarks || parsed.score || 70,
         evaluation: parsed.evaluation || this.createDefaultEvaluation(),
         totalMarks: parsed.totalMarks || parsed.score || 70,
-        isOutlineOnly: parsed.isOutlineOnly || false,
+        isOutlineOnly: Boolean(parsed.isOutlineOnly),
         examinerRemarks: parsed.examinerRemarks || this.createDefaultRemarks()
       };
       
@@ -332,7 +332,7 @@ Return ONLY this JSON format:
       });
     }
     
-    return isValid;
+    return Boolean(isValid);
   }
 
   private createFallbackAnalysis(essay: string): EssayAnalysisResult {

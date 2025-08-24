@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       .single();
 
     // Step 4: Get ALL profiles to see what's in the table
-    const { data: allProfiles, error: allProfilesError } = await supabase
+    const { data: allProfiles } = await supabase
       .from('user_profiles')
       .select('id, email, subscription_status, subscription_expiry')
       .limit(20);

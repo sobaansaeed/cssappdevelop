@@ -40,12 +40,9 @@ export async function POST(request: NextRequest) {
       fix: 'Everyone gets Pro access'
     });
 
-    // Set isProUser to true for everyone
-    const isProUser = true;
-
     // Optional: Still try to check/create profile but don't block access
     try {
-      const { data: profile, error: profileError } = await supabase
+      const { error: profileError } = await supabase
         .from('user_profiles')
         .select('subscription_status, subscription_expiry')
         .eq('id', user.id)
