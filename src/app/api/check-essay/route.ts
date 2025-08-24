@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
     
     if (authError || !user) {
+      console.error('Auth error:', authError);
       return NextResponse.json(
         { error: 'Invalid or expired token' },
         { status: 401 }
@@ -47,17 +48,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if user has active pro subscription
-    const isProUser = profile.subscription_status === 'active' && 
-                     profile.subscription_expiry && 
-                     new Date(profile.subscription_expiry) > new Date();
+    // Fixed subscription check logic
+    let isProUser = false;
+    
+    if (profile.subscription_status === 'active') {
+      // If no expiry date, consider it active
+      if (!profile.subscription_expiry) {
+        isProUser = true;
+      } else {
+        // Check if subscription hasn't expired
+        const expiryDate = new Date(profile.subscription_expiry);
+        const currentDate = new Date();
+        isProUser = expiryDate > currentDate;
+      }
+    }
+
+    console.log('Subscription check:', {
+      userId: user.id,
+      email: user.email,
+      status: profile.subscription_status,
+      expiry: profile.subscription_expiry,
+      isProUser
+    });
 
     if (!isProUser) {
       return NextResponse.json(
         { 
           error: 'Pro subscription required',
           message: 'This feature is only available for pro users. Please upgrade your subscription to access the essay checker.',
-          upgradeUrl: '/pricing'
+          upgradeUrl: '/pricing',
+          debug: {
+            subscriptionStatus: profile.subscription_status,
+            subscriptionExpiry: profile.subscription_expiry,
+            isProUser
+          }
         },
         { status: 403 }
       );
