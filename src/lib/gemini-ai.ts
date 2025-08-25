@@ -65,7 +65,18 @@ export class GeminiAIService {
 
   async analyzeEssay(essay: string): Promise<EssayAnalysisResult> {
     console.log('=== STARTING ESSAY ANALYSIS ===');
-    console.log('Essay word count:', essay.split(' ').length);
+    
+    // Improved word count calculation for logging
+    const cleanEssay = essay.trim().replace(/\s+/g, ' ');
+    const words = cleanEssay.split(' ').filter(word => word.length > 0);
+    const actualWordCount = words.length;
+    
+    console.log('Essay analysis details:', {
+      originalLength: essay.length,
+      cleanLength: cleanEssay.length,
+      wordCount: actualWordCount,
+      firstFewWords: words.slice(0, 10).join(' ')
+    });
     console.log('API Key available:', !!(process.env.GOOGLE_AI_API_KEY || process.env.AI_API_KEY));
     
     try {
@@ -217,6 +228,14 @@ Type B (Outline + Essay): Evaluate all sections.
 Type C (Essay Without Outline): Outline = 0; evaluate others. Remark: "Outline missing — weakens CSS attempt."
 Type D (Intro-Only / Fragment): Evaluate Thesis (0–10) only; others = 0. Remark: "Fragmentary essay; CSS considers this a failure."
 Type E (Short Essay <800 words): Evaluate all, but Word Count = 0/15. Remark: "Too short; CSS requires ~2500–3000 words. Fail."
+
+Word Count Scoring Guidelines:
+- 0-799 words: 0/15 (automatic fail)
+- 800-999 words: 3/15 (very poor)
+- 1000-1499 words: 6/15 (poor)
+- 1500-1999 words: 9/15 (below average)
+- 2000-2499 words: 12/15 (adequate)
+- 2500+ words: 15/15 (excellent)
 Type F (Nonsense/Irrelevant): Total = 0. Remark: "Irrelevant/incoherent submission. Automatic fail."
 
 Step 4 — Scoring Culture (strict)
@@ -236,6 +255,8 @@ Step 5 — Marking Scheme (Total 100)
 6. Critical Thinking & Analytical Reasoning — 5
 7. Conclusion — 10
 8. Word Count & Length Control — 15
+
+IMPORTANT: Calculate word count by counting actual words (not characters). A word is any sequence of letters/numbers separated by spaces. Count words in the sanitized essay content only.
 
 Step 6 — Output Format (must follow exactly)
 
@@ -333,6 +354,11 @@ Return ONLY this JSON format:
       };
       
       console.log('Successfully parsed AI response with total marks:', result.totalMarks);
+      console.log('AI evaluation details:', {
+        wordCountScore: result.evaluation.wordCount.score,
+        wordCountComment: result.evaluation.wordCount.comment,
+        totalMarks: result.totalMarks
+      });
       return result;
     } catch (error) {
       console.error('Error parsing Gemini response:', error);
@@ -420,11 +446,20 @@ Return ONLY this JSON format:
   private createFallbackAnalysis(essay: string): EssayAnalysisResult {
     console.log('🔄 Creating fallback analysis (AI failed to respond)');
     
-    // Simple but variable content analysis
-    const words = essay.split(' ').filter(word => word.length > 0);
+    // Improved word count calculation
+    const cleanEssay = essay.trim().replace(/\s+/g, ' '); // Normalize whitespace
+    const words = cleanEssay.split(' ').filter(word => word.length > 0);
     const wordCount = words.length;
     const paragraphs = essay.split('\n\n').filter(p => p.trim().length > 10);
     const essayLower = essay.toLowerCase();
+    
+    console.log('📊 Word count analysis:', {
+      originalLength: essay.length,
+      cleanLength: cleanEssay.length,
+      wordCount: wordCount,
+      paragraphCount: paragraphs.length,
+      firstFewWords: words.slice(0, 10).join(' ')
+    });
     
     // Create unique hash-based variation to ensure different results
     const essayHash = this.simpleHash(essay);
