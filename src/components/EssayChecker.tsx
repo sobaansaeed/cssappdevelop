@@ -740,34 +740,7 @@ const EssayChecker: React.FC<EssayCheckerProps> = ({ onAnalysisComplete }) => {
 
 
 
-          {/* Mistakes */}
-          {analysisResult.mistakes.length > 0 && (
-            <div className="mb-8">
-              <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-                Mistakes Found ({analysisResult.mistakes.length})
-              </h4>
-              <div className="space-y-3">
-                {analysisResult.mistakes.map((mistake, index) => (
-                  <div key={index} className="bg-red-50 border border-red-200 rounded-lg p-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="flex-shrink-0 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-sm font-medium">
-                        {index + 1}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-2">
-                          <span className="text-red-700 font-medium">&ldquo;{mistake.original}&rdquo;</span>
-                          <span className="text-gray-400">→</span>
-                          <span className="text-green-700 font-medium">&ldquo;{mistake.correction}&rdquo;</span>
-                        </div>
-                        <p className="text-gray-700 text-sm">{mistake.explanation}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+
 
           {/* Suggestions */}
           {analysisResult.suggestions.length > 0 && (
