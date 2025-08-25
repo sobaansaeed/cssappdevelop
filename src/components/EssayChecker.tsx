@@ -444,26 +444,93 @@ const EssayChecker: React.FC<EssayCheckerProps> = ({ onAnalysisComplete }) => {
               
               {/* Animated performance indicator */}
               <div className="mt-4">
-                <p className={`text-lg font-bold animate-bounce ${analysisResult.totalMarks || analysisResult.score >= 80 ? 'text-green-600' : 
-                 analysisResult.totalMarks || analysisResult.score >= 70 ? 'text-blue-600' : 
-                 analysisResult.totalMarks || analysisResult.score >= 60 ? 'text-yellow-600' : 'text-red-600'}`} style={{ animationDelay: '1s' }}>
-                  {analysisResult.totalMarks || analysisResult.score >= 80 ? '🌟 Excellent!' : 
-                   analysisResult.totalMarks || analysisResult.score >= 70 ? '👍 Good!' : 
-                   analysisResult.totalMarks || analysisResult.score >= 60 ? '⚡ Fair' : '💪 Needs Improvement'}
-                </p>
+                {(() => {
+                  const score = analysisResult.totalMarks || analysisResult.score;
+                  let grade, color, emoji;
+                  
+                  if (score >= 91) {
+                    grade = 'Outstanding';
+                    color = 'text-purple-600';
+                    emoji = '🌟';
+                  } else if (score >= 71) {
+                    grade = 'Excellent';
+                    color = 'text-green-600';
+                    emoji = '✅';
+                  } else if (score >= 61) {
+                    grade = 'Very Good';
+                    color = 'text-blue-600';
+                    emoji = '👍';
+                  } else if (score >= 51) {
+                    grade = 'Good';
+                    color = 'text-yellow-600';
+                    emoji = '🙂';
+                  } else if (score >= 41) {
+                    grade = 'Fair';
+                    color = 'text-orange-600';
+                    emoji = '😐';
+                  } else if (score >= 31) {
+                    grade = 'Needs Improvement';
+                    color = 'text-red-500';
+                    emoji = '⚠️';
+                  } else {
+                    grade = 'Poor';
+                    color = 'text-red-600';
+                    emoji = '❌';
+                  }
+                  
+                  return (
+                    <p className={`text-lg font-bold animate-bounce ${color}`} style={{ animationDelay: '1s' }}>
+                      {emoji} {grade}!
+                    </p>
+                  );
+                })()}
               </div>
               
               {/* Floating achievement badges */}
-              {(analysisResult.totalMarks || analysisResult.score) >= 80 && (
-                <div className="mt-4 flex justify-center space-x-2">
-                  <div className="bg-yellow-100 border border-yellow-300 rounded-full px-3 py-1 text-yellow-800 text-sm font-medium animate-bounce" style={{ animationDelay: '1.5s' }}>
-                    🏆 Top Performer
-                  </div>
-                  <div className="bg-blue-100 border border-blue-300 rounded-full px-3 py-1 text-blue-800 text-sm font-medium animate-bounce" style={{ animationDelay: '2s' }}>
-                    ⭐ Outstanding
-                  </div>
-                </div>
-              )}
+              {(() => {
+                const score = analysisResult.totalMarks || analysisResult.score;
+                
+                if (score >= 91) {
+                  return (
+                    <div className="mt-4 flex justify-center space-x-2">
+                      <div className="bg-purple-100 border border-purple-300 rounded-full px-3 py-1 text-purple-800 text-sm font-medium animate-bounce" style={{ animationDelay: '1.5s' }}>
+                        🌟 Outstanding
+                      </div>
+                      <div className="bg-yellow-100 border border-yellow-300 rounded-full px-3 py-1 text-yellow-800 text-sm font-medium animate-bounce" style={{ animationDelay: '2s' }}>
+                        🏆 Exceptional
+                      </div>
+                    </div>
+                  );
+                } else if (score >= 71) {
+                  return (
+                    <div className="mt-4 flex justify-center space-x-2">
+                      <div className="bg-green-100 border border-green-300 rounded-full px-3 py-1 text-green-800 text-sm font-medium animate-bounce" style={{ animationDelay: '1.5s' }}>
+                        ✅ Excellent
+                      </div>
+                      <div className="bg-blue-100 border border-blue-300 rounded-full px-3 py-1 text-blue-800 text-sm font-medium animate-bounce" style={{ animationDelay: '2s' }}>
+                        🎯 High Achiever
+                      </div>
+                    </div>
+                  );
+                } else if (score >= 61) {
+                  return (
+                    <div className="mt-4 flex justify-center space-x-2">
+                      <div className="bg-blue-100 border border-blue-300 rounded-full px-3 py-1 text-blue-800 text-sm font-medium animate-bounce" style={{ animationDelay: '1.5s' }}>
+                        👍 Very Good
+                      </div>
+                    </div>
+                  );
+                } else if (score >= 51) {
+                  return (
+                    <div className="mt-4 flex justify-center space-x-2">
+                      <div className="bg-yellow-100 border border-yellow-300 rounded-full px-3 py-1 text-yellow-800 text-sm font-medium animate-bounce" style={{ animationDelay: '1.5s' }}>
+                        🙂 Good
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
             </div>
           </div>
 
