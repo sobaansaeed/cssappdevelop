@@ -156,8 +156,8 @@ const EssayCheckerPage: React.FC = () => {
         throw new Error(`Essay must be at least 100 characters long. Current length: ${essayContent.length} characters`);
       }
 
-      if (essayContent.length > 15000) {
-        throw new Error('Essay must be less than 15,000 characters');
+      if (essayContent.length > 25000) {
+        throw new Error('Essay must be less than 25,000 characters');
       }
 
       // Call the Python FastAPI backend
@@ -345,7 +345,7 @@ const EssayCheckerPage: React.FC = () => {
                   <textarea
                     value={essayText}
                     onChange={(e) => handleTextChange(e.target.value)}
-                    placeholder="Paste your essay here... (Minimum 100 characters, Maximum 15,000 characters)"
+                    placeholder="Paste your essay here... (Minimum 100 characters, Maximum 25,000 characters)"
                     className="w-full h-64 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                     disabled={isAnalyzing}
                   />
