@@ -20,6 +20,7 @@ class EssayRequest(BaseModel):
 
 class EssayResponse(BaseModel):
     essay_id: str = Field(..., description="Unique identifier for the essay")
+    task_id: Optional[str] = Field(None, description="Task ID for progress tracking")
     overall_score: int = Field(..., description="Overall score out of 100")
     category_scores: Dict[str, CategoryScore] = Field(..., description="Scores for each category")
     summary_feedback: str = Field(..., description="Overall feedback")

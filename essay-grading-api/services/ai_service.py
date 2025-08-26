@@ -1,4 +1,4 @@
-import openai
+import google.generativeai as genai
 import json
 import logging
 import os
@@ -8,16 +8,16 @@ from models import GradingResult, CategoryScore
 logger = logging.getLogger(__name__)
 
 class AIService:
-    """Service for AI-powered essay grading"""
+    """Service for AI-powered essay grading using Google Gemini"""
     
     def __init__(self):
-        # Initialize OpenAI client
-        api_key = os.getenv("OPENAI_API_KEY")
+        # Initialize Gemini client
+        api_key = os.getenv("GEMINI_API_KEY")
         if not api_key:
-            raise ValueError("OPENAI_API_KEY environment variable is required")
+            raise ValueError("GEMINI_API_KEY environment variable is required")
         
-        self.client = openai.OpenAI(api_key=api_key)
-        self.model = "gpt-4"  # Can be configured
+        genai.configure(api_key=api_key)
+        self.model = genai.GenerativeModel('gemini-1.5-flash')
     
     async def grade_essay(self, essay_text: str, rubric_type: str = "default") -> GradingResult:
         """
@@ -34,8 +34,8 @@ class AIService:
             # Build the prompt based on rubric type
             prompt = self._build_grading_prompt(essay_text, rubric_type)
             
-            # Call OpenAI API
-            response = await self._call_openai(prompt)
+            # Call Gemini API
+            response = await self._call_gemini(prompt)
             
             # Parse the response
             grading_result = self._parse_ai_response(response)
@@ -189,23 +189,14 @@ Return ONLY this JSON format:
 
         return prompt
     
-    async def _call_openai(self, prompt: str) -> str:
-        """Call OpenAI API"""
+    async def _call_gemini(self, prompt: str) -> str:
+        """Call Gemini API"""
         try:
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": "You are an expert essay grader. Always respond with valid JSON."},
-                    {"role": "user", "content": prompt}
-                ],
-                temperature=0.3,  # Lower temperature for more consistent grading
-                max_tokens=2000
-            )
-            
-            return response.choices[0].message.content
+            response = self.model.generate_content(prompt)
+            return response.text
             
         except Exception as e:
-            logger.error(f"OpenAI API error: {e}")
+            logger.error(f"Gemini API error: {e}")
             raise Exception(f"AI service error: {str(e)}")
     
     def _parse_ai_response(self, response: str) -> GradingResult:

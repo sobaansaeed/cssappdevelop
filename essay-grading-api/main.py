@@ -34,6 +34,9 @@ ai_service = AIService()
 storage_service = StorageService()
 pdf_generator = PDFGenerator()
 
+# Progress tracking
+progress_tracker = {}
+
 @app.get("/")
 async def root():
     return {"message": "Essay Grading API is running", "version": "1.0.0"}
@@ -59,37 +62,73 @@ async def upload_essay(request: EssayRequest):
         if len(request.essay_text) > 15000:
             raise HTTPException(status_code=400, detail="Essay text must be less than 15,000 characters")
         
-        # Generate unique essay ID
+        # Generate unique essay ID and task ID
         essay_id = str(uuid.uuid4())
+        task_id = str(uuid.uuid4())
         
-        # Grade essay using AI
-        grading_result = await ai_service.grade_essay(request.essay_text)
+        # Initialize progress tracking
+        progress_tracker[task_id] = {
+            "task_id": task_id,
+            "essay_id": essay_id,
+            "progress": 0,
+            "status": "processing",
+            "message": "Starting analysis..."
+        }
         
-        # Generate annotated PDF (create a simple text-based PDF)
-        annotated_pdf_path = await pdf_generator.create_annotated_pdf_from_text(
-            essay_text=request.essay_text,
-            grading_result=grading_result,
-            essay_id=essay_id
-        )
-        
-        # Store results
-        await storage_service.store_essay_result(
-            essay_id=essay_id,
-            original_text=request.essay_text,
-            grading_result=grading_result,
-            annotated_pdf_path=annotated_pdf_path
-        )
-        
-        return EssayResponse(
-            essay_id=essay_id,
-            overall_score=grading_result.overall_score,
-            category_scores=grading_result.category_scores,
-            summary_feedback=grading_result.summary_feedback,
-            submission_type=grading_result.submission_type,
-            word_count=grading_result.word_count,
-            examiner_remarks=grading_result.examiner_remarks,
-            message="Essay graded successfully"
-        )
+        try:
+            # Update progress: Text validation complete
+            progress_tracker[task_id]["progress"] = 10
+            progress_tracker[task_id]["message"] = "Text validated, starting AI analysis..."
+            
+            # Grade essay using AI
+            grading_result = await ai_service.grade_essay(request.essay_text)
+            
+            # Update progress: AI analysis complete
+            progress_tracker[task_id]["progress"] = 70
+            progress_tracker[task_id]["message"] = "AI analysis complete, generating PDF..."
+            
+            # Generate annotated PDF (create a simple text-based PDF)
+            annotated_pdf_path = await pdf_generator.create_annotated_pdf_from_text(
+                essay_text=request.essay_text,
+                grading_result=grading_result,
+                essay_id=essay_id
+            )
+            
+            # Update progress: PDF generation complete
+            progress_tracker[task_id]["progress"] = 90
+            progress_tracker[task_id]["message"] = "PDF generated, storing results..."
+            
+            # Store results
+            await storage_service.store_essay_result(
+                essay_id=essay_id,
+                original_text=request.essay_text,
+                grading_result=grading_result,
+                annotated_pdf_path=annotated_pdf_path
+            )
+            
+            # Update progress: Complete
+            progress_tracker[task_id]["progress"] = 100
+            progress_tracker[task_id]["status"] = "completed"
+            progress_tracker[task_id]["message"] = "Analysis completed successfully!"
+            
+            return EssayResponse(
+                essay_id=essay_id,
+                task_id=task_id,
+                overall_score=grading_result.overall_score,
+                category_scores=grading_result.category_scores,
+                summary_feedback=grading_result.summary_feedback,
+                submission_type=grading_result.submission_type,
+                word_count=grading_result.word_count,
+                examiner_remarks=grading_result.examiner_remarks,
+                message="Essay graded successfully"
+            )
+            
+        except Exception as e:
+            # Update progress: Error
+            progress_tracker[task_id]["progress"] = 0
+            progress_tracker[task_id]["status"] = "error"
+            progress_tracker[task_id]["message"] = str(e)
+            raise e
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing essay: {str(e)}")
@@ -107,35 +146,106 @@ async def upload_pdf(file: UploadFile = File(...)):
         if file.size > 10 * 1024 * 1024:  # 10MB limit
             raise HTTPException(status_code=400, detail="File size must be less than 10MB")
         
-        # Generate unique essay ID
+        # Generate unique essay ID and task ID
         essay_id = str(uuid.uuid4())
+        task_id = str(uuid.uuid4())
         
-        # Extract text from PDF
-        essay_text = await pdf_service.extract_text(file)
+        # Initialize progress tracking
+        progress_tracker[task_id] = {
+            "task_id": task_id,
+            "essay_id": essay_id,
+            "progress": 0,
+            "status": "processing",
+            "message": "Starting PDF analysis..."
+        }
+        
+        # Save uploaded file temporarily
+        import tempfile
+        
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as temp_file:
+            content = await file.read()
+            temp_file.write(content)
+            temp_file_path = temp_file.name
+        
+        try:
+            # Update progress: PDF processing started
+            progress_tracker[task_id]["progress"] = 20
+            progress_tracker[task_id]["message"] = "Extracting text from PDF..."
+            
+            # Extract text from PDF using enhanced service
+            essay_text = pdf_service.extract_text_from_pdf(temp_file_path)
+            
+            # Update progress: Text extraction complete
+            progress_tracker[task_id]["progress"] = 40
+            progress_tracker[task_id]["message"] = "Text extracted, cleaning content..."
+            
+            # Clean the extracted text
+            essay_text = pdf_service.clean_text(essay_text)
+            
+            # Update progress: Text cleaning complete
+            progress_tracker[task_id]["progress"] = 50
+            progress_tracker[task_id]["message"] = "Content cleaned, starting AI analysis..."
+            
+        except Exception as e:
+            # Update progress: Error during PDF processing
+            progress_tracker[task_id]["progress"] = 0
+            progress_tracker[task_id]["status"] = "error"
+            progress_tracker[task_id]["message"] = f"PDF processing failed: {str(e)}"
+            raise e
+        finally:
+            # Clean up temporary file
+            import os
+            if os.path.exists(temp_file_path):
+                os.unlink(temp_file_path)
         
         if not essay_text or len(essay_text.strip()) < 100:
             raise HTTPException(status_code=400, detail="PDF appears to be empty or contains insufficient text")
         
-        # Grade essay using AI
-        grading_result = await ai_service.grade_essay(essay_text)
-        
-        # Generate annotated PDF
-        annotated_pdf_path = await pdf_generator.create_annotated_pdf(
-            original_file=file,
-            grading_result=grading_result,
-            essay_id=essay_id
-        )
-        
-        # Store results
-        await storage_service.store_essay_result(
-            essay_id=essay_id,
-            original_text=essay_text,
-            grading_result=grading_result,
-            annotated_pdf_path=annotated_pdf_path
-        )
+        try:
+            # Update progress: Validation complete
+            progress_tracker[task_id]["progress"] = 60
+            progress_tracker[task_id]["message"] = "Content validated, processing with AI..."
+            
+            # Grade essay using AI
+            grading_result = await ai_service.grade_essay(essay_text)
+            
+            # Update progress: AI analysis complete
+            progress_tracker[task_id]["progress"] = 80
+            progress_tracker[task_id]["message"] = "AI analysis complete, generating PDF..."
+            
+            # Generate annotated PDF
+            annotated_pdf_path = await pdf_generator.create_annotated_pdf(
+                grading_result=grading_result,
+                essay_id=essay_id
+            )
+            
+            # Update progress: PDF generation complete
+            progress_tracker[task_id]["progress"] = 90
+            progress_tracker[task_id]["message"] = "PDF generated, storing results..."
+            
+            # Store results
+            await storage_service.store_essay_result(
+                essay_id=essay_id,
+                original_text=essay_text,
+                grading_result=grading_result,
+                annotated_pdf_path=annotated_pdf_path
+            )
+            
+            # Update progress: Complete
+            progress_tracker[task_id]["progress"] = 100
+            progress_tracker[task_id]["status"] = "completed"
+            progress_tracker[task_id]["message"] = "Analysis completed successfully!"
+            
+        except Exception as e:
+            # Update progress: Error
+            progress_tracker[task_id]["progress"] = 0
+            progress_tracker[task_id]["status"] = "error"
+            progress_tracker[task_id]["message"] = str(e)
+            raise e
         
         return EssayResponse(
             essay_id=essay_id,
+            task_id=task_id,
             overall_score=grading_result.overall_score,
             category_scores=grading_result.category_scores,
             summary_feedback=grading_result.summary_feedback,
@@ -172,6 +282,21 @@ async def get_results(essay_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error retrieving results: {str(e)}")
+
+@app.get("/progress/{task_id}")
+async def get_progress(task_id: str):
+    """
+    Get progress status for a task
+    """
+    try:
+        if task_id not in progress_tracker:
+            raise HTTPException(status_code=404, detail="Task not found")
+        
+        return progress_tracker[task_id]
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error retrieving progress: {str(e)}")
 
 @app.get("/results/{essay_id}/json")
 async def get_results_json(essay_id: str):

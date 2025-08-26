@@ -1,0 +1,60 @@
+{
+  "essay_id": "1f96578c-7f23-426d-aa34-3903c2c5b071",
+  "original_text": "This is a comprehensive test essay with more than 100 characters to ensure it passes the validation. The essay discusses various topics and provides detailed analysis of the subject matter with proper structure and content. It includes multiple paragraphs with different ideas and arguments to demonstrate the full functionality of the essay checking system.",
+  "grading_result": {
+    "overall_score": 33,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 5,
+        "feedback": "The essay lacks a clearly stated thesis.  The introduction is vague and doesn't specify a central argument or focus. Topic is too broad."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No outline provided."
+      },
+      "Structure & Coherence": {
+        "score": 5,
+        "feedback": "The structure is rudimentary. Paragraphs lack clear transitions and logical flow. The essay jumps between topics without clear connections."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 8,
+        "feedback": "Content is superficial and lacks depth.  Analysis is minimal, and claims are not supported with evidence.  Relevance is unclear due to lack of a defined focus."
+      },
+      "Language Proficiency & Expression": {
+        "score": 7,
+        "feedback": "Language is adequate but lacks precision and sophistication. Sentence structures are simple and repetitive. Some phrasing is awkward."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 0,
+        "feedback": "Little to no critical thinking or analysis present.  Arguments are not developed or challenged."
+      },
+      "Conclusion": {
+        "score": 3,
+        "feedback": "Conclusion is weak and doesn't summarize the main points or offer a thoughtful closing statement. It simply restates the vague introduction."
+      },
+      "Word Count & Length Control": {
+        "score": 5,
+        "feedback": "Essay is significantly below the required word count."
+      }
+    },
+    "summary_feedback": "This essay demonstrates a poor understanding of essay structure and argumentation. The lack of a clear thesis, weak supporting evidence, and underdeveloped analysis result in a very low score.  The essay is far too short and lacks depth. Significant improvement is needed in all areas.",
+    "submission_type": "E",
+    "word_count": 77,
+    "examiner_remarks": {
+      "strengths": [
+        "Some grammatical correctness."
+      ],
+      "weaknesses": [
+        "Lack of thesis, weak structure, inadequate word count, superficial analysis, absence of critical thinking, poor conclusion.",
+        "Overall lack of depth and development."
+      ],
+      "suggestions": [
+        "Develop a strong thesis statement. Create a detailed outline before writing. Provide supporting evidence and examples to substantiate arguments.  Improve the coherence of the essay by using clear transitions. Consider the overall length requirement. Strengthen analysis and engage in critical thinking. Proofread carefully."
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_1f96578c-7f23-426d-aa34-3903c2c5b071.pdf",
+  "graded_at": "2025-08-27T02:51:11.358019",
+  "word_count": 54,
+  "character_count": 358
+}

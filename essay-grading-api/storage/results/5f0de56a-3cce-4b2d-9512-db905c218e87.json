@@ -1,0 +1,60 @@
+{
+  "essay_id": "5f0de56a-3cce-4b2d-9512-db905c218e87",
+  "original_text": "This is a comprehensive test essay with more than 100 characters to ensure it passes the validation. The essay discusses various topics and provides detailed analysis of the subject matter with proper structure and content.",
+  "grading_result": {
+    "overall_score": 37,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 5,
+        "feedback": "The essay lacks a clearly stated thesis.  The introduction is vague and doesn't specify a central argument or point of focus.  The essay touches upon various topics without establishing clear connections or a unifying theme."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No outline was provided."
+      },
+      "Structure & Coherence": {
+        "score": 5,
+        "feedback": "The essay's structure is poorly defined. The transitions between ideas are weak, and the overall flow of the argument is disjointed.  There's a lack of clear paragraphing and logical progression."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 8,
+        "feedback": "While the essay mentions detailed analysis and various topics, it lacks substantial depth in exploring any specific area. The analysis is superficial, and supporting evidence is absent.  Relevance to any particular theme is unclear."
+      },
+      "Language Proficiency & Expression": {
+        "score": 7,
+        "feedback": "The language is adequate but lacks precision and sophistication.  Sentence structure is sometimes clumsy, and the overall writing style is simplistic. More varied vocabulary and complex sentence structures are needed."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 2,
+        "feedback": "The essay demonstrates minimal critical thinking or analytical reasoning.  There is no evidence of engagement with counterarguments or alternative perspectives. Arguments are asserted without sufficient justification."
+      },
+      "Conclusion": {
+        "score": 0,
+        "feedback": "There is no discernible conclusion. The essay simply ends without summarizing the main points or offering a final reflection."
+      },
+      "Word Count & Length Control": {
+        "score": 10,
+        "feedback": "The word count is insufficient for the CSS exam."
+      }
+    },
+    "summary_feedback": "This essay is a weak attempt that fails to meet the minimum requirements of the CSS exam. The lack of a clear thesis, poor structure, superficial analysis, and insufficient word count significantly detract from the overall quality.  The writing demonstrates minimal critical thinking and lacks a proper conclusion.  Significant improvements are needed in all aspects to achieve a passing grade.",
+    "submission_type": "E",
+    "word_count": 68,
+    "examiner_remarks": {
+      "strengths": [
+        "The essay attempts to address a topic."
+      ],
+      "weaknesses": [
+        "Lack of a clear thesis, poor structure, superficial content, insufficient word count, lack of critical analysis, absence of a conclusion.",
+        "Simple language and writing style."
+      ],
+      "suggestions": [
+        "Develop a clear and concise thesis statement before starting. Create a detailed outline to ensure a logical flow. Strengthen the analysis by providing evidence and supporting arguments. Expand the essay significantly to meet the required word count. Engage in critical thinking by considering opposing viewpoints. Include a substantial conclusion to summarize your findings."
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_5f0de56a-3cce-4b2d-9512-db905c218e87.pdf",
+  "graded_at": "2025-08-27T02:49:48.739846",
+  "word_count": 35,
+  "character_count": 223
+}

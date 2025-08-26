@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   FileText, 
   Upload, 
@@ -17,9 +17,11 @@ import {
   Brain,
   Clock
 } from 'lucide-react';
+import ProgressModal from '@/components/ProgressModal';
 
 interface EssayAnalysisResult {
   essay_id: string;
+  task_id?: string;
   overall_score: number;
   category_scores: {
     [key: string]: {
@@ -48,11 +50,47 @@ const EssayCheckerPage: React.FC = () => {
   const [wordCount, setWordCount] = useState(0);
   const [charCount, setCharCount] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Progress modal state
+  const [showProgressModal, setShowProgressModal] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [progressStatus, setProgressStatus] = useState<'processing' | 'completed' | 'error'>('processing');
+  const [progressError, setProgressError] = useState<string>('');
+  const [currentTaskId, setCurrentTaskId] = useState<string>('');
 
   const handleTextChange = (text: string) => {
     setEssayText(text);
     setWordCount(text.trim() ? text.trim().split(/\s+/).length : 0);
     setCharCount(text.length);
+  };
+
+  // Progress tracking function
+  const trackProgress = async (taskId: string) => {
+    const interval = setInterval(async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/progress/${taskId}`);
+        if (response.ok) {
+          const progressData = await response.json();
+          setProgress(progressData.progress);
+          setProgressStatus(progressData.status);
+          
+          if (progressData.status === 'completed' || progressData.status === 'error') {
+            clearInterval(interval);
+            if (progressData.status === 'error') {
+              setProgressError(progressData.message);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error tracking progress:', error);
+        clearInterval(interval);
+      }
+    }, 500); // Check every 500ms
+
+    // Cleanup interval after 5 minutes (timeout)
+    setTimeout(() => {
+      clearInterval(interval);
+    }, 300000);
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +120,12 @@ const EssayCheckerPage: React.FC = () => {
     setIsAnalyzing(true);
     setError(null);
     setAnalysisResult(null);
+    
+    // Initialize progress modal
+    setShowProgressModal(true);
+    setProgress(0);
+    setProgressStatus('processing');
+    setProgressError('');
 
     try {
       let essayContent = '';
@@ -134,9 +178,18 @@ const EssayCheckerPage: React.FC = () => {
 
       const result = await response.json();
       setAnalysisResult(result);
+      
+      // Start progress tracking if task_id is available
+      if (result.task_id) {
+        setCurrentTaskId(result.task_id);
+        trackProgress(result.task_id);
+      }
 
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMessage);
+      setProgressStatus('error');
+      setProgressError(errorMessage);
     } finally {
       setIsAnalyzing(false);
     }
@@ -179,7 +232,7 @@ const EssayCheckerPage: React.FC = () => {
             resolve(trimmedText);
           } catch (error) {
             console.error('PDF extraction error:', error);
-            reject(new Error('Failed to extract text from PDF. Please ensure the PDF contains selectable text.'));
+            reject(new Error('Failed to extract text from PDF. The system tried multiple methods including OCR for handwritten text. Please ensure the PDF is readable and not corrupted.'));
           }
         };
         
@@ -525,6 +578,15 @@ const EssayCheckerPage: React.FC = () => {
           </div>
         )}
       </div>
+      
+      {/* Progress Modal */}
+      <ProgressModal
+        isOpen={showProgressModal}
+        onClose={() => setShowProgressModal(false)}
+        progress={progress}
+        status={progressStatus}
+        errorMessage={progressError}
+      />
     </div>
   );
 };

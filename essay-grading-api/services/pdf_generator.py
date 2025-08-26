@@ -64,7 +64,6 @@ class PDFGenerator:
     
     async def create_annotated_pdf(
         self, 
-        original_file: UploadFile, 
         grading_result: GradingResult, 
         essay_id: str
     ) -> str:

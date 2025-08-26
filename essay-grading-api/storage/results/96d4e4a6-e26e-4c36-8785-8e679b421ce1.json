@@ -1,0 +1,59 @@
+{
+  "essay_id": "96d4e4a6-e26e-4c36-8785-8e679b421ce1",
+  "original_text": "This is a comprehensive test essay with more than 100 characters to ensure it passes the validation. The essay discusses various topics and provides detailed analysis of the subject matter with proper structure and content.",
+  "grading_result": {
+    "overall_score": 38,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 5,
+        "feedback": "The essay lacks a clearly stated thesis.  The introduction is vague and doesn't adequately define the scope or argument of the essay.  The topic itself is too broad."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No discernible outline is present."
+      },
+      "Structure & Coherence": {
+        "score": 8,
+        "feedback": "While the essay attempts some structure, the transitions between ideas are weak and the overall flow is disjointed.  Paragraphs lack a clear internal structure."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 10,
+        "feedback": "The content is superficial and lacks in-depth analysis.  There's a general lack of specific examples or evidence to support claims. The essay touches upon various topics, but fails to develop them adequately."
+      },
+      "Language Proficiency & Expression": {
+        "score": 5,
+        "feedback": "The language is adequate but lacks precision and sophistication.  Sentences are often awkwardly constructed.  More formal vocabulary is needed for CSS standard."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 0,
+        "feedback": "The essay demonstrates little critical thinking or analytical reasoning. Claims are presented without sufficient justification or exploration of alternative perspectives."
+      },
+      "Conclusion": {
+        "score": 5,
+        "feedback": "The conclusion is weak and fails to summarize the main points effectively or offer any insightful final thoughts. It reads as a simple restatement."
+      },
+      "Word Count & Length Control": {
+        "score": 5,
+        "feedback": "The word count is far below the required minimum for a CSS essay."
+      }
+    },
+    "summary_feedback": "This essay is a weak attempt that fails to meet the basic requirements of a CSS essay. The lack of a clear thesis, insufficient depth of analysis, poor structure, and inadequate word count all contribute to its low score.  The language is acceptable but lacks the precision and sophistication expected at this level.  The essay needs significant revision before meeting CSS standards.  Consider narrowing the topic drastically and building a clear, well-supported argument.",
+    "submission_type": "E",
+    "word_count": 75,
+    "examiner_remarks": {
+      "strengths": [
+        "The essay attempts to address multiple aspects of the topic, though superficially."
+      ],
+      "weaknesses": [
+        "Lack of a clear thesis, insufficient word count, superficial analysis, poor structure, weak conclusion, absence of outline"
+      ],
+      "suggestions": [
+        "Narrow the scope of the essay, develop a strong thesis statement, provide specific examples to support claims, improve sentence structure, expand word count significantly, and include an outline to organize thoughts and improve clarity."
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_96d4e4a6-e26e-4c36-8785-8e679b421ce1.pdf",
+  "graded_at": "2025-08-27T02:39:26.419846",
+  "word_count": 35,
+  "character_count": 223
+}
