@@ -65,15 +65,16 @@ class PDFGenerator:
     async def create_annotated_pdf(
         self, 
         grading_result: GradingResult, 
-        essay_id: str
+        essay_id: str,
+        extracted_text: str = None
     ) -> str:
         """
         Create an annotated PDF with grading results from uploaded PDF
         
         Args:
-            original_file: Original PDF file
             grading_result: AI grading result
             essay_id: Unique identifier for the essay
+            extracted_text: Text extracted from the PDF (optional)
             
         Returns:
             Path to the generated annotated PDF
@@ -86,8 +87,9 @@ class PDFGenerator:
             # Generate output filename
             output_path = os.path.join(output_dir, f"graded_essay_{essay_id}.pdf")
             
-            # Create the annotated PDF
-            await self._generate_grading_report(
+            # Create the annotated PDF with extracted text included
+            await self._generate_grading_report_with_text(
+                essay_text=extracted_text or "Text not available",
                 grading_result=grading_result,
                 essay_id=essay_id,
                 output_path=output_path
@@ -140,13 +142,69 @@ class PDFGenerator:
             logger.error(f"Error creating annotated PDF: {e}")
             raise Exception(f"Failed to create annotated PDF: {str(e)}")
     
+    async def _generate_grading_report_with_text(
+        self, 
+        essay_text: str,
+        grading_result: GradingResult, 
+        essay_id: str, 
+        output_path: str
+    ):
+        """Generate the grading report PDF with original text included"""
+        try:
+            # Create PDF document
+            doc = SimpleDocTemplate(output_path, pagesize=A4)
+            story = []
+            
+            # Add title
+            title = Paragraph("Essay Grading Report", self.title_style)
+            story.append(title)
+            story.append(Spacer(1, 20))
+            
+            # Add essay ID and timestamp
+            metadata = f"Essay ID: {essay_id}<br/>Graded on: {datetime.now().strftime('%B %d, %Y at %I:%M %p')}<br/>Submission Type: {grading_result.submission_type}<br/>Word Count: {grading_result.word_count}"
+            metadata_para = Paragraph(metadata, self.styles['Normal'])
+            story.append(metadata_para)
+            story.append(Spacer(1, 30))
+            
+            # Add overall score
+            score_text = f"Overall Score: {grading_result.overall_score}/100"
+            score_para = Paragraph(score_text, self.score_style)
+            story.append(score_para)
+            story.append(Spacer(1, 30))
+            
+            # Add category scores table
+            story.extend(self._create_category_scores_table(grading_result))
+            story.append(Spacer(1, 30))
+            
+            # Add detailed feedback
+            story.extend(self._create_detailed_feedback(grading_result))
+            story.append(Spacer(1, 30))
+            
+            # Add summary feedback
+            story.extend(self._create_summary_feedback(grading_result))
+            story.append(Spacer(1, 30))
+            
+            # Add examiner remarks
+            story.extend(self._create_examiner_remarks(grading_result))
+            story.append(Spacer(1, 30))
+            
+            # Add extracted text section
+            story.extend(self._create_extracted_text_section(essay_text))
+            
+            # Build PDF
+            doc.build(story)
+            
+        except Exception as e:
+            logger.error(f"Error generating grading report: {e}")
+            raise
+    
     async def _generate_grading_report(
         self, 
         grading_result: GradingResult, 
         essay_id: str, 
         output_path: str
     ):
-        """Generate the grading report PDF"""
+        """Generate the grading report PDF (legacy method)"""
         try:
             # Create PDF document
             doc = SimpleDocTemplate(output_path, pagesize=A4)
@@ -286,6 +344,50 @@ class PDFGenerator:
         
         return elements
     
+    def _create_extracted_text_section(self, essay_text: str) -> list:
+        """Create a section showing the extracted text"""
+        elements = []
+        
+        # Section title
+        elements.append(Paragraph("Extracted Text (What the AI Analyzed)", self.category_style))
+        elements.append(Spacer(1, 10))
+        
+        # Add extracted text with proper formatting
+        if essay_text and essay_text.strip():
+            # Format the text for display
+            formatted_text = essay_text.replace('\n\n', '<br/><br/>').replace('\n', '<br/>')
+            
+            # Create text style for extracted content
+            text_style = ParagraphStyle(
+                'ExtractedText',
+                parent=self.styles['Normal'],
+                fontSize=10,
+                spaceAfter=15,
+                leftIndent=20,
+                rightIndent=20,
+                backColor=colors.lightgrey,
+                borderWidth=1,
+                borderColor=colors.grey,
+                borderPadding=10
+            )
+            
+            # Add the extracted text
+            text_para = Paragraph(f"<b>Extracted Content:</b><br/><br/>{formatted_text}", text_style)
+            elements.append(text_para)
+        else:
+            # No text available
+            no_text_style = ParagraphStyle(
+                'NoText',
+                parent=self.styles['Normal'],
+                fontSize=10,
+                spaceAfter=15,
+                leftIndent=20,
+                textColor=colors.red
+            )
+            elements.append(Paragraph("No text was extracted from the PDF.", no_text_style))
+        
+        return elements
+    
     def _get_max_points_for_category(self, category: str) -> int:
         """Get maximum points for a category"""
         max_points = {
@@ -384,68 +486,3 @@ class PDFGenerator:
         packet.seek(0)
         
         return PdfReader(packet).pages[0]
-
-    async def _generate_grading_report_with_text(
-        self, 
-        essay_text: str, 
-        grading_result: GradingResult, 
-        essay_id: str, 
-        output_path: str
-    ):
-        """Generate grading report PDF with original text included"""
-        try:
-            # Create PDF document
-            doc = SimpleDocTemplate(output_path, pagesize=A4)
-            story = []
-            
-            # Add title
-            title = Paragraph("Essay Grading Report", self.title_style)
-            story.append(title)
-            story.append(Spacer(1, 20))
-            
-            # Add essay ID and timestamp
-            metadata = f"Essay ID: {essay_id}<br/>Graded on: {datetime.now().strftime('%B %d, %Y at %I:%M %p')}<br/>Submission Type: {grading_result.submission_type}<br/>Word Count: {grading_result.word_count}"
-            metadata_para = Paragraph(metadata, self.styles['Normal'])
-            story.append(metadata_para)
-            story.append(Spacer(1, 30))
-            
-            # Add overall score
-            score_text = f"Overall Score: {grading_result.overall_score}/100"
-            score_para = Paragraph(score_text, self.score_style)
-            story.append(score_para)
-            story.append(Spacer(1, 30))
-            
-            # Add original essay text
-            story.append(Paragraph("Original Essay", self.category_style))
-            story.append(Spacer(1, 10))
-            
-            # Split essay into paragraphs for better formatting
-            paragraphs = essay_text.split('\n\n')
-            for paragraph in paragraphs:
-                if paragraph.strip():
-                    para = Paragraph(paragraph.strip(), self.feedback_style)
-                    story.append(para)
-                    story.append(Spacer(1, 10))
-            
-            story.append(Spacer(1, 30))
-            
-            # Add category scores table
-            story.extend(self._create_category_scores_table(grading_result))
-            story.append(Spacer(1, 30))
-            
-            # Add detailed feedback
-            story.extend(self._create_detailed_feedback(grading_result))
-            story.append(Spacer(1, 30))
-            
-            # Add summary feedback
-            story.extend(self._create_summary_feedback(grading_result))
-            
-            # Add examiner remarks
-            story.extend(self._create_examiner_remarks(grading_result))
-            
-            # Build PDF
-            doc.build(story)
-            
-        except Exception as e:
-            logger.error(f"Error generating grading report with text: {e}")
-            raise

@@ -220,7 +220,8 @@ async def upload_pdf(file: UploadFile = File(...)):
             # Generate annotated PDF
             annotated_pdf_path = await pdf_generator.create_annotated_pdf(
                 grading_result=grading_result,
-                essay_id=essay_id
+                essay_id=essay_id,
+                extracted_text=essay_text  # Pass the extracted text to show in results
             )
             
             # Update progress: PDF generation complete

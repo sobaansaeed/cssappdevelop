@@ -1,0 +1,69 @@
+{
+  "essay_id": "1b3b4eca-63f0-4d4a-a61f-29f3d4f0c3a0",
+  "original_text": "The Im pactof Technology on M odern E duc ati on Technologyh asfundamentallytrans formed thelandscapeofmoderneduc ati on,cre at ingboth opportunitiesandchallenges forstudents,teachers,andeduc ati onal instituti ons. The integr ati onof digitaltools,onl inepl at forms,andartificial intelligenceh asrevoluti onizedhowknowledgeisaccessed, shared,andevalu ated. Thistrans form ati onh asacceler atedparticularly inrecentyears,with theglobal pandemicserv ing asac atalyst forwidespreadadopti onoftechnology-enhancedlearn ingmethods. However,thistechnologicalrevoluti onalsopresentssignificantchallenges th atmustbeaddressed. Thedigitaldivide,wherestudentsfrom differentsocioec onomicbackgroundshaveunequalaccessto technology,h asbecomeacriticalissue ineduc ati onalequity. Additi onally,c oncernsaboutscreentime, digitaldistracti on,and thepotentiallossoftraditi onallearn ingskillshaveraisedquesti onsabout the optimalbalancebetweentechnologyandc onventi onalteach ingmethods. Despite thesechallenges,thebenefitsoftechnology ineduc ati onaresubstantialandwell-documented. Digitaltoolsenablepers onalizedlearn ingexperiences,allow ingstudentstoprogress at theirownpace andfocus onare aswhere theyneedadditi onalsupport. Onl ineresourcesprovideaccesstov ast amountsof in form ati onanddiverseperspectives th atwerepreviouslyunavailabletomanystudents. Fur thermore,technologyfacilit atescollabor ati onandcommunic ati on,prepar ingstudents for the incre as inglydigitalworkplace. Inc onclusi on,whiletechnology ineduc ati onpresentsbothopportunitiesandchallenges,its integr ati on isessential forprepar ingstudents for thefuture. Thekeylies inthoughtfulimplement ati on th at maximizesbenefitswhilem inimiz ingpotentialdrawbacks. Educ ati onal instituti onsmust invest inboth technology infr astructureandteachertra in ingtoensureeffective integr ati on. Bydo ingso,wecan cre ateaneduc ati onalsystem th atleverages thebestofbothtraditi onalandtechnologicalapproaches tolearn ing.",
+  "grading_result": {
+    "overall_score": 38,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 7,
+        "feedback": "The thesis is present and identifies the dual nature of technology's impact on education, but lacks nuance and originality."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No discernible outline is present.  The essay lacks a structured approach, impacting overall coherence."
+      },
+      "Structure & Coherence": {
+        "score": 8,
+        "feedback": "The essay follows a basic structure (intro, body, conclusion), but transitions are weak and the flow is somewhat disjointed. Paragraphs lack development and depth."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 10,
+        "feedback": "The content touches upon key aspects of the topic, including the digital divide and personalized learning. However, the analysis is superficial and lacks supporting evidence or examples.  Points are stated rather than argued."
+      },
+      "Language Proficiency & Expression": {
+        "score": 7,
+        "feedback": "The language is understandable but contains several grammatical errors and stylistic flaws (e.g., repetition, awkward phrasing). The writing style is simplistic and repetitive."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 1,
+        "feedback": "Critical analysis is minimal. The essay presents a somewhat balanced view, but lacks a sophisticated understanding of the complex interplay between technology and pedagogy."
+      },
+      "Conclusion": {
+        "score": 5,
+        "feedback": "The conclusion restates the introduction without offering significant new insights or recommendations.  It lacks impact and strength."
+      },
+      "Word Count & Length Control": {
+        "score": 0,
+        "feedback": "Essay is significantly below the required word count.  This severely limits the depth and sophistication of the analysis."
+      }
+    },
+    "summary_feedback": "This essay demonstrates a basic understanding of the topic, but falls short of the standards expected at the CSS level. The analysis is superficial, lacking depth, supporting evidence, and critical engagement.  Grammatical errors and weak structure further detract from the essay's quality.  The significant shortfall in word count is a major deficiency.  Significant improvement in argumentation, critical analysis, and writing proficiency is required.",
+    "submission_type": "C",
+    "word_count": 0,
+    "examiner_remarks": {
+      "strengths": [
+        "Identifies key aspects of the topic",
+        "Attempts a balanced perspective"
+      ],
+      "weaknesses": [
+        "Superficial analysis",
+        "Weak structure and transitions",
+        "Grammatical errors",
+        "Insufficient word count",
+        "Lack of critical thinking",
+        "Repetitive and simplistic writing style"
+      ],
+      "suggestions": [
+        "Conduct thorough research to develop stronger arguments and provide supporting evidence",
+        "Improve grammatical accuracy and refine writing style",
+        "Develop a more sophisticated analytical framework",
+        "Expand the essay significantly to meet the required word count",
+        "Focus on in-depth analysis of specific issues rather than superficial overview"
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_1b3b4eca-63f0-4d4a-a61f-29f3d4f0c3a0.pdf",
+  "graded_at": "2025-08-27T03:39:13.653100",
+  "word_count": 168,
+  "character_count": 1974
+}
