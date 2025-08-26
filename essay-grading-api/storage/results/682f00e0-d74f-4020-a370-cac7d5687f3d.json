@@ -1,0 +1,58 @@
+{
+  "essay_id": "682f00e0-d74f-4020-a370-cac7d5687f3d",
+  "original_text": "This is a test essay with non-selectable text. The system should be able to extract this content. This tests the enhanced PDF processing capabilities. It includes multiple lines of text for testing. The enhanced system should handle this properly.",
+  "grading_result": {
+    "overall_score": 0,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 0,
+        "feedback": "No discernible thesis or topic. The submission consists of instructions and system-testing text, not an essay."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No outline present."
+      },
+      "Structure & Coherence": {
+        "score": 0,
+        "feedback": "No coherent structure; the text is a series of instructions and test statements."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 0,
+        "feedback": "Content is entirely irrelevant to any essay topic; it focuses on system testing."
+      },
+      "Language Proficiency & Expression": {
+        "score": 0,
+        "feedback": "While the language is English, the text is not an essay and therefore lacks the context to evaluate language proficiency."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 0,
+        "feedback": "No critical thinking or analysis is present."
+      },
+      "Conclusion": {
+        "score": 0,
+        "feedback": "No conclusion is present."
+      },
+      "Word Count & Length Control": {
+        "score": 0,
+        "feedback": "Word count is irrelevant as the submission is not an essay."
+      }
+    },
+    "summary_feedback": "This submission is not an essay; it consists of instructions and text designed to test the system's capabilities.  It contains no attempt at an essay response to any topic. Automatic fail.",
+    "submission_type": "G",
+    "word_count": 87,
+    "examiner_remarks": {
+      "strengths": [],
+      "weaknesses": [
+        "Submission is not an essay.",
+        "Lacks any essay content."
+      ],
+      "suggestions": [
+        "Submit a properly formatted essay addressing a given topic."
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_682f00e0-d74f-4020-a370-cac7d5687f3d.pdf",
+  "graded_at": "2025-08-27T03:05:13.875102",
+  "word_count": 39,
+  "character_count": 247
+}

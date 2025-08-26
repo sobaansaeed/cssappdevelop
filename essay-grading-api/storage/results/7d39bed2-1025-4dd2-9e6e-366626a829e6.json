@@ -1,0 +1,59 @@
+{
+  "essay_id": "7d39bed2-1025-4dd2-9e6e-366626a829e6",
+  "original_text": "This is a comprehensive test essay with more than 50 characters to ensure it passes the validation. The essay discusses various topics and provides detailed analysis of the subject matter with proper structure and content. It includes multiple paragraphs with different ideas and arguments to demonstrate the full functionality of the enhanced essay checking system.",
+  "grading_result": {
+    "overall_score": 33,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 5,
+        "feedback": "The essay lacks a clearly defined thesis statement.  The topic is vaguely stated, promising a 'comprehensive test' but failing to deliver a focused argument."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No outline is present."
+      },
+      "Structure & Coherence": {
+        "score": 5,
+        "feedback": "The essay attempts a basic structure but lacks clear transitions and logical progression between ideas.  Paragraphs are underdeveloped and lack supporting evidence."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 8,
+        "feedback": "The content is superficial, making general claims without providing substantial analysis or supporting evidence.  The essay lacks depth and specific examples."
+      },
+      "Language Proficiency & Expression": {
+        "score": 7,
+        "feedback": "Language is grammatically correct, but the expression lacks precision and sophistication. The writing is descriptive rather than analytical."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 0,
+        "feedback": "The essay demonstrates no critical thinking or analytical reasoning. Claims are asserted without justification or evaluation of different perspectives."
+      },
+      "Conclusion": {
+        "score": 0,
+        "feedback": "The essay lacks a concluding paragraph, summarizing main points or offering final thoughts."
+      },
+      "Word Count & Length Control": {
+        "score": 8,
+        "feedback": "The essay is significantly below the required word count (approximately 799 words) resulting in a substantial deduction."
+      }
+    },
+    "summary_feedback": "This essay is a weak attempt at fulfilling the requirements of the CSS examination. The lack of a clear thesis, underdeveloped content, absence of an outline, and insufficient word count result in a failing grade.  The writing demonstrates some basic competency in English grammar but lacks depth of analysis and critical engagement with the subject matter.",
+    "submission_type": "E",
+    "word_count": 79,
+    "examiner_remarks": {
+      "strengths": [
+        "Grammatically correct sentences."
+      ],
+      "weaknesses": [
+        "Lack of thesis statement, insufficient word count, underdeveloped content, absence of an outline, no critical analysis, no conclusion."
+      ],
+      "suggestions": [
+        "Develop a clear and focused thesis statement. Create a detailed outline before writing.  Conduct thorough research to support your arguments with evidence. Incorporate critical thinking and analysis.  Expand on the content, providing specific examples and in-depth analysis. Add a strong concluding paragraph that summarizes main points and offers concluding remarks."
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_7d39bed2-1025-4dd2-9e6e-366626a829e6.pdf",
+  "graded_at": "2025-08-27T03:03:36.289151",
+  "word_count": 55,
+  "character_count": 366
+}

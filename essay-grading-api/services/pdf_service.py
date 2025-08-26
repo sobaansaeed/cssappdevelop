@@ -1,154 +1,128 @@
 import pdfplumber
-import pytesseract
-import cv2
-import numpy as np
-from PIL import Image
-from pdf2image import convert_from_path
-import io
 import logging
+import os
 from typing import Tuple, Optional
 
 logger = logging.getLogger(__name__)
 
 class PDFService:
-    """Service for extracting text from PDF files with OCR support"""
+    """Service for extracting text from PDF files with enhanced capabilities"""
     
     def __init__(self):
-        # Configure Tesseract path for macOS (if installed via Homebrew)
-        try:
-            pytesseract.get_tesseract_version()
-        except Exception:
-            # Try common macOS Tesseract paths
-            possible_paths = [
-                '/usr/local/bin/tesseract',
-                '/opt/homebrew/bin/tesseract',
-                '/usr/bin/tesseract'
-            ]
-            for path in possible_paths:
-                try:
-                    pytesseract.pytesseract.tesseract_cmd = path
-                    pytesseract.get_tesseract_version()
-                    logger.info(f"Tesseract found at: {path}")
-                    break
-                except Exception:
-                    continue
-            else:
-                logger.warning("Tesseract not found. OCR functionality will be limited.")
+        logger.info("PDFService initialized with enhanced text extraction")
     
     def extract_text_from_pdf(self, pdf_file_path: str) -> str:
         """
-        Extract text from PDF using multiple methods:
-        1. First try to extract selectable text
-        2. If no text found, use OCR on images
-        3. Combine results for best coverage
+        Extract text from PDF using enhanced methods:
+        1. Extract selectable text with improved parsing
+        2. Extract text from tables and forms
+        3. Enhanced text cleaning and normalization
         """
         try:
-            # Method 1: Extract selectable text
-            selectable_text = self._extract_selectable_text(pdf_file_path)
+            logger.info(f"Starting enhanced text extraction from: {pdf_file_path}")
             
-            # Method 2: Extract text using OCR from images
-            ocr_text = self._extract_text_with_ocr(pdf_file_path)
+            if not os.path.exists(pdf_file_path):
+                raise Exception(f"PDF file not found: {pdf_file_path}")
             
-            # Combine results
-            combined_text = self._combine_text_results(selectable_text, ocr_text)
+            # Extract text using enhanced methods
+            extracted_text = self._extract_enhanced_text(pdf_file_path)
             
-            if not combined_text.strip():
-                raise Exception("No text could be extracted from the PDF using any method")
+            if not extracted_text.strip():
+                raise Exception("No text could be extracted from the PDF")
             
-            logger.info(f"Successfully extracted {len(combined_text)} characters from PDF")
-            return combined_text
+            # Clean the final text
+            cleaned_text = self.clean_text(extracted_text)
+            
+            logger.info(f"Final extracted text: {len(cleaned_text)} characters")
+            return cleaned_text
             
         except Exception as e:
             logger.error(f"Error extracting text from PDF: {e}")
             raise Exception(f"Failed to extract text from PDF: {str(e)}")
     
-    def _extract_selectable_text(self, pdf_file_path: str) -> str:
-        """Extract selectable text from PDF using pdfplumber"""
+    def _extract_enhanced_text(self, pdf_file_path: str) -> str:
+        """Extract text using enhanced methods including tables and forms"""
         try:
             text = ""
             with pdfplumber.open(pdf_file_path) as pdf:
-                for page in pdf.pages:
-                    page_text = page.extract_text()
-                    if page_text:
-                        text += page_text + "\n"
+                logger.info(f"PDF opened successfully, {len(pdf.pages)} pages found")
+                
+                for page_num, page in enumerate(pdf.pages):
+                    try:
+                        # Extract regular text
+                        page_text = page.extract_text()
+                        
+                        # Extract text from tables
+                        tables_text = self._extract_text_from_tables(page)
+                        
+                        # Extract text from forms and annotations
+                        forms_text = self._extract_text_from_forms(page)
+                        
+                        # Combine all text from this page
+                        combined_page_text = ""
+                        if page_text:
+                            combined_page_text += page_text + "\n"
+                        if tables_text:
+                            combined_page_text += tables_text + "\n"
+                        if forms_text:
+                            combined_page_text += forms_text + "\n"
+                        
+                        if combined_page_text.strip():
+                            text += combined_page_text
+                            logger.info(f"Page {page_num + 1}: Extracted {len(combined_page_text)} characters (enhanced)")
+                        else:
+                            logger.info(f"Page {page_num + 1}: No text found")
+                            
+                    except Exception as e:
+                        logger.warning(f"Error extracting text from page {page_num + 1}: {e}")
+                        continue
+            
             return text.strip()
         except Exception as e:
-            logger.warning(f"Failed to extract selectable text: {e}")
+            logger.warning(f"Enhanced text extraction failed: {e}")
             return ""
     
-    def _extract_text_with_ocr(self, pdf_file_path: str) -> str:
-        """Extract text from PDF images using OCR"""
+    def _extract_text_from_tables(self, page) -> str:
+        """Extract text from tables in the page"""
         try:
-            # Convert PDF to images
-            images = convert_from_path(pdf_file_path, dpi=300)
+            tables = page.extract_tables()
+            if not tables:
+                return ""
             
-            all_text = ""
-            for i, image in enumerate(images):
-                try:
-                    # Convert PIL image to OpenCV format
-                    opencv_image = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-                    
-                    # Preprocess image for better OCR
-                    processed_image = self._preprocess_image_for_ocr(opencv_image)
-                    
-                    # Extract text using Tesseract
-                    page_text = pytesseract.image_to_string(
-                        processed_image, 
-                        config='--psm 6 --oem 3 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,!?;:()[]{}"\'-_/\\|@#$%^&*+=<>~` '
-                    )
-                    
-                    if page_text.strip():
-                        all_text += page_text + "\n"
-                        logger.info(f"OCR extracted {len(page_text)} characters from page {i+1}")
-                    
-                except Exception as e:
-                    logger.warning(f"OCR failed for page {i+1}: {e}")
-                    continue
+            table_text = ""
+            for table in tables:
+                for row in table:
+                    if row:
+                        # Join row elements and clean
+                        row_text = " | ".join([str(cell).strip() if cell else "" for cell in row])
+                        if row_text.strip():
+                            table_text += row_text + "\n"
             
-            return all_text.strip()
-            
+            return table_text.strip()
         except Exception as e:
-            logger.warning(f"OCR extraction failed: {e}")
+            logger.warning(f"Table text extraction failed: {e}")
             return ""
     
-    def _preprocess_image_for_ocr(self, image: np.ndarray) -> np.ndarray:
-        """Preprocess image to improve OCR accuracy"""
+    def _extract_text_from_forms(self, page) -> str:
+        """Extract text from forms and annotations"""
         try:
-            # Convert to grayscale
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            # Extract text from form fields
+            form_text = ""
             
-            # Apply thresholding to get binary image
-            _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+            # Try to extract from annotations
+            if hasattr(page, 'annotations') and page.annotations:
+                for annotation in page.annotations:
+                    if hasattr(annotation, 'get_text') and callable(annotation.get_text):
+                        try:
+                            annotation_text = annotation.get_text()
+                            if annotation_text:
+                                form_text += annotation_text + "\n"
+                        except:
+                            continue
             
-            # Apply morphological operations to clean up the image
-            kernel = np.ones((1, 1), np.uint8)
-            cleaned = cv2.morphologyEx(binary, cv2.MORPH_CLOSE, kernel)
-            
-            # Apply slight blur to reduce noise
-            blurred = cv2.GaussianBlur(cleaned, (1, 1), 0)
-            
-            return blurred
-            
+            return form_text.strip()
         except Exception as e:
-            logger.warning(f"Image preprocessing failed: {e}")
-            return image
-    
-    def _combine_text_results(self, selectable_text: str, ocr_text: str) -> str:
-        """Combine text from different extraction methods"""
-        if selectable_text and ocr_text:
-            # If both methods found text, prefer selectable text but add OCR as backup
-            combined = selectable_text
-            if len(ocr_text) > len(selectable_text) * 1.5:  # OCR found significantly more text
-                combined = ocr_text
-            logger.info(f"Combined text: {len(selectable_text)} chars (selectable) + {len(ocr_text)} chars (OCR)")
-            return combined
-        elif selectable_text:
-            logger.info(f"Using selectable text: {len(selectable_text)} characters")
-            return selectable_text
-        elif ocr_text:
-            logger.info(f"Using OCR text: {len(ocr_text)} characters")
-            return ocr_text
-        else:
+            logger.warning(f"Form text extraction failed: {e}")
             return ""
     
     def get_word_count(self, text: str) -> int:
@@ -163,18 +137,32 @@ class PDFService:
         return len(text) if text else 0
     
     def clean_text(self, text: str) -> str:
-        """Clean and normalize extracted text"""
+        """Clean and normalize extracted text with enhanced processing"""
         if not text:
             return ""
         
-        # Remove excessive whitespace
-        text = ' '.join(text.split())
+        # Remove excessive whitespace and normalize
+        lines = text.split('\n')
+        cleaned_lines = []
         
-        # Remove common OCR artifacts
-        text = text.replace('|', 'I')  # Common OCR mistake
-        text = text.replace('0', 'O')  # Common OCR mistake in certain contexts
+        for line in lines:
+            # Clean each line
+            line = line.strip()
+            if line:
+                # Remove excessive spaces within the line
+                line = ' '.join(line.split())
+                # Remove common PDF artifacts
+                line = line.replace('|', ' ')  # Replace table separators with spaces
+                line = line.replace('  ', ' ')  # Remove double spaces
+                cleaned_lines.append(line)
+        
+        # Join lines with proper spacing
+        cleaned_text = '\n'.join(cleaned_lines)
         
         # Remove non-printable characters
-        text = ''.join(char for char in text if char.isprintable() or char.isspace())
+        cleaned_text = ''.join(char for char in cleaned_text if char.isprintable() or char.isspace())
         
-        return text.strip()
+        # Final cleanup
+        cleaned_text = ' '.join(cleaned_text.split())  # Normalize all whitespace
+        
+        return cleaned_text.strip()

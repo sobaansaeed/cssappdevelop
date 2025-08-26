@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   FileText, 
   Upload, 
@@ -56,7 +56,7 @@ const EssayCheckerPage: React.FC = () => {
   const [progress, setProgress] = useState(0);
   const [progressStatus, setProgressStatus] = useState<'processing' | 'completed' | 'error'>('processing');
   const [progressError, setProgressError] = useState<string>('');
-  const [currentTaskId, setCurrentTaskId] = useState<string>('');
+  // const [currentTaskId, setCurrentTaskId] = useState<string>('');
 
   const handleTextChange = (text: string) => {
     setEssayText(text);
@@ -179,11 +179,10 @@ const EssayCheckerPage: React.FC = () => {
       const result = await response.json();
       setAnalysisResult(result);
       
-      // Start progress tracking if task_id is available
-      if (result.task_id) {
-        setCurrentTaskId(result.task_id);
-        trackProgress(result.task_id);
-      }
+                     // Start progress tracking if task_id is available
+               if (result.task_id) {
+                 trackProgress(result.task_id);
+               }
 
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
@@ -202,7 +201,7 @@ const EssayCheckerPage: React.FC = () => {
         const pdfjsLib = await import('pdfjs-dist');
         
         // Set up the worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+        pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 
         // Read the file as ArrayBuffer
         const reader = new FileReader();
@@ -232,7 +231,7 @@ const EssayCheckerPage: React.FC = () => {
             resolve(trimmedText);
           } catch (error) {
             console.error('PDF extraction error:', error);
-            reject(new Error('Failed to extract text from PDF. The system tried multiple methods including OCR for handwritten text. Please ensure the PDF is readable and not corrupted.'));
+                          reject(new Error('Failed to extract text from PDF. The system tried enhanced extraction methods including tables and forms. Please ensure the PDF is readable and not corrupted.'));
           }
         };
         

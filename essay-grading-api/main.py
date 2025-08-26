@@ -190,16 +190,17 @@ async def upload_pdf(file: UploadFile = File(...)):
             # Update progress: Error during PDF processing
             progress_tracker[task_id]["progress"] = 0
             progress_tracker[task_id]["status"] = "error"
-            progress_tracker[task_id]["message"] = f"PDF processing failed: {str(e)}"
-            raise e
+            error_msg = f"Failed to extract text from PDF. The system tried enhanced extraction methods including tables and forms. Please ensure the PDF is readable and not corrupted. Error: {str(e)}"
+            progress_tracker[task_id]["message"] = error_msg
+            raise HTTPException(status_code=400, detail=error_msg)
         finally:
             # Clean up temporary file
             import os
             if os.path.exists(temp_file_path):
                 os.unlink(temp_file_path)
         
-        if not essay_text or len(essay_text.strip()) < 100:
-            raise HTTPException(status_code=400, detail="PDF appears to be empty or contains insufficient text")
+        if not essay_text or len(essay_text.strip()) < 50:
+            raise HTTPException(status_code=400, detail="PDF appears to be empty or contains insufficient text (minimum 50 characters required)")
         
         try:
             # Update progress: Validation complete
