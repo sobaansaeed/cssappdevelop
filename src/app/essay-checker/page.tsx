@@ -42,6 +42,7 @@ const EssayCheckerPage: React.FC = () => {
   const [essayText, setEssayText] = useState('');
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [isProcessingPdf, setIsProcessingPdf] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<EssayAnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [wordCount, setWordCount] = useState(0);
@@ -94,13 +95,21 @@ const EssayCheckerPage: React.FC = () => {
         if (!pdfFile) {
           throw new Error('Please upload a PDF file');
         }
-        // For now, we'll use a simple text extraction
-        // In production, you'd want to use a proper PDF parsing library
-        essayContent = await extractTextFromPDF(pdfFile);
+        // Extract text from PDF
+        setIsProcessingPdf(true);
+        try {
+          essayContent = await extractTextFromPDF(pdfFile);
+          
+          // Debug: Log the extracted text length
+          console.log('Extracted PDF text length:', essayContent.length);
+          console.log('First 200 characters:', essayContent.substring(0, 200));
+        } finally {
+          setIsProcessingPdf(false);
+        }
       }
 
       if (essayContent.length < 100) {
-        throw new Error('Essay must be at least 100 characters long');
+        throw new Error(`Essay must be at least 100 characters long. Current length: ${essayContent.length} characters`);
       }
 
       if (essayContent.length > 15000) {
@@ -134,17 +143,52 @@ const EssayCheckerPage: React.FC = () => {
   };
 
   const extractTextFromPDF = async (file: File): Promise<string> => {
-    // This is a placeholder implementation
-    // In production, you'd want to use a proper PDF parsing library
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        // For now, we'll just return a placeholder
-        // You should implement proper PDF text extraction here
-        resolve('PDF content placeholder - implement proper extraction');
-      };
-      reader.onerror = () => reject(new Error('Failed to read PDF file'));
-      reader.readAsText(file);
+    return new Promise(async (resolve, reject) => {
+      try {
+        // Import PDF.js dynamically to avoid SSR issues
+        const pdfjsLib = await import('pdfjs-dist');
+        
+        // Set up the worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+
+        // Read the file as ArrayBuffer
+        const reader = new FileReader();
+        reader.onload = async () => {
+          try {
+            const arrayBuffer = reader.result as ArrayBuffer;
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            
+            let fullText = '';
+            
+            // Extract text from all pages
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+              const page = await pdf.getPage(pageNum);
+              const textContent = await page.getTextContent();
+              const pageText = textContent.items
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                .map((item) => (item as any).str || '')
+                .join(' ');
+              fullText += pageText + '\n';
+            }
+            
+            const trimmedText = fullText.trim();
+            if (!trimmedText) {
+              reject(new Error('No text could be extracted from the PDF. The PDF might be image-based or corrupted.'));
+            }
+            
+            resolve(trimmedText);
+          } catch (error) {
+            console.error('PDF extraction error:', error);
+            reject(new Error('Failed to extract text from PDF. Please ensure the PDF contains selectable text.'));
+          }
+        };
+        
+        reader.onerror = () => reject(new Error('Failed to read PDF file'));
+        reader.readAsArrayBuffer(file);
+      } catch (error) {
+        console.error('PDF.js loading error:', error);
+        reject(new Error('Failed to load PDF processing library. Please try again.'));
+      }
     });
   };
 
@@ -327,10 +371,15 @@ const EssayCheckerPage: React.FC = () => {
             <div className="mt-6">
               <button
                 onClick={analyzeEssay}
-                disabled={isAnalyzing || (!essayText.trim() && !pdfFile)}
+                disabled={isAnalyzing || isProcessingPdf || (!essayText.trim() && !pdfFile)}
                 className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
-                {isAnalyzing ? (
+                {isProcessingPdf ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Processing PDF...
+                  </>
+                ) : isAnalyzing ? (
                   <>
                     <Loader2 className="h-5 w-5 mr-2 animate-spin" />
                     Analyzing Essay...
