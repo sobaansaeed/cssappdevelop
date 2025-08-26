@@ -1,0 +1,64 @@
+{
+  "essay_id": "87dd79c2-0834-45b0-b2c2-d09b8cde4414",
+  "original_text": "This is a short essay with exactly ten words for testing purposes..",
+  "grading_result": {
+    "overall_score": 0,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 0,
+        "feedback": "No discernible thesis or topic.  The submission is far too short to assess topic understanding."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No outline present."
+      },
+      "Structure & Coherence": {
+        "score": 0,
+        "feedback": "No discernible structure or coherence; the submission is a single, undeveloped sentence fragment."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 0,
+        "feedback": "No content of substance; lacks development and depth."
+      },
+      "Language Proficiency & Expression": {
+        "score": 0,
+        "feedback": "While grammatically correct, the submission is far too short to assess language proficiency."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 0,
+        "feedback": "No critical thinking or analysis present."
+      },
+      "Conclusion": {
+        "score": 0,
+        "feedback": "No conclusion present."
+      },
+      "Word Count & Length Control": {
+        "score": 0,
+        "feedback": "Extremely short; far below the minimum word count requirement."
+      }
+    },
+    "summary_feedback": "This submission is far too short to be considered a valid essay. It lacks a thesis statement, development, and any discernible structure. It fails to meet the minimum word count requirement by a significant margin and demonstrates no critical thinking or analytical reasoning.  This is a complete failure to meet the requirements of the CSS essay examination.",
+    "submission_type": "D",
+    "word_count": 0,
+    "examiner_remarks": {
+      "strengths": [],
+      "weaknesses": [
+        "Extreme brevity",
+        "Lack of development",
+        "Absence of a thesis statement",
+        "Failure to meet minimum word count"
+      ],
+      "suggestions": [
+        "Re-read the essay prompt carefully.",
+        "Develop a clear thesis statement.",
+        "Construct a detailed outline.",
+        "Write a substantially longer essay with a proper introduction, body, and conclusion.",
+        "Practice writing longer essays on similar topics."
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_87dd79c2-0834-45b0-b2c2-d09b8cde4414.pdf",
+  "graded_at": "2025-08-27T03:28:39.567651",
+  "word_count": 12,
+  "character_count": 67
+}

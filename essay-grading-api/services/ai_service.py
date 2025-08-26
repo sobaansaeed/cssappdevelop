@@ -229,7 +229,7 @@ Return ONLY this JSON format:
                 category_scores=category_scores,
                 summary_feedback=data.get("summary_feedback", "No summary feedback provided."),
                 submission_type=data.get("submission_type", "B"),
-                word_count=data.get("word_count", 0),
+                word_count=0,  # Word count will be calculated separately from actual essay text
                 examiner_remarks=data.get("examiner_remarks", {
                     "strengths": [],
                     "weaknesses": [],

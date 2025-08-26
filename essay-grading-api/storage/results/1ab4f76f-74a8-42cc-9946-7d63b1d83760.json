@@ -1,0 +1,73 @@
+{
+  "essay_id": "1ab4f76f-74a8-42cc-9946-7d63b1d83760",
+  "original_text": "Democracy and Its Challenges Democracy is a form of government that allows citizens to participate in the decision-making process through voting and representation. In a democratic system, the power ultimately rests with the people, who elect their leaders and representatives. This form of governance promotes equality, freedom of expression, and the protection of individual rights.\nHowever, democracy also faces significant challenges in the modern world. Voter apathy, political polarization, and the influence of money in politics are major concerns that threaten the integrity of democratic processes. These issues can undermine public trust and participation in democratic institutions. Despite these challenges, democracy remains one of the most effective ways to ensure government accountability and protect human rights. The success of democracy depends on an informed and engaged citizenry, strong institutions, and the rule of law. Through democratic processes, societies can address conflicts peacefully and work towards the common good.\nIn conclusion, while democracy faces numerous challenges, its fundamental principles of equality, freedom, and participation make it the most desirable form of governance. The key to strengthening democracy lies in addressing its challenges through education, institutional reform, and civic engagement.",
+  "grading_result": {
+    "overall_score": 35,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 7,
+        "feedback": "The thesis is adequately stated, identifying democracy and its challenges. However, it lacks nuance and depth, presenting a simplistic view of a complex topic."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No discernible outline present."
+      },
+      "Structure & Coherence": {
+        "score": 10,
+        "feedback": "The essay follows a basic structure with an introduction, body, and conclusion. However, the transitions between paragraphs are weak, and the overall flow is somewhat disjointed.  The development of ideas is shallow."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 8,
+        "feedback": "The content is relevant to the topic but lacks depth and critical analysis.  The challenges are mentioned but not thoroughly explored or analyzed.  A balanced argument is missing; counterarguments are absent. Examples are lacking."
+      },
+      "Language Proficiency & Expression": {
+        "score": 8,
+        "feedback": "Language is adequate but lacks precision and sophistication. Sentence structures are simple and repetitive.  The vocabulary is limited.  There is some awkward phrasing."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 2,
+        "feedback": "Critical thinking is underdeveloped. The essay mainly presents assertions rather than engaging in critical analysis of the topic."
+      },
+      "Conclusion": {
+        "score": 0,
+        "feedback": "The conclusion merely restates the introduction without offering any new insights or a compelling synthesis of the arguments."
+      },
+      "Word Count & Length Control": {
+        "score": 0,
+        "feedback": "Essay is far below the required word count."
+      }
+    },
+    "summary_feedback": "This essay demonstrates a basic understanding of the topic of democracy and its challenges. However, it falls significantly short of the requirements for a CSS examination.  The essay lacks depth, critical analysis, and originality.  The language is adequate but lacks sophistication.  The overall structure is rudimentary and the arguments underdeveloped.  Significant improvement is required in terms of research, analysis, and writing skills to meet the standards of the CSS examination.",
+    "submission_type": "E",
+    "word_count": 170,
+    "examiner_remarks": {
+      "strengths": [
+        "Relevant to the topic",
+        "Clear introductory paragraph (although simplistic)"
+      ],
+      "weaknesses": [
+        "Lack of depth and critical analysis",
+        "Insufficient word count",
+        "Weak conclusion",
+        "Absence of supporting evidence",
+        "Simple and repetitive writing style",
+        "Absence of an outline",
+        "Limited exploration of the challenges"
+      ],
+      "suggestions": [
+        "Conduct thorough research and engage with diverse perspectives",
+        "Develop a strong thesis statement",
+        "Construct a detailed outline before writing",
+        "Support arguments with credible evidence and examples",
+        "Use more sophisticated vocabulary and sentence structures",
+        "Analyze the challenges of democracy critically",
+        "Include counter-arguments and explore alternative viewpoints",
+        "Strengthen the conclusion to offer meaningful synthesis and insight"
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_1ab4f76f-74a8-42cc-9946-7d63b1d83760.pdf",
+  "graded_at": "2025-08-27T03:24:22.384048",
+  "word_count": 188,
+  "character_count": 1354
+}

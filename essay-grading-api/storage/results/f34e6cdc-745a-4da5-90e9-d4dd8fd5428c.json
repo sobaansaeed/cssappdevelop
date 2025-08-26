@@ -1,0 +1,69 @@
+{
+  "essay_id": "f34e6cdc-745a-4da5-90e9-d4dd8fd5428c",
+  "original_text": "Democracy is a form of government that allows citizens to participate in the decision-making process through voting and representation. In a democratic system, the power ultimately rests with the people, who elect their leaders and representatives.\nThis form of governance promotes equality, freedom of expression, and the protection of individual rights.\nHowever, democracy also faces significant challenges in the modern world. Voter apathy, political polarization, and the influence of money in politics are major concerns that threaten the integrity of democratic processes.\nThese issues can undermine public trust and participation in democratic institutions. Despite these challenges, democracy remains one of the most effective ways to ensure government accountability and protect human rights..",
+  "grading_result": {
+    "overall_score": 27,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 5,
+        "feedback": "The thesis is present but lacks depth and originality. It merely states a basic definition of democracy without hinting at a specific argument or perspective."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No discernible outline is present. The essay lacks a structured approach."
+      },
+      "Structure & Coherence": {
+        "score": 5,
+        "feedback": "The essay follows a basic structure of introduction, body, and conclusion. However, the transitions between paragraphs are weak, and the overall flow is disjointed."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 5,
+        "feedback": "The content is superficial and lacks in-depth analysis.  The points raised are generic and lack supporting evidence or examples. The balance between the positive and negative aspects of democracy is also uneven."
+      },
+      "Language Proficiency & Expression": {
+        "score": 7,
+        "feedback": "The language is simple and understandable but lacks precision and sophistication. The writing is somewhat repetitive and lacks stylistic flair."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 0,
+        "feedback": "The essay demonstrates minimal critical thinking. It presents a simplistic view of democracy without engaging in complex analysis or offering nuanced perspectives."
+      },
+      "Conclusion": {
+        "score": 5,
+        "feedback": "The conclusion is weak and merely reiterates points already made in the essay. It lacks a sense of closure or finality."
+      },
+      "Word Count & Length Control": {
+        "score": 0,
+        "feedback": "Essay is far below the minimum word count requirement for CSS."
+      }
+    },
+    "summary_feedback": "This essay presents a rudimentary understanding of democracy. It lacks depth, originality, and critical analysis. The structure is basic but lacks coherence. The word count is severely insufficient for a CSS-level essay. Significant improvement in argumentation, evidence-based reasoning, and overall length is required.",
+    "submission_type": "E",
+    "word_count": 0,
+    "examiner_remarks": {
+      "strengths": [
+        "Simple language is understandable.",
+        "Basic essay structure is evident."
+      ],
+      "weaknesses": [
+        "Superficial treatment of a complex topic.",
+        "Lack of critical analysis and supporting evidence.",
+        "Inadequate word count.",
+        "Poor structure and coherence.",
+        "Repetitive and lacks stylistic flair."
+      ],
+      "suggestions": [
+        "Engage in more in-depth research and analysis of democracy.",
+        "Develop a more nuanced and original argument.",
+        "Support claims with credible evidence and examples.",
+        "Improve structural coherence with stronger transitions.",
+        "Enhance language proficiency and stylistic qualities.",
+        "Significantly increase essay length to meet minimum requirements."
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_f34e6cdc-745a-4da5-90e9-d4dd8fd5428c.pdf",
+  "graded_at": "2025-08-27T03:28:48.237707",
+  "word_count": 112,
+  "character_count": 802
+}

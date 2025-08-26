@@ -1,0 +1,63 @@
+{
+  "essay_id": "60023dc3-9e92-4e3e-bc0f-94e05cbbb28d",
+  "original_text": "This is a short essay with exactly ten words for testing purposes.",
+  "grading_result": {
+    "overall_score": 0,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 0,
+        "feedback": "No discernible thesis or topic.  The submission is far too short to establish either."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No outline present."
+      },
+      "Structure & Coherence": {
+        "score": 0,
+        "feedback": "No discernible structure or coherence; the submission is a single, extremely short phrase."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 0,
+        "feedback": "No content to evaluate; the submission lacks depth, balance, and relevance."
+      },
+      "Language Proficiency & Expression": {
+        "score": 0,
+        "feedback": "Insufficient language to evaluate proficiency or expression."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 0,
+        "feedback": "No critical thinking or analytical reasoning demonstrated."
+      },
+      "Conclusion": {
+        "score": 0,
+        "feedback": "No conclusion present."
+      },
+      "Word Count & Length Control": {
+        "score": 0,
+        "feedback": "Extremely short; far below the minimum word count requirement."
+      }
+    },
+    "summary_feedback": "This submission is far too short to be considered an essay. It fails to meet the minimum requirements for length and content.  The lack of a thesis statement, developed arguments, and a conclusion renders the submission incomplete and unassessable.",
+    "submission_type": "D",
+    "word_count": 0,
+    "examiner_remarks": {
+      "strengths": [],
+      "weaknesses": [
+        "Extremely short word count",
+        "Lack of a thesis statement",
+        "Absence of argumentation",
+        "No conclusion"
+      ],
+      "suggestions": [
+        "Develop a clear thesis statement.",
+        "Expand on your ideas with detailed arguments and supporting evidence.",
+        "Write a substantial conclusion to summarize your points.",
+        "Consider using an outline to structure your essay."
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_60023dc3-9e92-4e3e-bc0f-94e05cbbb28d.pdf",
+  "graded_at": "2025-08-27T03:28:13.245804",
+  "word_count": 12,
+  "character_count": 66
+}

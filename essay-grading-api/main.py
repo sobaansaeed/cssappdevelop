@@ -52,16 +52,9 @@ async def health_check():
 @app.post("/upload-essay", response_model=EssayResponse)
 async def upload_essay(request: EssayRequest):
     """
-    Submit essay text and get it graded with annotations
+    Upload essay text and get it graded with annotations
     """
     try:
-        # Validate input
-        if not request.essay_text or len(request.essay_text.strip()) < 100:
-            raise HTTPException(status_code=400, detail="Essay text must be at least 100 characters long")
-        
-        if len(request.essay_text) > 15000:
-            raise HTTPException(status_code=400, detail="Essay text must be less than 15,000 characters")
-        
         # Generate unique essay ID and task ID
         essay_id = str(uuid.uuid4())
         task_id = str(uuid.uuid4())
@@ -72,8 +65,15 @@ async def upload_essay(request: EssayRequest):
             "essay_id": essay_id,
             "progress": 0,
             "status": "processing",
-            "message": "Starting analysis..."
+            "message": "Starting essay analysis..."
         }
+        
+        # Validate essay text
+        if not request.essay_text or len(request.essay_text.strip()) < 50:
+            raise HTTPException(status_code=400, detail="Essay must be at least 50 characters long")
+        
+        # Calculate actual word count from essay text
+        actual_word_count = pdf_service.get_word_count(request.essay_text)
         
         try:
             # Update progress: Text validation complete
@@ -118,7 +118,7 @@ async def upload_essay(request: EssayRequest):
                 category_scores=grading_result.category_scores,
                 summary_feedback=grading_result.summary_feedback,
                 submission_type=grading_result.submission_type,
-                word_count=grading_result.word_count,
+                word_count=actual_word_count,  # Use actual word count instead of AI response
                 examiner_remarks=grading_result.examiner_remarks,
                 message="Essay graded successfully"
             )
@@ -181,6 +181,9 @@ async def upload_pdf(file: UploadFile = File(...)):
             
             # Clean the extracted text
             essay_text = pdf_service.clean_text(essay_text)
+            
+            # Calculate actual word count from essay text
+            actual_word_count = pdf_service.get_word_count(essay_text)
             
             # Update progress: Text cleaning complete
             progress_tracker[task_id]["progress"] = 50
@@ -251,7 +254,7 @@ async def upload_pdf(file: UploadFile = File(...)):
             category_scores=grading_result.category_scores,
             summary_feedback=grading_result.summary_feedback,
             submission_type=grading_result.submission_type,
-            word_count=grading_result.word_count,
+            word_count=actual_word_count,  # Use actual word count instead of AI response
             examiner_remarks=grading_result.examiner_remarks,
             message="Essay graded successfully"
         )

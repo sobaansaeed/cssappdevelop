@@ -1,0 +1,59 @@
+{
+  "essay_id": "caf26fd0-efea-4ce4-9910-f5ed30ce02d7",
+  "original_text": "Democracy is a form of government that allows citizens to participate in the decision-making process through voting and representation. In a democratic system, the power ultimately rests with the people, who elect their leaders and representatives.\nThis form of governance promotes equality, freedom of expression, and the protection of individual rights..",
+  "grading_result": {
+    "overall_score": 17,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 5,
+        "feedback": "The thesis statement is simplistic and lacks depth. It merely defines democracy without offering any nuanced perspective or argumentative direction.  More critical engagement with the concept is needed."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No outline provided."
+      },
+      "Structure & Coherence": {
+        "score": 3,
+        "feedback": "The essay lacks structure. It presents two very short paragraphs without development, transition or analysis.  It is not a cohesive argument."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 2,
+        "feedback": "The content is extremely superficial.  It provides only a rudimentary definition of democracy and lacks depth of analysis, relevant examples, or counterarguments."
+      },
+      "Language Proficiency & Expression": {
+        "score": 5,
+        "feedback": "The language is simple but grammatically correct. However, the writing is very basic and lacks sophistication.  The vocabulary is limited. There is insufficient development of the ideas."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 0,
+        "feedback": "No evidence of critical thinking or analytical reasoning. The essay presents assertions without support or explanation."
+      },
+      "Conclusion": {
+        "score": 0,
+        "feedback": "No conclusion is present."
+      },
+      "Word Count & Length Control": {
+        "score": 2,
+        "feedback": "The essay is far too short; significantly below the minimum word count required for CSS."
+      }
+    },
+    "summary_feedback": "This submission is a very weak attempt at an essay. It provides only a bare-bones definition of democracy and lacks any critical analysis, development, or argumentation. The extreme brevity and lack of structure indicate a serious deficiency in essay-writing skills. The candidate needs to significantly improve their understanding of essay structure, develop more sophisticated analytical skills and practice writing longer, more detailed responses.",
+    "submission_type": "D",
+    "word_count": 0,
+    "examiner_remarks": {
+      "strengths": [
+        "Grammatically correct sentences."
+      ],
+      "weaknesses": [
+        "Extremely short, lacks depth, lacks structure, no critical thinking, no conclusion, inadequate vocabulary, failure to meet word count requirements."
+      ],
+      "suggestions": [
+        "Study essay structure. Develop a thorough understanding of the topic. Learn to present arguments with evidence and counterarguments. Practice writing longer essays.  Improve vocabulary and writing style."
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_caf26fd0-efea-4ce4-9910-f5ed30ce02d7.pdf",
+  "graded_at": "2025-08-27T03:28:43.757354",
+  "word_count": 51,
+  "character_count": 356
+}

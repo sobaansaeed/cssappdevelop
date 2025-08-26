@@ -1,0 +1,59 @@
+{
+  "essay_id": "ab3be70c-0370-4a7e-888c-4c9c64dd0d57",
+  "original_text": "Democracy is a form of government that allows citizens to participate in the decision-making process through voting and representation. In a democratic system, the power ultimately rests with the people, who elect their leaders and representatives. This form of governance promotes equality, freedom of expression, and the protection of individual rights. However, democracy also faces significant challenges in the modern world. Voter apathy, political polarization, and the influence of money in politics are major concerns that threaten the integrity of democratic processes.",
+  "grading_result": {
+    "overall_score": 27,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 7,
+        "feedback": "The thesis statement adequately introduces the topic of democracy and its challenges. However, it lacks depth and originality; a more nuanced approach would be beneficial."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No discernible outline present.  The essay lacks a clear organizational structure, hindering the development of arguments."
+      },
+      "Structure & Coherence": {
+        "score": 5,
+        "feedback": "The structure is rudimentary; a clear introduction and conclusion are present, but the body lacks proper organization and development.  Transitions between ideas are weak."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 5,
+        "feedback": "The essay touches upon some relevant challenges to democracy, but the treatment of each point is superficial and lacks supporting evidence or detailed analysis.  A balanced perspective is missing; the discussion lacks counterarguments or alternative viewpoints."
+      },
+      "Language Proficiency & Expression": {
+        "score": 5,
+        "feedback": "The language is clear but lacks sophistication and stylistic flair. Sentence structures are simple, and the vocabulary is basic.  More concise and impactful phrasing is needed."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 0,
+        "feedback": "The essay demonstrates minimal critical thinking. There is no in-depth analysis or evaluation of the complexities of the issues raised."
+      },
+      "Conclusion": {
+        "score": 5,
+        "feedback": "The conclusion summarizes the main points but does not offer any insightful concluding remarks or recommendations."
+      },
+      "Word Count & Length Control": {
+        "score": 0,
+        "feedback": "Essay is significantly below the required word count (under 800 words).  Automatic fail."
+      }
+    },
+    "summary_feedback": "This essay demonstrates a basic understanding of democracy and its challenges but lacks depth, analytical rigor, and structural coherence. The extremely short word count and superficial treatment of the topic prevent it from meeting the CSS standards.  The essay needs significant improvement in terms of structure, content development, critical thinking, and word count.",
+    "submission_type": "E",
+    "word_count": 0,
+    "examiner_remarks": {
+      "strengths": [
+        "Clear introduction and conclusion"
+      ],
+      "weaknesses": [
+        "Extremely short word count, superficial analysis, poor organization, lack of critical thinking, insufficient evidence"
+      ],
+      "suggestions": [
+        "Expand significantly on the chosen points, develop more robust arguments with evidence, restructure the essay with a clear outline, incorporate counterarguments, and refine the language for better clarity and impact."
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_ab3be70c-0370-4a7e-888c-4c9c64dd0d57.pdf",
+  "graded_at": "2025-08-27T03:28:17.806003",
+  "word_count": 82,
+  "character_count": 578
+}

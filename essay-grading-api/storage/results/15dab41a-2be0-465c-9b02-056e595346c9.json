@@ -1,0 +1,71 @@
+{
+  "essay_id": "15dab41a-2be0-465c-9b02-056e595346c9",
+  "original_text": "Democracy is a form of government that allows citizens to participate in the decision-making process through voting and representation. In a democratic system, the power ultimately rests with the people, who elect their leaders and representatives. This form of governance promotes equality, freedom of expression, and the protection of individual rights. However, democracy also faces significant challenges in the modern world. Voter apathy, political polarization, and the influence of money in politics are major concerns that threaten the integrity of democratic processes. These issues can undermine public trust and participation in democratic institutions. Despite these challenges, democracy remains one of the most effective ways to ensure government accountability and protect human rights. The success of democracy depends on an informed and engaged citizenry, strong institutions, and the rule of law. Through democratic processes, societies can address conflicts peacefully and work towards the common good. In conclusion, while democracy faces numerous challenges, its fundamental principles of equality, freedom, and participation make it the most desirable form of governance. The key to strengthening democracy lies in addressing its challenges through education, institutional reform, and civic engagement.",
+  "grading_result": {
+    "overall_score": 38,
+    "category_scores": {
+      "Thesis & Topic Understanding": {
+        "score": 7,
+        "feedback": "The thesis is adequately stated, identifying both the positive aspects and challenges of democracy. However, it lacks originality and depth of insight."
+      },
+      "Outline Quality": {
+        "score": 0,
+        "feedback": "No discernible outline is present. The essay proceeds in a linear, underdeveloped manner."
+      },
+      "Structure & Coherence": {
+        "score": 8,
+        "feedback": "The essay follows a basic structure with an introduction, body, and conclusion. However, the transitions between paragraphs are weak and the overall flow is somewhat disjointed.  Paragraphs lack sufficient internal structure."
+      },
+      "Content Depth, Balance & Relevance": {
+        "score": 10,
+        "feedback": "The content touches upon key aspects of democracy, but the treatment is superficial.  While challenges are mentioned, there's limited analysis or exploration of specific examples. The balance between strengths and weaknesses is uneven."
+      },
+      "Language Proficiency & Expression": {
+        "score": 7,
+        "feedback": "The language is grammatically correct and relatively clear. However, the writing lacks precision and sophistication. The vocabulary is basic, and the prose is rather simplistic and repetitive."
+      },
+      "Critical Thinking & Analytical Reasoning": {
+        "score": 1,
+        "feedback": "The essay presents a somewhat descriptive overview rather than a critical analysis.  There's minimal engagement with complex arguments or counter-arguments."
+      },
+      "Conclusion": {
+        "score": 5,
+        "feedback": "The conclusion restates the thesis but offers little in the way of insightful synthesis or forward-looking analysis.  It lacks a compelling conclusion."
+      },
+      "Word Count & Length Control": {
+        "score": 0,
+        "feedback": "The essay falls drastically short of the required word count. (Under 800 words). Automatic Fail for this criteria."
+      }
+    },
+    "summary_feedback": "This essay demonstrates a basic understanding of democracy but lacks depth, critical analysis, and sufficient development. The superficial treatment of the topic, coupled with the extremely short length, results in a failing grade.  The writing is adequate but lacks originality and sophistication.  Considerable improvement is required to meet CSS standards.",
+    "submission_type": "E",
+    "word_count": 0,
+    "examiner_remarks": {
+      "strengths": [
+        "Clear introductory statement",
+        "Grammatically correct"
+      ],
+      "weaknesses": [
+        "Lack of depth and analysis",
+        "Extremely short word count",
+        "Superficial treatment of complex topic",
+        "Absence of an outline",
+        "Weak argumentation",
+        "Repetitive language"
+      ],
+      "suggestions": [
+        "Expand significantly to meet minimum word count",
+        "Develop a structured outline",
+        "Engage in deeper critical analysis",
+        "Use more precise and sophisticated language",
+        "Explore specific examples to illustrate arguments",
+        "Incorporate counterarguments",
+        "Strengthen the conclusion to offer insightful synthesis"
+      ]
+    }
+  },
+  "annotated_pdf_path": "storage/pdfs/graded_essay_15dab41a-2be0-465c-9b02-056e595346c9.pdf",
+  "graded_at": "2025-08-27T03:28:22.656428",
+  "word_count": 184,
+  "character_count": 1325
+}
