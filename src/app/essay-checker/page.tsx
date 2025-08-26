@@ -8,9 +8,6 @@ import {
   AlertCircle, 
   Loader2, 
   Trash2,
-  Star,
-  TrendingUp,
-  Target,
   Lightbulb,
   BookOpen,
   FileUp,
@@ -18,7 +15,6 @@ import {
   Download,
   Copy,
   Brain,
-  Award,
   Clock
 } from 'lucide-react';
 
@@ -168,7 +164,7 @@ const EssayCheckerPage: React.FC = () => {
         window.URL.revokeObjectURL(url);
         document.body.removeChild(a);
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to download PDF');
     }
   };

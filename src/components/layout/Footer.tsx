@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { GraduationCap, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import { Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import Logo from '@/components/Logo';
 
 const Footer: React.FC = () => {

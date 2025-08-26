@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { GraduationCap, Home, Newspaper, Book, Calendar, Menu, X, User, LogOut, Crown, LogIn, UserPlus, Mail, FileText } from 'lucide-react';
+import { Home, Newspaper, Book, Calendar, Menu, X, User, LogOut, Crown, LogIn, UserPlus, Mail, FileText } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { userProfileService } from '@/lib/user-profile';
 import Logo from '@/components/Logo';
