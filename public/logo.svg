@@ -1,16 +1,23 @@
 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Stylized CK logo in vibrant purple (#7C3AED) -->
+  <!-- Abstract CK logo in vibrant purple (#7C3AED) -->
   
-  <!-- C shape - stylized with sharp angles and curves -->
-  <path d="M12 8C12 6.89543 12.8954 6 14 6H20C21.1046 6 22 6.89543 22 8V12C22 13.1046 21.1046 14 20 14H16C15.4477 14 15 14.4477 15 15V17C15 17.5523 15.4477 18 16 18H20C21.1046 18 22 18.8954 22 20V24C22 25.1046 21.1046 26 20 26H14C12.8954 26 12 25.1046 12 24V8Z" fill="#7C3AED"/>
+  <!-- C shape - flowing curve with sharp tip -->
+  <path d="M6 12C6 8.68629 8.68629 6 12 6H18C19.1046 6 20 6.89543 20 8V10C20 11.1046 19.1046 12 18 12H16C15.4477 12 15 12.4477 15 13V15C15 15.5523 15.4477 16 16 16H18C19.1046 16 20 16.8954 20 18V20C20 21.1046 19.1046 22 18 22H12C8.68629 22 6 19.3137 6 16V12Z" fill="#7C3AED"/>
+  
+  <!-- C's extended tip that flows into K -->
+  <path d="M20 18L24 16L28 16" stroke="#7C3AED" stroke-width="3" stroke-linecap="round"/>
   
   <!-- K shape - vertical line with diagonal extensions -->
-  <path d="M26 8C26 6.89543 26.8954 6 28 6H32C33.1046 6 34 6.89543 34 8V24C34 25.1046 33.1046 26 32 26H28C26.8954 26 26 25.1046 26 24V8Z" fill="#7C3AED"/>
+  <path d="M28 8C28 6.89543 28.8954 6 30 6H34C35.1046 6 36 6.89543 36 8V24C36 25.1046 35.1046 26 34 26H30C28.8954 26 28 25.1046 28 24V8Z" fill="#7C3AED"/>
   
-  <!-- K diagonal lines -->
-  <path d="M30 12L36 8" stroke="#7C3AED" stroke-width="3" stroke-linecap="round"/>
-  <path d="M30 20L36 24" stroke="#7C3AED" stroke-width="3" stroke-linecap="round"/>
+  <!-- K diagonal lines - upper and lower with sharp angles -->
+  <path d="M32 6L42 4" stroke="#7C3AED" stroke-width="3" stroke-linecap="round"/>
+  <path d="M32 26L42 28" stroke="#7C3AED" stroke-width="3" stroke-linecap="round"/>
   
-  <!-- Connecting element between C and K -->
-  <path d="M22 16H26" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
+  <!-- Connecting elements for unified flow -->
+  <path d="M22 16H28" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
+  <path d="M24 14L28 16" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Additional flow elements -->
+  <path d="M20 20L24 18" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
 </svg>
