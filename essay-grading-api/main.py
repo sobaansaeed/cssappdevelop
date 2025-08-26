@@ -47,7 +47,55 @@ async def health_check():
     }}
 
 @app.post("/upload-essay", response_model=EssayResponse)
-async def upload_essay(file: UploadFile = File(...)):
+async def upload_essay(request: EssayRequest):
+    """
+    Submit essay text and get it graded with annotations
+    """
+    try:
+        # Validate input
+        if not request.essay_text or len(request.essay_text.strip()) < 100:
+            raise HTTPException(status_code=400, detail="Essay text must be at least 100 characters long")
+        
+        if len(request.essay_text) > 15000:
+            raise HTTPException(status_code=400, detail="Essay text must be less than 15,000 characters")
+        
+        # Generate unique essay ID
+        essay_id = str(uuid.uuid4())
+        
+        # Grade essay using AI
+        grading_result = await ai_service.grade_essay(request.essay_text)
+        
+        # Generate annotated PDF (create a simple text-based PDF)
+        annotated_pdf_path = await pdf_generator.create_annotated_pdf_from_text(
+            essay_text=request.essay_text,
+            grading_result=grading_result,
+            essay_id=essay_id
+        )
+        
+        # Store results
+        await storage_service.store_essay_result(
+            essay_id=essay_id,
+            original_text=request.essay_text,
+            grading_result=grading_result,
+            annotated_pdf_path=annotated_pdf_path
+        )
+        
+        return EssayResponse(
+            essay_id=essay_id,
+            overall_score=grading_result.overall_score,
+            category_scores=grading_result.category_scores,
+            summary_feedback=grading_result.summary_feedback,
+            submission_type=grading_result.submission_type,
+            word_count=grading_result.word_count,
+            examiner_remarks=grading_result.examiner_remarks,
+            message="Essay graded successfully"
+        )
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error processing essay: {str(e)}")
+
+@app.post("/upload-pdf", response_model=EssayResponse)
+async def upload_pdf(file: UploadFile = File(...)):
     """
     Upload a PDF essay and get it graded with annotations
     """

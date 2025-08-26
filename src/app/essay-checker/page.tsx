@@ -1,371 +1,484 @@
 'use client';
 
-import React from 'react';
-import { FileText, Brain, Target, CheckSquare, Zap, TrendingUp, Award, Shield, Clock, Users, ArrowRight, Crown, Sparkles, Lock } from 'lucide-react';
-import Link from 'next/link';
-import { useSubscription } from '@/lib/use-subscription';
+import React, { useState, useRef } from 'react';
+import { 
+  FileText, 
+  Upload, 
+  CheckCircle, 
+  AlertCircle, 
+  Loader2, 
+  Trash2,
+  Star,
+  TrendingUp,
+  Target,
+  Lightbulb,
+  BookOpen,
+  FileUp,
+  X,
+  Download,
+  Copy,
+  Brain,
+  Award,
+  Clock
+} from 'lucide-react';
 
+interface EssayAnalysisResult {
+  essay_id: string;
+  overall_score: number;
+  category_scores: {
+    [key: string]: {
+      score: number;
+      feedback: string;
+    };
+  };
+  summary_feedback: string;
+  submission_type: string;
+  word_count: number;
+  examiner_remarks: {
+    strengths: string[];
+    weaknesses: string[];
+    suggestions: string[];
+  };
+}
 
 const EssayCheckerPage: React.FC = () => {
-  const { isPro, isLoading } = useSubscription();
+  const [inputType, setInputType] = useState<'text' | 'pdf'>('text');
+  const [essayText, setEssayText] = useState('');
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<EssayAnalysisResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [wordCount, setWordCount] = useState(0);
+  const [charCount, setCharCount] = useState(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Show loading state while checking subscription
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Checking your subscription status...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleTextChange = (text: string) => {
+    setEssayText(text);
+    setWordCount(text.trim() ? text.trim().split(/\s+/).length : 0);
+    setCharCount(text.length);
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.type !== 'application/pdf') {
+        setError('Please upload a PDF file');
+        return;
+      }
+      if (file.size > 10 * 1024 * 1024) { // 10MB limit
+        setError('File size must be less than 10MB');
+        return;
+      }
+      setPdfFile(file);
+      setError(null);
+    }
+  };
+
+  const removePdfFile = () => {
+    setPdfFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const analyzeEssay = async () => {
+    setIsAnalyzing(true);
+    setError(null);
+    setAnalysisResult(null);
+
+    try {
+      let essayContent = '';
+      
+      if (inputType === 'text') {
+        if (!essayText.trim()) {
+          throw new Error('Please enter your essay text');
+        }
+        essayContent = essayText;
+      } else {
+        if (!pdfFile) {
+          throw new Error('Please upload a PDF file');
+        }
+        // For now, we'll use a simple text extraction
+        // In production, you'd want to use a proper PDF parsing library
+        essayContent = await extractTextFromPDF(pdfFile);
+      }
+
+      if (essayContent.length < 100) {
+        throw new Error('Essay must be at least 100 characters long');
+      }
+
+      if (essayContent.length > 15000) {
+        throw new Error('Essay must be less than 15,000 characters');
+      }
+
+      // Call the Python FastAPI backend
+      const response = await fetch('http://localhost:8000/upload-essay', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          essay_text: essayContent
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to analyze essay');
+      }
+
+      const result = await response.json();
+      setAnalysisResult(result);
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const extractTextFromPDF = async (file: File): Promise<string> => {
+    // This is a placeholder implementation
+    // In production, you'd want to use a proper PDF parsing library
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        // For now, we'll just return a placeholder
+        // You should implement proper PDF text extraction here
+        resolve('PDF content placeholder - implement proper extraction');
+      };
+      reader.onerror = () => reject(new Error('Failed to read PDF file'));
+      reader.readAsText(file);
+    });
+  };
+
+  const downloadPDF = async () => {
+    if (!analysisResult) return;
+    
+    try {
+      const response = await fetch(`http://localhost:8000/results/${analysisResult.essay_id}`);
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `essay-analysis-${analysisResult.essay_id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }
+    } catch (err) {
+      setError('Failed to download PDF');
+    }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+  };
+
+  const resetForm = () => {
+    setEssayText('');
+    setPdfFile(null);
+    setAnalysisResult(null);
+    setError(null);
+    setWordCount(0);
+    setCharCount(0);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600"></div>
-        
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      {/* Header */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center">
-            <div className="flex items-center justify-center mb-6">
-              <div className="relative">
-                <div className="absolute inset-0 bg-white/20 backdrop-blur-sm rounded-full p-4"></div>
-                <FileText className="h-16 w-16 text-white relative z-10" />
-              </div>
-            </div>
-            
-            <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              CSSKRO
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300">
-                Essay Checker
-              </span>
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
+              CSS Essay Checker
             </h1>
-            
-            <p className="text-xl lg:text-2xl text-blue-100 max-w-4xl mx-auto mb-8 leading-relaxed">
-              Revolutionize your CSS exam preparation with advanced AI-powered essay analysis. 
-              Get instant, intelligent feedback that transforms your writing skills.
-            </p>
-
-            {!isPro ? (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                <Link
-                  href="/auth/get-started"
-                  className="group bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center space-x-2"
-                >
-                  <span>Get Started for Free</span>
-                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-                <Link
-                  href="/pricing"
-                  className="group border-2 border-white/30 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white/10 transition-all duration-300 backdrop-blur-sm flex items-center space-x-2"
-                >
-                  <Crown className="h-5 w-5" />
-                  <span>View Premium Plans</span>
-                </Link>
-              </div>
-            ) : (
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-                <Link
-                  href="/essay-checker/tool"
-                  className="group bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center space-x-2"
-                >
-                  <Sparkles className="h-5 w-5" />
-                  <span>Access Essay Checker</span>
-                </Link>
-                <Link
-                  href="/pricing"
-                  className="group border-2 border-white/30 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:white/10 transition-all duration-300 backdrop-blur-sm flex items-center space-x-2"
-                >
-                  <Crown className="h-5 w-5" />
-                  <span>Manage Subscription</span>
-                </Link>
-              </div>
-            )}
-
-            <div className="flex flex-wrap justify-center items-center gap-8 text-blue-100">
-              <div className="flex items-center space-x-2">
-                <Users className="h-5 w-5" />
-                <span>10,000+ CSS Aspirants</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Shield className="h-5 w-5" />
-                <span>Advanced AI Technology</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Clock className="h-5 w-5" />
-                <span>Instant Results</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Pro User Welcome Section */}
-      {isPro && (
-        <div className="py-16 bg-white">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-3xl p-12 border border-yellow-200">
-              <div className="flex items-center justify-center mb-6">
-                <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full p-4">
-                  <Crown className="h-8 w-8 text-white" />
-                </div>
-              </div>
-              
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Welcome, Pro User! 👑
-              </h2>
-              
-              <p className="text-lg text-gray-700 mb-8">
-                You have full access to the CSSKRO Essay Checker. Your subscription is active and ready to use.
-              </p>
-              
-              <div className="bg-white rounded-2xl p-6 shadow-lg">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                  <div>
-                    <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <FileText className="h-8 w-8 text-blue-600" />
-                    </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Unlimited Essays</h3>
-                    <p className="text-sm text-gray-600">Check as many essays as you need</p>
-                  </div>
-                  
-                  <div>
-                    <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <Brain className="h-8 w-8 text-green-600" />
-                    </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Advanced AI</h3>
-                    <p className="text-sm text-gray-600">Get detailed CSS exam feedback</p>
-                  </div>
-                  
-                  <div>
-                    <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <TrendingUp className="h-8 w-8 text-purple-600" />
-                    </div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Progress Tracking</h3>
-                    <p className="text-sm text-gray-600">Monitor your improvement over time</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-8">
-                <Link
-                  href="/essay-checker/tool"
-                  className="inline-flex items-center space-x-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 shadow-2xl"
-                >
-                  <Sparkles className="h-5 w-5" />
-                  <span>Start Using Essay Checker Now</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-
-
-      {/* Non-Pro User CTA */}
-      {!isPro && (
-        <div className="py-12 bg-white">
-          <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-8 border border-gray-200">
-              <Lock className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Pro Feature</h2>
-              <p className="text-lg text-gray-600 mb-6">
-                The essay checker tool is exclusively available for pro users. Upgrade your subscription 
-                to access this powerful AI-powered writing assistant.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  href="/pricing"
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg"
-                >
-                  <Crown className="h-5 w-5 inline mr-2" />
-                  View Pro Plans
-                </Link>
-                <Link
-                  href="/auth/signin"
-                  className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-xl font-semibold text-lg hover:border-gray-400 hover:bg-gray-50 transition-all duration-300"
-                >
-                  Sign In
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Features Section */}
-      <div className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Why Choose CSSKRO Essay Checker?
-            </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Experience the future of essay writing with cutting-edge AI technology designed specifically for CSS exams.
+              Professional AI-powered essay analysis using the official CSS FPSC Pakistan rubric
             </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="group bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-blue-100">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Brain className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">AI-Powered Analysis</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Powered by advanced AI technology, our system provides intelligent analysis that understands context, 
-                identifies patterns, and offers personalized feedback for CSS exam success.
-              </p>
-            </div>
-
-            <div className="group bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-purple-100">
-              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Target className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">CSS-Specific Feedback</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Tailored specifically for CSS exam requirements, including proper essay structure, 
-                argument development, and analytical depth expected by examiners.
-              </p>
-            </div>
-
-            <div className="group bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-green-100">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <CheckSquare className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Comprehensive Analysis</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Get detailed feedback on grammar, vocabulary, sentence structure, logical flow, 
-                and content relevance - everything you need to excel in CSS essays.
-              </p>
-            </div>
-
-            <div className="group bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-orange-100">
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Zap className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Instant Results</h3>
-              <p className="text-gray-600 leading-relaxed">
-                No more waiting! Get comprehensive feedback in seconds, allowing you to 
-                quickly identify areas for improvement and practice more effectively.
-              </p>
-            </div>
-
-            <div className="group bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-teal-100">
-              <div className="w-16 h-16 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <TrendingUp className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Progress Tracking</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Monitor your improvement over time with detailed scoring, 
-                track your writing evolution, and identify patterns in your strengths and weaknesses.
-              </p>
-            </div>
-
-            <div className="group bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-yellow-100">
-              <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <Award className="h-8 w-8 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Expert-Level Insights</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Access insights that rival expert tutors, with explanations that help you 
-                understand not just what to change, but why and how to improve.
-              </p>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* How It Works Section */}
-      <div className="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              How It Works
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Three simple steps to transform your essay writing skills
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
-                1
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {!analysisResult ? (
+          /* Input Section */
+          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">Upload Your Essay</h2>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-500">AI Powered</span>
+                <Brain className="h-5 w-5 text-purple-500" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Input Your Essay</h3>
-              <p className="text-gray-600">
-                Paste your essay text or upload a PDF file. Our system supports both formats 
-                for maximum convenience and flexibility.
-              </p>
             </div>
 
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
-                2
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">AI Analysis</h3>
-              <p className="text-gray-600">
-                Our advanced AI analyzes your essay in seconds, examining grammar, 
-                structure, content, and CSS-specific requirements.
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold">
-                3
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Get Detailed Feedback</h3>
-              <p className="text-gray-600">
-                Receive comprehensive feedback with corrections, explanations, 
-                and actionable suggestions to improve your writing.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* CTA Section */}
-      <div className="py-20 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
-        <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
-            Ready to Transform Your Essay Writing?
-          </h2>
-          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of CSS aspirants who are already improving their writing skills 
-            with AI-powered feedback. Start your journey to exam success today.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {!isPro ? (
-              <>
-                <Link
-                  href="/auth/get-started"
-                  className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center space-x-2"
-                >
-                  <Sparkles className="h-5 w-5" />
-                  <span>Get Started for Free</span>
-                </Link>
-                <Link
-                  href="/pricing"
-                  className="border-2 border-white/30 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-white/10 transition-all duration-300 backdrop-blur-sm flex items-center justify-center space-x-2"
-                >
-                  <Crown className="h-5 w-5" />
-                  <span>View Premium Plans</span>
-                </Link>
-              </>
-            ) : (
-              <Link
-                href="/essay-checker/tool"
-                className="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center space-x-2"
+            {/* Input Type Toggle */}
+            <div className="flex space-x-2 mb-6">
+              <button
+                onClick={() => setInputType('text')}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  inputType === 'text'
+                    ? 'bg-blue-100 text-blue-700 border-2 border-blue-300'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
               >
-                <Sparkles className="h-5 w-5" />
-                <span>Access Essay Checker</span>
-              </Link>
+                <FileText className="h-4 w-4 inline mr-2" />
+                Text Input
+              </button>
+              <button
+                onClick={() => setInputType('pdf')}
+                className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  inputType === 'pdf'
+                    ? 'bg-blue-100 text-blue-700 border-2 border-blue-300'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                <FileUp className="h-4 w-4 inline mr-2" />
+                PDF Upload
+              </button>
+            </div>
+
+            {/* Text Input */}
+            {inputType === 'text' && (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Essay Text
+                  </label>
+                  <textarea
+                    value={essayText}
+                    onChange={(e) => handleTextChange(e.target.value)}
+                    placeholder="Paste your essay here... (Minimum 100 characters, Maximum 15,000 characters)"
+                    className="w-full h-64 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                    disabled={isAnalyzing}
+                  />
+                </div>
+                <div className="flex justify-between text-sm text-gray-500">
+                  <span>Words: {wordCount}</span>
+                  <span>Characters: {charCount}</span>
+                </div>
+              </div>
             )}
+
+            {/* PDF Upload */}
+            {inputType === 'pdf' && (
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Upload PDF
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    {pdfFile ? (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-center space-x-2">
+                          <FileText className="h-8 w-8 text-blue-500" />
+                          <span className="font-medium">{pdfFile.name}</span>
+                        </div>
+                        <button
+                          onClick={removePdfFile}
+                          className="inline-flex items-center px-3 py-1 text-sm text-red-600 hover:text-red-700"
+                        >
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          Remove
+                        </button>
+                      </div>
+                    ) : (
+                      <div>
+                        <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                        <p className="text-gray-600 mb-2">
+                          Click to upload or drag and drop
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          PDF files only, max 10MB
+                        </p>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept=".pdf"
+                          onChange={handleFileUpload}
+                          className="hidden"
+                        />
+                        <button
+                          onClick={() => fileInputRef.current?.click()}
+                          className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        >
+                          <Upload className="h-4 w-4 mr-2" />
+                          Choose File
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Error Display */}
+            {error && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <div className="flex items-center">
+                  <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
+                  <span className="text-red-700">{error}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Analyze Button */}
+            <div className="mt-6">
+              <button
+                onClick={analyzeEssay}
+                disabled={isAnalyzing || (!essayText.trim() && !pdfFile)}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              >
+                {isAnalyzing ? (
+                  <>
+                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                    Analyzing Essay...
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle className="h-5 w-5 mr-2" />
+                    Analyze Essay
+                  </>
+                )}
+              </button>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Results Section */
+          <div className="space-y-8">
+            {/* Header Actions */}
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-gray-900">Analysis Results</h2>
+              <div className="flex space-x-3">
+                <button
+                  onClick={downloadPDF}
+                  className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                >
+                  <Download className="h-4 w-4 mr-2" />
+                  Download PDF
+                </button>
+                <button
+                  onClick={resetForm}
+                  className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                >
+                  <X className="h-4 w-4 mr-2" />
+                  New Essay
+                </button>
+              </div>
+            </div>
+
+            {/* Overall Score */}
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Overall Score</h3>
+                <div className="text-6xl font-bold text-blue-600 mb-2">
+                  {analysisResult.overall_score}/100
+                </div>
+                <div className="flex items-center justify-center space-x-4 text-sm text-gray-600">
+                  <div className="flex items-center">
+                    <Clock className="h-4 w-4 mr-1" />
+                    <span>Submission Type: {analysisResult.submission_type}</span>
+                  </div>
+                  <div className="flex items-center">
+                    <BookOpen className="h-4 w-4 mr-1" />
+                    <span>Word Count: {analysisResult.word_count}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Category Scores */}
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Detailed Analysis</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {Object.entries(analysisResult.category_scores).map(([category, data]) => (
+                  <div key={category} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <h4 className="font-semibold text-gray-900">{category}</h4>
+                      <span className="text-lg font-bold text-blue-600">
+                        {data.score}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600">{data.feedback}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Examiner Remarks */}
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Examiner Remarks</h3>
+              
+              {/* Strengths */}
+              <div className="mb-6">
+                <h4 className="text-lg font-semibold text-green-700 mb-3 flex items-center">
+                  <CheckCircle className="h-5 w-5 mr-2" />
+                  Strengths
+                </h4>
+                <ul className="space-y-2">
+                  {analysisResult.examiner_remarks.strengths.map((strength, index) => (
+                    <li key={index} className="flex items-start">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                      <span className="text-gray-700">{strength}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Weaknesses */}
+              <div className="mb-6">
+                <h4 className="text-lg font-semibold text-red-700 mb-3 flex items-center">
+                  <AlertCircle className="h-5 w-5 mr-2" />
+                  Areas for Improvement
+                </h4>
+                <ul className="space-y-2">
+                  {analysisResult.examiner_remarks.weaknesses.map((weakness, index) => (
+                    <li key={index} className="flex items-start">
+                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                      <span className="text-gray-700">{weakness}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Suggestions */}
+              <div>
+                <h4 className="text-lg font-semibold text-blue-700 mb-3 flex items-center">
+                  <Lightbulb className="h-5 w-5 mr-2" />
+                  Suggestions
+                </h4>
+                <ul className="space-y-2">
+                  {analysisResult.examiner_remarks.suggestions.map((suggestion, index) => (
+                    <li key={index} className="flex items-start">
+                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                      <span className="text-gray-700">{suggestion}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Summary Feedback */}
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Summary Feedback</h3>
+              <div className="bg-gray-50 rounded-lg p-4">
+                <p className="text-gray-700 leading-relaxed">{analysisResult.summary_feedback}</p>
+                <button
+                  onClick={() => copyToClipboard(analysisResult.summary_feedback)}
+                  className="mt-3 inline-flex items-center px-3 py-1 text-sm text-blue-600 hover:text-blue-700"
+                >
+                  <Copy className="h-4 w-4 mr-1" />
+                  Copy to Clipboard
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

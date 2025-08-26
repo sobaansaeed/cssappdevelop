@@ -31,8 +31,8 @@ const SignInPage: React.FC = () => {
       if (error) {
         setError(error.message || 'Invalid email or password. Please try again.');
       } else {
-        // Redirect to essay checker after successful login
-        window.location.href = '/essay-checker';
+        // Redirect to home page after successful login
+        window.location.href = '/';
       }
     } catch {
       setError('An error occurred during sign in. Please try again.');
@@ -51,7 +51,7 @@ const SignInPage: React.FC = () => {
             className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Essay Checker
+            Back to Home
           </Link>
           
           <div className="flex items-center justify-center mb-4">

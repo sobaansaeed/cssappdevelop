@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { GraduationCap, Mail, MapPin, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import Logo from '@/components/Logo';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -11,10 +12,7 @@ const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* About Section */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <GraduationCap className="h-8 w-8 text-blue-400" />
-              <span className="text-xl font-bold">CSS KRO</span>
-            </div>
+            <Logo size={32} className="text-white" />
             <p className="text-gray-300 text-sm leading-relaxed">
               Your comprehensive platform for CSS exam preparation with newspapers, resources, past papers, and expert guidance.
             </p>

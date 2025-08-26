@@ -11,7 +11,7 @@ const GetStartedPage: React.FC = () => {
         {/* Back to Essay Checker */}
         <div className="text-center mb-12">
           <Link 
-            href="/essay-checker" 
+            href="/" 
             className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors mb-6"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />

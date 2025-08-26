@@ -57,9 +57,9 @@ const SignUpPage: React.FC = () => {
         setError(error.message || 'An error occurred during signup. Please try again.');
       } else {
         setSuccess(true);
-        // Redirect to essay checker after successful signup
+        // Redirect to home page after successful signup
         setTimeout(() => {
-          window.location.href = '/essay-checker';
+          window.location.href = '/';
         }, 2000);
       }
     } catch {
@@ -98,7 +98,7 @@ const SignUpPage: React.FC = () => {
             className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Essay Checker
+            Back to Home
           </Link>
           
           <div className="flex items-center justify-center mb-4">

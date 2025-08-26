@@ -3,9 +3,10 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { GraduationCap, Home, Newspaper, Book, Calendar, Menu, X, FileText, User, LogOut, Crown, LogIn, UserPlus, Mail } from 'lucide-react';
+import { GraduationCap, Home, Newspaper, Book, Calendar, Menu, X, User, LogOut, Crown, LogIn, UserPlus, Mail, FileText } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { userProfileService } from '@/lib/user-profile';
+import Logo from '@/components/Logo';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -125,9 +126,8 @@ const Navbar: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 transition-colors">
-              <GraduationCap className="h-8 w-8" />
-              <span className="text-xl font-bold">CSS KRO</span>
+            <Link href="/" className="hover:opacity-80 transition-opacity">
+              <Logo size={32} />
             </Link>
 
             {/* Desktop Navigation */}
