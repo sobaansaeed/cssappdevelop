@@ -3,12 +3,10 @@
 import React from 'react';
 import { FileText, Brain, Target, CheckSquare, Zap, TrendingUp, Award, Shield, Clock, Users, ArrowRight, Crown, Sparkles, Lock } from 'lucide-react';
 import Link from 'next/link';
-import { useAuth } from '@/lib/auth-context';
 import { useSubscription } from '@/lib/use-subscription';
 
 
 const EssayCheckerPage: React.FC = () => {
-  const { user } = useAuth();
   const { isPro, isLoading } = useSubscription();
 
   // Show loading state while checking subscription

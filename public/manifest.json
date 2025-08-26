@@ -1,0 +1,22 @@
+{
+  "name": "CSS KRO - Complete CSS Preparation Platform",
+  "short_name": "CSS KRO",
+  "description": "Comprehensive CSS exam preparation with AI-powered essay grading",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#7C3AED",
+  "theme_color": "#7C3AED",
+  "icons": [
+    {
+      "src": "/atom-icon.svg",
+      "sizes": "128x128",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/atom-favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -36,7 +36,9 @@ export function useSubscription() {
         setError(null);
 
         // NUCLEAR FIX: Just set everyone to Pro immediately and skip database check
-        console.log('NUCLEAR FIX: Setting user to Pro immediately', user.email);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('NUCLEAR FIX: Setting user to Pro immediately', user.email);
+        }
         
         if (mounted) {
           setIsPro(true);
@@ -54,10 +56,14 @@ export function useSubscription() {
         return;
 
         // NUCLEAR FIX: Skip all database logic, everyone is Pro
-        console.log('NUCLEAR FIX: All users are Pro, skipping database check');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('NUCLEAR FIX: All users are Pro, skipping database check');
+        }
 
       } catch (err) {
-        console.error('Subscription check error:', err);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Subscription check error:', err);
+        }
         if (mounted) {
           setError(null); // Don't show errors, just set to Pro
           setIsPro(true);
@@ -97,7 +103,9 @@ export function useSubscription() {
         .single();
 
       if (profileError) {
-        console.error('Error refreshing profile:', profileError);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error refreshing profile:', profileError);
+        }
         return;
       }
 

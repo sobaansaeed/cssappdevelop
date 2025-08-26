@@ -19,20 +19,22 @@ const EssayCheckerToolPage: React.FC = () => {
   const forceProAccess = typeof window !== 'undefined' && localStorage.getItem('force-pro-access') === 'true';
   const effectiveIsPro = isPro || forceProAccess;
 
-  // Debug logging
-  console.log('Essay Checker Tool Debug:', {
-    user: !!user,
-    authLoading,
-    subscriptionLoading,
-    isPro,
-    forceProAccess,
-    effectiveIsPro,
-    profile: profile ? {
-      status: profile.subscription_status,
-      expiry: profile.subscription_expiry
-    } : null,
-    error
-  });
+  // Debug logging (only in development)
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Essay Checker Tool Debug:', {
+      user: !!user,
+      authLoading,
+      subscriptionLoading,
+      isPro,
+      forceProAccess,
+      effectiveIsPro,
+      profile: profile ? {
+        status: profile.subscription_status,
+        expiry: profile.subscription_expiry
+      } : null,
+      error
+    });
+  }
 
   useEffect(() => {
     // Redirect non-pro users to the main essay checker page
