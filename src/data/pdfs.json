@@ -2,9 +2,9 @@
   "pdfs": [
     {
       "id": "1",
-      "title": "September 09 Dawn Newspaper",
-      "date": "2025-09-09",
-      "fileUrl": "/pdfs/newspapersmerged_output (4)_compressed.pdf",
+      "title": "September 17 Dawn Newspaper",
+      "date": "2025-09-17",
+      "fileUrl": "/public/pdfs/newspapers/2025-09-17_merged_output (5)_compressed.pdf",
       "category": "newspapers"
     },
     {
@@ -18,7 +18,7 @@
     },
     {
       "id": "3",
-     "title": "August 26 Dawn Opinion With Urdu Translation",
+      "title": "August 26 Dawn Opinion With Urdu Translation",
       "date": "2025-08-26",
       "fileUrl": "/pdfs/editorials/Aug 26 Dawn Opinion With Urdu Translation.pdf",
       "category": "editorials",
