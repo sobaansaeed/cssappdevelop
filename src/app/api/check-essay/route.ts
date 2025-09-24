@@ -17,18 +17,19 @@ export async function POST(request: NextRequest) {
     });
 
     const text = await resp.text();
-    let json: any;
+    let json: unknown;
     try {
       json = text ? JSON.parse(text) : {};
     } catch {
-      json = { detail: text };
+      json = { detail: text } as Record<string, unknown>;
     }
 
     if (!resp.ok) {
-      return NextResponse.json({ error: 'upstream_error', detail: json.detail || json || 'Failed' }, { status: resp.status });
+      const detail = (json as { detail?: string } | undefined)?.detail ?? (typeof json === 'string' ? json : undefined) ?? 'Failed';
+      return NextResponse.json({ error: 'upstream_error', detail }, { status: resp.status });
     }
 
-    return NextResponse.json(json);
+    return NextResponse.json(json as Record<string, unknown>);
   } catch (error) {
     return NextResponse.json({ error: 'proxy_failed', detail: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
   }
