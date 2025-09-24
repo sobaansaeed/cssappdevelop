@@ -2,15 +2,15 @@
   "pdfs": [
     {
       "id": "1",
-      "title": "August 26 Dawn Newspaper",
-      "date": "2024-08-26",
-      "fileUrl": "/pdfs/newspapers/26_08_2025_compressed.pdf",
+      "title": "September 18 Dawn Newspaper",
+      "date": "2025-09-18",
+      "fileUrl": "/pdfs/newspapers/2025-09-18_merged_output (5)_compressed.pdf",
       "category": "newspapers"
     },
     {
       "id": "2",
       "title": "August 26 Dawn Editorial With Urdu Translation",
-      "date": "2024-08-26",
+      "date": "2025-08-26",
       "fileUrl": "/pdfs/editorials/Aug 26 Dawn Editorial With Urdu Translation.pdf",
       "category": "editorials",
       "authorName": "Sobaan Saeed",
@@ -18,8 +18,8 @@
     },
     {
       "id": "3",
-     "title": "August 26 Dawn Opinion With Urdu Translation",
-      "date": "2024-08-26",
+      "title": "August 26 Dawn Opinion With Urdu Translation",
+      "date": "2025-08-26",
       "fileUrl": "/pdfs/editorials/Aug 26 Dawn Opinion With Urdu Translation.pdf",
       "category": "editorials",
       "authorName": "Sobaan Saeed",
