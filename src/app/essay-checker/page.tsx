@@ -68,7 +68,7 @@ const EssayCheckerPage: React.FC = () => {
   const trackProgress = async (taskId: string) => {
     const interval = setInterval(async () => {
       try {
-        const response = await fetch(`http://localhost:8000/progress/${taskId}`);
+        const response = await fetch(`/api/check-essay/progress?taskId=${encodeURIComponent(taskId)}`);
         if (response.ok) {
           const progressData = await response.json();
           setProgress(progressData.progress);
@@ -160,8 +160,8 @@ const EssayCheckerPage: React.FC = () => {
         throw new Error('Essay must be less than 25,000 characters');
       }
 
-      // Call the Python FastAPI backend
-      const response = await fetch('http://localhost:8000/upload-essay', {
+      // Call Next.js proxy API which forwards to FastAPI
+      const response = await fetch('/api/check-essay', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
