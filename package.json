@@ -19,7 +19,7 @@
     "dotenv": "^17.2.1",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.536.0",
-    "next": "15.4.5",
+    "next": "15.4.10",
     "pdfjs-dist": "^5.4.54",
     "react": "19.1.0",
     "react-dom": "19.1.0"
