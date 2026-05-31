@@ -1,14 +1,30 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, useInView, useMotionValue, useTransform, animate } from 'framer-motion';
-import { ArrowRight, Newspaper, BookOpen, Clock, FileText } from 'lucide-react';
+import { 
+  Newspaper, 
+  FileText, 
+  BookOpen, 
+  PenTool, 
+  ArrowRight,
+  Star,
+  CheckCircle
+} from 'lucide-react';
 
-/* ──────────────────────────────────────────────
-   Animated Counter Component
-   ────────────────────────────────────────────── */
-function AnimatedCounter({ target, suffix = '', duration = 2 }: { target: number; suffix?: string; duration?: number }) {
+/* ══════════════════════════════════════════════
+   ANIMATED COUNTER COMPONENT
+   ══════════════════════════════════════════════ */
+function AnimatedCounter({ 
+  target, 
+  suffix = '', 
+  duration = 2 
+}: { 
+  target: number; 
+  suffix?: string; 
+  duration?: number 
+}) {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const motionValue = useMotionValue(0);
@@ -30,166 +46,149 @@ function AnimatedCounter({ target, suffix = '', duration = 2 }: { target: number
   return <span ref={ref}>0{suffix}</span>;
 }
 
-/* ──────────────────────────────────────────────
-   Feature Row Component
-   ────────────────────────────────────────────── */
-function FeatureRow({
-  numeral,
-  title,
-  description,
-  href,
-  linkText,
-  reversed,
-  icon: Icon,
-}: {
-  numeral: string;
-  title: string;
-  description: string;
-  href: string;
-  linkText: string;
-  reversed: boolean;
-  icon: React.FC<{ className?: string }>;
-}) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-80px' });
+/* ══════════════════════════════════════════════
+   STARFIELD COMPONENT
+   ══════════════════════════════════════════════ */
+function Starfield() {
+  const stars = Array.from({ length: 120 }, (_, i) => ({
+    id: i,
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    size: Math.random() * 2 + 1,
+    delay: Math.random() * 3,
+  }));
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, ease: 'easeOut' }}
-      className={`grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center ${reversed ? 'lg:direction-rtl' : ''
-        }`}
-    >
-      {/* Text Side */}
-      <div className={`lg:col-span-7 space-y-6 ${reversed ? 'lg:order-2 lg:pl-8' : 'lg:order-1'}`}>
-        <div className="flex items-baseline gap-4">
-          <span className="font-display text-6xl lg:text-7xl font-bold text-gold/20 leading-none select-none">
-            {numeral}
-          </span>
-          <div className="w-12 h-px bg-gold/40" />
-        </div>
-        <h3 className="font-display text-3xl lg:text-4xl font-bold text-navy leading-tight">
-          {title}
-        </h3>
-        <p className="font-body text-lg text-slate leading-relaxed max-w-xl">
-          {description}
-        </p>
-        <Link
-          href={href}
-          className="inline-flex items-center gap-2 font-mono text-xs tracking-widest uppercase text-gold hover:text-gold-dark transition-colors group"
-        >
-          {linkText}
-          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
-        </Link>
-      </div>
-
-      {/* Visual Side */}
-      <div className={`lg:col-span-5 ${reversed ? 'lg:order-1' : 'lg:order-2'}`}>
-        <div className="relative bg-navy/5 border border-navy/10 p-12 flex items-center justify-center" style={{ borderRadius: '4px' }}>
-          <div className="absolute inset-0 geo-grid opacity-50" style={{ borderRadius: '4px' }} />
-          <Icon className="h-24 w-24 text-navy/15" />
-          <div className="absolute top-4 right-4 w-3 h-3 border border-gold/30 rotate-45" />
-          <div className="absolute bottom-4 left-4 w-5 h-5 border border-gold/20 rotate-45" />
-        </div>
-      </div>
-    </motion.div>
+    <div className="absolute inset-0 overflow-hidden">
+      {stars.map((star) => (
+        <div
+          key={star.id}
+          className="star"
+          style={{
+            left: star.left,
+            top: star.top,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            animationDelay: `${star.delay}s`,
+          }}
+        />
+      ))}
+    </div>
   );
 }
 
 /* ══════════════════════════════════════════════
    HOMEPAGE
    ══════════════════════════════════════════════ */
-const HomePage: React.FC = () => {
-  const [, setTick] = useState(0);
-
-  // Force re-render after mount for SSR hydration safety
-  useEffect(() => setTick(1), []);
-
-  const successQuotes = [
-    { quote: "CSS KRO's resources were instrumental in my preparation. The newspapers section alone saved me hours daily.", author: "Ayesha K., PAS 2024" },
-    { quote: "The structured timeline kept me on track. I never missed a deadline during my preparation.", author: "Hassan R., PCS 2023" },
-    { quote: "Best CSS preparation platform in Pakistan. The exam pattern breakdown is incredibly detailed.", author: "Fatima S., DMG 2024" },
-    { quote: "From past papers to daily newspapers — everything a CSS aspirant needs is right here.", author: "Ahmed M., FSP 2023" },
-    { quote: "The quality of resources on CSS KRO is unmatched. It feels like having a personal mentor.", author: "Zainab A., Police Service 2024" },
-    { quote: "I recommend CSS KRO to every serious CSS aspirant. It transformed my preparation strategy.", author: "Usman T., Customs 2023" },
-  ];
-
+export default function HomePage() {
   return (
     <div className="overflow-hidden">
-
+      
       {/* ═══════════════════════════════════════════
-          VELORAH® CINEMATIC HERO
+          1. HERO SECTION
           ═══════════════════════════════════════════ */}
-      <section className="relative min-h-screen flex flex-col overflow-hidden">
+      <section 
+        className="relative min-h-screen flex items-center justify-center overflow-hidden"
+        style={{ 
+          background: 'linear-gradient(180deg, #0B1E3D 0%, #0F2A52 60%, #1A3A2A 100%)'
+        }}
+      >
+        {/* Starfield Background */}
+        <Starfield />
         
-        {/* Video Background */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        >
-          <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4" type="video/mp4" />
-        </video>
-
         {/* Hero Content */}
-        <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-32 pb-40 flex-1 min-h-screen">
-          <div className="w-full max-w-7xl">
-            {/* Eyebrow */}
-            <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground mb-8">
-              Pakistan&apos;s Premier CSS Platform
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-32 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <p className="eyebrow text-accent-gold mb-6">
+              PAKISTAN&apos;S PREMIER CSS PLATFORM
             </p>
+          </motion.div>
 
-            {/* Main Headline */}
-            <h1 
-              className="text-5xl sm:text-7xl md:text-8xl leading-[0.95] max-w-7xl mx-auto font-normal animate-fade-rise"
-              style={{ 
-                fontFamily: "'Instrument Serif', serif",
-                letterSpacing: '-2.46px'
-              }}
-            >
-              Master CSS <em className="not-italic text-muted-foreground">with Confidence</em>
-            </h1>
+          <motion.h1
+            className="font-display text-6xl md:text-7xl lg:text-8xl font-semibold text-white mb-6"
+            style={{ lineHeight: 1.05 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            Master CSS with <br />
+            <span className="text-accent-gold">Confidence</span>
+          </motion.h1>
 
-            {/* Subtext */}
-            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto mt-8 leading-relaxed animate-fade-rise-delay">
-              Comprehensive exam preparation with daily newspapers, curated resources,
-              past papers, and expert guidance — everything you need to clear the Central
-              Superior Services examination.
-            </p>
+          <motion.p
+            className="font-body text-lg md:text-xl text-text-on-dark/80 max-w-3xl mx-auto mb-10"
+            style={{ lineHeight: 1.7 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            Comprehensive exam preparation with daily newspapers, curated resources, 
+            past papers, and expert guidance — everything you need to clear the Central 
+            Superior Services examination.
+          </motion.p>
 
-            {/* CTA Button */}
-            <Link
-              href="/resources"
-              className="inline-block liquid-glass rounded-full px-14 py-5 text-base text-foreground mt-12 cursor-pointer animate-fade-rise-delay-2"
-            >
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            <Link href="/resources" className="btn-primary inline-block">
               Start Preparing
             </Link>
-          </div>
+            <Link href="/newspapers" className="btn-ghost inline-block text-white border-white hover:bg-white/10">
+              Read Today&apos;s Papers
+            </Link>
+          </motion.div>
         </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+        >
+          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+            <motion.div
+              className="w-1.5 h-1.5 bg-white rounded-full mt-2"
+              animate={{ y: [0, 12, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+          </div>
+        </motion.div>
       </section>
 
       {/* ═══════════════════════════════════════════
-          WHITE BACKGROUND SECTIONS (Legacy Style)
+          2. STATS BAR
           ═══════════════════════════════════════════ */}
-
-      {/* ─── STATS BAR ─── */}
-      <section className="relative bg-cream py-20 lg:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-0 lg:divide-x lg:divide-navy/10">
+      <section 
+        className="py-20 lg:py-24"
+        style={{ background: '#0B1E3D' }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0">
             {[
-              { target: 25000, suffix: '+', label: 'Students Served' },
-              { target: 300, suffix: '+', label: 'Success Stories' },
-              { target: 95, suffix: '%', label: 'Satisfaction Rate' },
+              { target: 10000, suffix: '+', label: 'Students' },
+              { target: 2500, suffix: '+', label: 'Past Papers' },
+              { target: 5, suffix: ' Years', label: 'of Excellence' },
+              { target: 98, suffix: '%', label: 'Success Rate' },
             ].map((stat, i) => (
-              <div key={i} className="text-center lg:px-12">
-                <div className="font-mono text-5xl sm:text-6xl lg:text-7xl font-bold text-navy tracking-tight mb-3">
+              <div 
+                key={i} 
+                className="text-center relative"
+              >
+                {i > 0 && (
+                  <div className="hidden lg:block absolute left-0 top-1/2 transform -translate-y-1/2 w-px h-16 bg-accent-gold/30" />
+                )}
+                <div className="font-display text-5xl lg:text-6xl font-semibold text-white mb-2">
                   <AnimatedCounter target={stat.target} suffix={stat.suffix} />
                 </div>
-                <div className="font-mono text-[10px] text-slate tracking-[0.3em] uppercase">
+                <div className="font-body text-xs text-text-on-dark/60 uppercase tracking-widest">
                   {stat.label}
                 </div>
               </div>
@@ -198,133 +197,482 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ─── FEATURE SECTIONS ─── */}
-      <section className="bg-cream-light py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24 lg:space-y-32">
-
+      {/* ═══════════════════════════════════════════
+          3. FEATURES SECTION
+          ═══════════════════════════════════════════ */}
+      <section 
+        className="py-20 lg:py-32"
+        style={{ background: '#F5F0E8' }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
           {/* Section Header */}
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <div className="w-12 h-px bg-gold/40" />
-              <span className="font-mono text-[10px] text-gold tracking-[0.4em] uppercase">What We Offer</span>
-              <div className="w-12 h-px bg-gold/40" />
-            </div>
-            <h2 className="font-display text-4xl lg:text-5xl font-bold text-navy leading-tight">
-              Everything for Your CSS Journey
+          <div className="text-center mb-16">
+            <p className="eyebrow text-accent-primary mb-4">
+              EVERYTHING YOU NEED
+            </p>
+            <h2 className="font-display text-4xl lg:text-5xl font-medium text-text-primary mb-4">
+              Your Complete CSS Arsenal
             </h2>
           </div>
 
-          <FeatureRow
-            numeral="I"
-            title="Daily Newspapers"
-            description="Stay ahead of current affairs with curated editions from Pakistan's leading publications. Never miss a headline that could appear in your exam — updated daily, organized by source."
-            href="/newspapers"
-            linkText="Read Today's Papers"
-            reversed={false}
-            icon={Newspaper}
-          />
-
-          <FeatureRow
-            numeral="II"
-            title="Curated Resources"
-            description="A comprehensive library of study materials organized by subject. Past papers, syllabi, notes, and guides — structured like a catalog so you find exactly what you need, instantly."
-            href="/resources"
-            linkText="Browse Resources"
-            reversed={true}
-            icon={BookOpen}
-          />
-
-          <FeatureRow
-            numeral="III"
-            title="Exam Timeline"
-            description="Every deadline, every milestone, every important date mapped out for you. From application windows to result announcements — never be caught off guard during your preparation."
-            href="/timeline"
-            linkText="View Timeline"
-            reversed={false}
-            icon={Clock}
-          />
-
-          <FeatureRow
-            numeral="IV"
-            title="Exam Pattern & Scheme"
-            description="Detailed breakdown of the CSS examination structure, marking schemes, optional and compulsory subjects — formatted like an official document for absolute clarity."
-            href="/exam-pattern"
-            linkText="Study the Pattern"
-            reversed={true}
-            icon={FileText}
-          />
-        </div>
-      </section>
-
-      {/* ─── SOCIAL PROOF MARQUEE ─── */}
-      <section className="bg-navy py-16 overflow-hidden">
-        <div className="flex items-center justify-center gap-4 mb-10">
-          <div className="w-8 h-px bg-gold/30" />
-          <span className="font-mono text-[10px] text-gold/60 tracking-[0.4em] uppercase">What Our Students Say</span>
-          <div className="w-8 h-px bg-gold/30" />
-        </div>
-
-        <div className="relative">
-          {/* Fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-navy to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-navy to-transparent z-10" />
-
-          <div className="flex animate-marquee">
-            {[...successQuotes, ...successQuotes].map((item, i) => (
-              <div
+          {/* Feature Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              {
+                icon: Newspaper,
+                title: 'Daily Newspapers',
+                description: 'Curated editorials from Dawn, The News, Express Tribune — summarized for CSS relevance',
+                link: '/newspapers',
+                linkText: 'Explore'
+              },
+              {
+                icon: FileText,
+                title: 'Past Papers',
+                description: '20+ years of CSS past papers, organized by year and subject',
+                link: '/past-papers',
+                linkText: 'Explore'
+              },
+              {
+                icon: BookOpen,
+                title: 'Study Resources',
+                description: 'Topic-wise notes, recommended books, syllabus breakdowns',
+                link: '/resources',
+                linkText: 'Explore'
+              },
+              {
+                icon: PenTool,
+                title: 'Essay Checker',
+                description: 'AI-powered feedback on your essays — score, structure, and improvement tips',
+                link: '/essay-checker',
+                linkText: 'Explore'
+              },
+            ].map((feature, i) => (
+              <motion.div
                 key={i}
-                className="flex-shrink-0 w-[400px] mx-4 px-8 py-6 border border-cream/8 bg-cream/[0.03]"
-                style={{ borderRadius: '4px' }}
+                className="light-card p-8"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
               >
-                <div className="font-display text-3xl text-gold/30 leading-none mb-3">&ldquo;</div>
-                <p className="font-body text-sm text-cream/60 italic leading-relaxed mb-4">
-                  {item.quote}
+                <div 
+                  className="w-16 h-16 rounded-full flex items-center justify-center mb-6"
+                  style={{ background: 'rgba(232, 101, 10, 0.1)' }}
+                >
+                  <feature.icon className="w-8 h-8 text-accent-primary" />
+                </div>
+                <h3 className="font-display text-2xl font-medium text-text-primary mb-3">
+                  {feature.title}
+                </h3>
+                <p className="font-body text-base text-text-muted mb-4" style={{ lineHeight: 1.65 }}>
+                  {feature.description}
                 </p>
-                <p className="font-mono text-[10px] text-gold/50 tracking-wider uppercase">
-                  — {item.author}
-                </p>
-              </div>
+                <Link 
+                  href={feature.link}
+                  className="inline-flex items-center gap-2 font-body text-sm font-medium text-accent-primary hover:text-accent-hover transition-colors"
+                >
+                  {feature.linkText} <ArrowRight className="w-4 h-4" />
+                </Link>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ─── PRE-FOOTER CTA ─── */}
-      <section className="bg-cream py-24 lg:py-32">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      {/* ═══════════════════════════════════════════
+          4. DAILY NEWSPAPER PREVIEW
+          ═══════════════════════════════════════════ */}
+      <section 
+        className="py-20 lg:py-32"
+        style={{ background: '#EDE6D6' }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Text Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8 }}
+            >
+              <p className="eyebrow text-accent-primary mb-4">
+                DAILY UPDATES
+              </p>
+              <h2 className="font-display text-4xl lg:text-5xl font-medium text-text-primary mb-6">
+                Stay Current, Stay Ahead
+              </h2>
+              <p className="font-body text-lg text-text-muted mb-8" style={{ lineHeight: 1.7 }}>
+                Fresh newspaper summaries every morning — Dawn, Express Tribune, The News. 
+                Highlighted for CSS exam relevance so you never miss what matters.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/newspapers" className="btn-primary inline-block">
+                  Read Today&apos;s Papers
+                </Link>
+                <Link href="/newspapers" className="btn-ghost inline-block">
+                  View Archive
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Right: Preview Cards */}
+            <motion.div
+              className="space-y-4"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8 }}
+            >
+              {[
+                { paper: 'Dawn', headline: 'Economic Reforms: A Path Forward', date: 'Today' },
+                { paper: 'The News', headline: 'Foreign Policy Challenges in 2025', date: 'Today' },
+                { paper: 'Express Tribune', headline: 'Education System Overhaul Proposed', date: 'Today' },
+              ].map((article, i) => (
+                <motion.div
+                  key={i}
+                  className="glass-card p-6"
+                  style={{ 
+                    background: 'rgba(11, 30, 61, 0.95)',
+                    transform: `rotate(${i === 0 ? -1 : i === 1 ? 0 : 1}deg)`
+                  }}
+                  whileHover={{ transform: 'rotate(0deg) scale(1.02)' }}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-body text-sm font-semibold text-accent-gold">
+                      {article.paper}
+                    </span>
+                    <span className="font-body text-xs text-text-on-dark/60">
+                      {article.date}
+                    </span>
+                  </div>
+                  <h4 className="font-display text-xl font-medium text-white mb-2">
+                    {article.headline}
+                  </h4>
+                  <p className="font-body text-sm text-text-on-dark/70 mb-4">
+                    Key insights and analysis relevant to CSS current affairs...
+                  </p>
+                  <Link 
+                    href="/newspapers"
+                    className="font-body text-sm font-medium text-accent-gold hover:text-accent-primary transition-colors"
+                  >
+                    Read More →
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          5. PAST PAPERS SHOWCASE
+          ═══════════════════════════════════════════ */}
+      <section 
+        className="py-20 lg:py-32"
+        style={{ background: '#0B1E3D' }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <p className="eyebrow text-accent-gold mb-4">
+              COMPREHENSIVE ARCHIVE
+            </p>
+            <h2 className="font-display text-4xl lg:text-5xl font-medium text-white mb-4">
+              Every Paper. Every Year.
+            </h2>
+            <p className="font-body text-lg text-text-on-dark/75 max-w-3xl mx-auto">
+              Access the complete CSS past papers library — from 2000 to present. 
+              Filter by subject, year, or topic.
+            </p>
+          </div>
+
+          {/* Subject Pills */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {[
+              'English Essay',
+              'Current Affairs',
+              'Pakistan Affairs',
+              'Islamiat',
+              'General Science',
+              'Political Science',
+              'History'
+            ].map((subject, i) => (
+              <motion.button
+                key={i}
+                className="px-6 py-2 rounded-full border border-accent-gold/30 text-accent-gold font-body text-sm hover:bg-accent-primary hover:text-white hover:border-accent-primary transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {subject}
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Year Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {[2024, 2023, 2022, 2021, 2020, 2019].map((year, i) => (
+              <motion.div
+                key={year}
+                className="glass-card p-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+              >
+                <div className="font-display text-4xl font-semibold text-white mb-2">
+                  {year}
+                </div>
+                <p className="font-body text-sm text-text-on-dark/60 mb-4">
+                  25+ papers available
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {['Essay', 'Current Affairs', 'Islamiat'].map((subject, j) => (
+                    <span 
+                      key={j}
+                      className="px-2 py-1 text-xs font-body bg-white/10 text-text-on-dark/80 rounded"
+                    >
+                      {subject}
+                    </span>
+                  ))}
+                </div>
+                <Link 
+                  href="/past-papers"
+                  className="inline-flex items-center gap-2 font-body text-sm font-medium text-accent-gold hover:text-accent-primary transition-colors"
+                >
+                  Download <ArrowRight className="w-4 h-4" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="text-center">
+            <Link href="/past-papers" className="btn-ghost inline-block text-white border-white hover:bg-white/10">
+              Browse Full Archive
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          6. ESSAY CHECKER CTA
+          ═══════════════════════════════════════════ */}
+      <section 
+        className="py-20 lg:py-32 relative overflow-hidden"
+        style={{ background: '#F5F0E8' }}
+      >
+        {/* Gradient Wash */}
+        <div 
+          className="absolute right-0 top-0 bottom-0 w-1/2 opacity-10"
+          style={{ 
+            background: 'linear-gradient(90deg, transparent, #E8650A)' 
+          }}
+        />
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
+            {/* Left: Text (60%) */}
+            <motion.div
+              className="lg:col-span-3"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8 }}
+            >
+              <p className="eyebrow text-accent-primary mb-4">
+                AI-POWERED
+              </p>
+              <h2 className="font-display text-4xl lg:text-5xl font-medium text-text-primary mb-6">
+                Get Your Essays Scored Instantly
+              </h2>
+              <p className="font-body text-lg text-text-muted mb-6" style={{ lineHeight: 1.7 }}>
+                Submit your CSS essay and receive detailed AI feedback — overall score, 
+                argument strength, structure analysis, CSS examiner perspective, and 
+                specific improvement suggestions.
+              </p>
+
+              {/* Feature List */}
+              <div className="space-y-3 mb-8">
+                {[
+                  'Overall score out of 100',
+                  'Paragraph-by-paragraph feedback',
+                  'Language & grammar check',
+                  'CSS-specific examiner notes'
+                ].map((feature, i) => (
+                  <div key={i} className="flex items-center gap-3">
+                    <Star className="w-5 h-5 text-accent-primary flex-shrink-0" />
+                    <span className="font-body text-base text-text-primary">
+                      {feature}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              <Link href="/essay-checker" className="btn-primary inline-block">
+                Try Essay Checker
+              </Link>
+            </motion.div>
+
+            {/* Right: Visual (40%) */}
+            <motion.div
+              className="lg:col-span-2"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8 }}
+            >
+              <div className="light-card p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <span className="font-body text-sm font-semibold text-text-primary">
+                    Essay Analysis
+                  </span>
+                  <div 
+                    className="px-4 py-2 rounded-full font-display text-2xl font-semibold"
+                    style={{ background: 'rgba(232, 101, 10, 0.1)', color: '#E8650A' }}
+                  >
+                    74/100
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <p className="font-body text-sm text-text-muted">
+                      Strong introduction with clear thesis
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                    <p className="font-body text-sm text-text-muted">
+                      Good use of relevant examples
+                    </p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                    <p className="font-body text-sm text-text-muted">
+                      Conclusion could be more impactful
+                    </p>
+                  </div>
+                </div>
+                <div 
+                  className="mt-6 px-4 py-2 rounded-lg text-center font-body text-sm font-medium"
+                  style={{ background: 'rgba(232, 101, 10, 0.1)', color: '#E8650A' }}
+                >
+                  Grade: B+
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          7. TESTIMONIALS
+          ═══════════════════════════════════════════ */}
+      <section 
+        className="py-20 lg:py-32"
+        style={{ background: '#F5F0E8' }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <p className="eyebrow text-accent-primary mb-4">
+              STUDENT STORIES
+            </p>
+            <h2 className="font-display text-4xl lg:text-5xl font-medium text-text-primary">
+              From Aspirants to Officers
+            </h2>
+          </div>
+
+          {/* Testimonial Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+              {
+                quote: "CSS KRO&apos;s resources were instrumental in my preparation. The newspapers section alone saved me hours daily.",
+                name: "Ayesha Khan",
+                batch: "CSS 2023 — Cleared"
+              },
+              {
+                quote: "The structured timeline kept me on track. I never missed a deadline during my preparation journey.",
+                name: "Hassan Raza",
+                batch: "CSS 2023 — Cleared"
+              },
+              {
+                quote: "Best CSS preparation platform in Pakistan. The exam pattern breakdown is incredibly detailed and helpful.",
+                name: "Fatima Siddiqui",
+                batch: "CSS 2024 — Cleared"
+              }
+            ].map((testimonial, i) => (
+              <motion.div
+                key={i}
+                className="light-card p-8"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+              >
+                <div className="font-display text-5xl text-accent-gold/30 mb-4">&ldquo;</div>
+                <p className="font-body text-base text-text-primary italic mb-6" style={{ lineHeight: 1.65 }}>
+                  {testimonial.quote}
+                </p>
+                <div>
+                  <p className="font-body text-sm font-semibold text-text-primary">
+                    {testimonial.name}
+                  </p>
+                  <div 
+                    className="inline-block mt-2 px-3 py-1 rounded-full text-xs font-body font-medium"
+                    style={{ background: 'rgba(232, 101, 10, 0.1)', color: '#E8650A' }}
+                  >
+                    {testimonial.batch}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          8. FINAL CTA SECTION
+          ═══════════════════════════════════════════ */}
+      <section 
+        className="py-24 lg:py-32 relative overflow-hidden"
+        style={{ background: '#0B1E3D' }}
+      >
+        {/* Subtle Star Pattern */}
+        <div className="absolute inset-0 opacity-15">
+          <Starfield />
+        </div>
+
+        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7 }}
+            transition={{ duration: 0.8 }}
           >
+            {/* Decorative Element */}
             <div className="flex items-center justify-center gap-3 mb-8">
-              <div className="w-12 h-px bg-gold/40" />
-              <span className="font-mono text-[10px] text-gold tracking-[0.3em] uppercase">Begin Today</span>
-              <div className="w-12 h-px bg-gold/40" />
+              <Star className="w-6 h-6 text-accent-gold" />
             </div>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-navy leading-tight mb-6">
-              Your Journey to the
-              <br />
-              Civil Services <span className="text-gold">Starts Here</span>
+
+            <h2 className="font-display text-4xl lg:text-6xl font-semibold text-white mb-6">
+              Your CSS Journey <br />Starts Tonight
             </h2>
-            <p className="font-body text-lg text-slate leading-relaxed max-w-xl mx-auto mb-10">
-              Join 25,000+ students who chose CSS KRO as their preparation partner.
-              Everything you need — all in one place.
+            <p className="font-body text-lg text-text-on-dark/70 mb-10 max-w-2xl mx-auto">
+              Join thousands of aspirants preparing smarter, not harder.
             </p>
-            <Link
-              href="/resources"
-              className="inline-flex items-center gap-2 px-10 py-4 bg-gold text-navy font-mono text-sm tracking-widest uppercase hover:bg-gold-light transition-all duration-300"
-              style={{ borderRadius: '4px' }}
-            >
-              Start Preparing Now
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/resources" className="btn-primary inline-block">
+                Start Preparing
+              </Link>
+              <Link href="/resources" className="btn-ghost inline-block text-white border-white hover:bg-white/10">
+                Explore Resources
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
     </div>
   );
-};
-
-export default HomePage;
+}

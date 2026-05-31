@@ -1,7 +1,22 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Source_Serif_4, DM_Mono, Instrument_Serif, Inter } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Playfair_Display, Source_Serif_4, DM_Mono, Instrument_Serif, Inter } from "next/font/google";
 import "./globals.css";
 import Layout from "@/components/layout/Layout";
+
+const cormorantGaramond = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
+  weight: ["300", "400", "500", "600"],
+});
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -64,7 +79,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${instrumentSerif.variable} ${inter.variable} ${playfair.variable} ${sourceSerif.variable} ${dmMono.variable} font-body antialiased`}
+        className={`${cormorantGaramond.variable} ${dmSans.variable} ${instrumentSerif.variable} ${inter.variable} ${playfair.variable} ${sourceSerif.variable} ${dmMono.variable} font-body antialiased`}
       >
         <Layout>{children}</Layout>
       </body>

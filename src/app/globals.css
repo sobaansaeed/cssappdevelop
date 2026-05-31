@@ -21,6 +21,36 @@
     
     --font-display: 'Instrument Serif', serif;
     --font-body: 'Inter', sans-serif;
+    
+    /* Design System Colors */
+    --bg-hero: #0B1E3D;
+    --bg-page: #F5F0E8;
+    --bg-section-alt: #EDE6D6;
+    --bg-card: rgba(255,255,255,0.12);
+    
+    --text-primary: #1A1207;
+    --text-on-dark: #F0EAD6;
+    --text-muted: #6B5E4E;
+    --text-heading-dark: #FFFFFF;
+    
+    --accent-primary: #E8650A;
+    --accent-hover: #C4520A;
+    --accent-gold: #C8962E;
+    --accent-glow: rgba(232,101,10,0.25);
+    
+    --border-glass: rgba(255,255,255,0.18);
+    --border-light: rgba(26,18,7,0.12);
+    --border-card: rgba(200,150,46,0.20);
+    
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 32px;
+    --radius-pill: 999px;
+    
+    --shadow-card: 0 8px 32px rgba(11,30,61,0.18), 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-card-hover: 0 16px 48px rgba(232,101,10,0.15), 0 4px 16px rgba(0,0,0,0.12);
+    --shadow-btn: 0 4px 20px rgba(232,101,10,0.35);
   }
 }
 
@@ -218,4 +248,120 @@ body {
 }
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
+}
+
+/* ══════════════════════════════════════════════
+   Design System Components
+   ══════════════════════════════════════════════ */
+
+/* ── Starfield Animation ── */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+/* ── Glassmorphism Card ── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ── Light Page Card ── */
+.light-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 24px rgba(26, 18, 7, 0.08);
+  transition: all 0.3s ease;
+}
+
+.light-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 32px rgba(232, 101, 10, 0.15);
+}
+
+/* ── Primary CTA Button ── */
+.btn-primary {
+  background: linear-gradient(135deg, #E8650A 0%, #C8962E 100%);
+  color: white;
+  padding: 14px 32px;
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-btn);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 28px rgba(232, 101, 10, 0.45);
+}
+
+/* ── Secondary/Ghost Button ── */
+.btn-ghost {
+  background: transparent;
+  border: 1.5px solid var(--accent-primary);
+  color: var(--accent-primary);
+  padding: 13px 30px;
+  border-radius: var(--radius-pill);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  background: rgba(232, 101, 10, 0.1);
+}
+
+/* ── Eyebrow Label ── */
+.eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin-bottom: 12px;
+}
+
+/* ── Frosted Navbar ── */
+.navbar-frosted {
+  background: rgba(11, 30, 61, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-glass);
+}
+
+/* ── Smooth Scroll ── */
+html {
+  scroll-behavior: smooth;
 }

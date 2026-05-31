@@ -1,43 +1,65 @@
 import React from 'react';
 import Link from 'next/link';
-import { Mail, MapPin } from 'lucide-react';
+import { Twitter, Instagram } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-navy text-cream">
+    <footer style={{ background: '#0B1E3D' }} className="text-text-on-dark">
       {/* Gold Rule */}
-      <div className="gold-rule" />
+      <div className="h-px bg-gradient-to-r from-transparent via-accent-gold to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
 
-          {/* Brand */}
-          <div className="space-y-5 lg:col-span-1">
+          {/* Col 1: Brand */}
+          <div className="space-y-5">
             <Link href="/" className="inline-flex items-center gap-1">
               <span className="font-display text-2xl font-bold text-cream-light">CSS</span>
-              <span className="font-display text-2xl font-bold text-gold">KRO</span>
+              <span className="font-display text-2xl font-bold text-accent-gold">KRO</span>
             </Link>
-            <p className="font-body text-sm text-cream/50 leading-relaxed max-w-xs">
-              Pakistan&apos;s premier CSS civil services exam preparation platform — built for serious aspirants.
+            <p className="font-body text-sm leading-relaxed max-w-xs" style={{ color: 'rgba(240, 234, 214, 0.7)' }}>
+              Master CSS with Confidence — Pakistan&apos;s premier CSS civil services exam preparation platform.
             </p>
+            {/* Social Links */}
+            <div className="flex items-center gap-4">
+              <a 
+                href="https://twitter.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-text-on-dark/60 hover:text-accent-gold transition-colors"
+              >
+                <Twitter className="w-5 h-5" />
+              </a>
+              <a 
+                href="https://instagram.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-text-on-dark/60 hover:text-accent-gold transition-colors"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+            </div>
           </div>
 
-          {/* Navigation */}
+          {/* Col 2: Platform Links */}
           <div className="space-y-5">
-            <h4 className="font-display text-sm font-bold tracking-wide text-gold uppercase">Navigate</h4>
+            <h4 className="font-body text-sm font-semibold tracking-wide text-accent-gold uppercase">Platform</h4>
             <ul className="space-y-3">
               {[
-                { href: '/', label: 'Home' },
-                { href: '/newspapers', label: 'Newspapers' },
+                { href: '/newspapers', label: 'Daily News' },
+                { href: '/past-papers', label: 'Past Papers' },
                 { href: '/resources', label: 'Resources' },
-                { href: '/timeline', label: 'Timeline' },
+                { href: '/essay-checker', label: 'Essay Checker' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="font-body text-sm text-cream/40 hover:text-cream transition-colors duration-200 editorial-underline"
+                    className="font-body text-sm transition-colors duration-200"
+                    style={{ color: 'rgba(240, 234, 214, 0.7)' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#F0EAD6'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(240, 234, 214, 0.7)'}
                   >
                     {link.label}
                   </Link>
@@ -46,20 +68,22 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Col 3: Support */}
           <div className="space-y-5">
-            <h4 className="font-display text-sm font-bold tracking-wide text-gold uppercase">Resources</h4>
+            <h4 className="font-body text-sm font-semibold tracking-wide text-accent-gold uppercase">Support</h4>
             <ul className="space-y-3">
               {[
-                { href: '/resources#past-papers', label: 'Past Papers' },
-                { href: '/resources#syllabus', label: 'Syllabus' },
-                { href: '/resources#materials', label: 'Study Materials' },
-                { href: '/exam-pattern', label: 'Exam Pattern' },
+                { href: '/about', label: 'About' },
+                { href: '/contact', label: 'Contact' },
+                { href: '/faq', label: 'FAQ' },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="font-body text-sm text-cream/40 hover:text-cream transition-colors duration-200 editorial-underline"
+                    className="font-body text-sm transition-colors duration-200"
+                    style={{ color: 'rgba(240, 234, 214, 0.7)' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#F0EAD6'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(240, 234, 214, 0.7)'}
                   >
                     {link.label}
                   </Link>
@@ -68,30 +92,54 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Col 4: Newsletter */}
           <div className="space-y-5">
-            <h4 className="font-display text-sm font-bold tracking-wide text-gold uppercase">Contact</h4>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-2">
-                <Mail className="h-3.5 w-3.5 text-gold/60" />
-                <span className="font-mono text-xs text-cream/50 tracking-wide">info@csskro.com</span>
-              </li>
-              <li className="flex items-center gap-2">
-                <MapPin className="h-3.5 w-3.5 text-gold/60" />
-                <span className="font-mono text-xs text-cream/50 tracking-wide">Lahore, Pakistan</span>
-              </li>
-            </ul>
+            <h4 className="font-body text-sm font-semibold tracking-wide text-accent-gold uppercase">Newsletter</h4>
+            <p className="font-body text-sm" style={{ color: 'rgba(240, 234, 214, 0.7)' }}>
+              Get CSS prep tips and updates delivered to your inbox.
+            </p>
+            <form className="flex gap-2">
+              <input
+                type="email"
+                placeholder="Your email"
+                className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-accent-gold transition-colors"
+              />
+              <button
+                type="submit"
+                className="px-4 py-2 bg-accent-gold hover:bg-accent-primary text-white font-body text-sm font-medium rounded-lg transition-colors"
+              >
+                Subscribe
+              </button>
+            </form>
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="border-t border-cream/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="font-mono text-[10px] text-cream/25 tracking-widest uppercase">
-            &copy; {currentYear} CSS KRO. All rights reserved.
+        {/* Bottom Bar */}
+        <div className="border-t mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4" style={{ borderColor: 'rgba(240, 234, 214, 0.1)' }}>
+          <p className="font-body text-xs tracking-wide" style={{ color: 'rgba(240, 234, 214, 0.5)' }}>
+            © {currentYear} CSSKRO · All Rights Reserved
           </p>
-          <p className="font-mono text-[10px] text-cream/25 tracking-widest uppercase">
-            Master CSS with Confidence
-          </p>
+          <div className="flex items-center gap-4">
+            <Link 
+              href="/privacy" 
+              className="font-body text-xs transition-colors"
+              style={{ color: 'rgba(240, 234, 214, 0.5)' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#F0EAD6'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(240, 234, 214, 0.5)'}
+            >
+              Privacy
+            </Link>
+            <span style={{ color: 'rgba(240, 234, 214, 0.3)' }}>·</span>
+            <Link 
+              href="/terms" 
+              className="font-body text-xs transition-colors"
+              style={{ color: 'rgba(240, 234, 214, 0.5)' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = '#F0EAD6'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(240, 234, 214, 0.5)'}
+            >
+              Terms
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

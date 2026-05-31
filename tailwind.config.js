@@ -19,6 +19,17 @@ module.exports = {
         border: 'hsl(0, 0%, 18%)',
         input: 'hsl(0, 0%, 18%)',
         
+        // Design System Colors
+        'bg-hero': '#0B1E3D',
+        'bg-page': '#F5F0E8',
+        'bg-section-alt': '#EDE6D6',
+        'text-primary': '#1A1207',
+        'text-on-dark': '#F0EAD6',
+        'text-muted': '#6B5E4E',
+        'accent-primary': '#E8650A',
+        'accent-hover': '#C4520A',
+        'accent-gold': '#C8962E',
+        
         // Legacy colors (keep for other pages)
         navy: {
           DEFAULT: '#0D1B2A',
@@ -44,8 +55,8 @@ module.exports = {
         },
       },
       fontFamily: {
-        display: ['var(--font-instrument-serif)', 'var(--font-playfair)', 'Georgia', 'serif'],
-        body: ['var(--font-inter)', 'var(--font-source-serif)', 'Georgia', 'serif'],
+        display: ['var(--font-cormorant)', 'var(--font-playfair)', 'Georgia', 'serif'],
+        body: ['var(--font-dm-sans)', 'var(--font-inter)', 'sans-serif'],
         mono: ['var(--font-dm-mono)', 'Courier New', 'monospace'],
       },
       keyframes: {

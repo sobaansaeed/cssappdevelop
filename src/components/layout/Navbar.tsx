@@ -123,13 +123,15 @@ const Navbar: React.FC = () => {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isHomePage 
-            ? 'bg-transparent' 
+            ? scrolled 
+              ? 'navbar-frosted' 
+              : 'bg-transparent'
             : scrolled 
               ? 'bg-navy shadow-lg shadow-black/20' 
               : 'bg-navy'
         }`}
         style={{
-          borderBottom: !isHomePage && scrolled ? '1px solid #C9A84C' : 'none',
+          borderBottom: scrolled && !isHomePage ? '1px solid #C9A84C' : scrolled && isHomePage ? '1px solid rgba(255,255,255,0.18)' : 'none',
         }}
       >
         <div className="max-w-7xl mx-auto px-8 py-6">
