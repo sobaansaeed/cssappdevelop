@@ -104,9 +104,11 @@ const Navbar: React.FC = () => {
     setShowUserMenu(false);
   };
 
+  const isHomePage = pathname === '/';
+
   if (isLoading) {
     return (
-      <nav className="fixed top-0 left-0 right-0 bg-navy z-50">
+      <nav className={`fixed top-0 left-0 right-0 z-50 ${isHomePage ? 'bg-transparent' : 'bg-navy'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-center items-center h-16">
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gold"></div>
@@ -119,23 +121,36 @@ const Navbar: React.FC = () => {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 bg-navy z-50 transition-all duration-500 ${scrolled ? 'shadow-lg shadow-black/20' : ''
-          }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          isHomePage 
+            ? 'bg-transparent' 
+            : scrolled 
+              ? 'bg-navy shadow-lg shadow-black/20' 
+              : 'bg-navy'
+        }`}
         style={{
-          borderBottom: scrolled ? '1px solid #C9A84C' : '1px solid transparent',
+          borderBottom: !isHomePage && scrolled ? '1px solid #C9A84C' : 'none',
         }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+        <div className="max-w-7xl mx-auto px-8 py-6">
+          <div className="flex justify-between items-center">
 
             {/* ── Logo ── */}
             <Link href="/" className="flex items-center gap-1 group">
-              <span className="font-display text-xl font-bold tracking-tight text-cream-light transition-colors group-hover:text-white">
-                CSS
-              </span>
-              <span className="font-display text-xl font-bold tracking-tight text-gold transition-colors group-hover:text-gold-light">
-                KRO
-              </span>
+              {isHomePage ? (
+                <div className="text-3xl tracking-tight text-foreground" style={{ fontFamily: "'Instrument Serif', serif" }}>
+                  CSS KRO<sup className="text-xs">®</sup>
+                </div>
+              ) : (
+                <>
+                  <span className="font-display text-xl font-bold tracking-tight text-cream-light transition-colors group-hover:text-white">
+                    CSS
+                  </span>
+                  <span className="font-display text-xl font-bold tracking-tight text-gold transition-colors group-hover:text-gold-light">
+                    KRO
+                  </span>
+                </>
+              )}
             </Link>
 
             {/* ── Desktop Nav ── */}
@@ -144,10 +159,15 @@ const Navbar: React.FC = () => {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`nav-link font-mono font-medium tracking-widest transition-colors ${isActive(item.href)
-                      ? 'text-gold active'
-                      : 'text-cream/70 hover:text-cream'
-                    }`}
+                  className={`text-sm transition-colors ${
+                    isHomePage
+                      ? isActive(item.href)
+                        ? 'text-foreground'
+                        : 'text-muted-foreground hover:text-foreground'
+                      : isActive(item.href)
+                        ? 'text-gold nav-link active'
+                        : 'text-cream/70 hover:text-cream nav-link'
+                  }`}
                 >
                   {item.label}
                 </Link>
@@ -160,8 +180,12 @@ const Navbar: React.FC = () => {
                 <div className="relative">
                   <button
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center gap-2 px-4 py-2 rounded border border-gold/30 text-gold hover:bg-gold/10 transition-all duration-200 font-mono text-xs tracking-wide"
-                    style={{ borderRadius: '4px' }}
+                    className={`flex items-center gap-2 px-4 py-2 rounded transition-all duration-200 font-mono text-xs tracking-wide ${
+                      isHomePage
+                        ? 'liquid-glass text-foreground'
+                        : 'border border-gold/30 text-gold hover:bg-gold/10'
+                    }`}
+                    style={{ borderRadius: isHomePage ? '9999px' : '4px' }}
                   >
                     <User className="h-3.5 w-3.5" />
                     <span>{userProfileService.getDisplayName(user)}</span>
@@ -185,10 +209,14 @@ const Navbar: React.FC = () => {
               ) : (
                 <button
                   onClick={() => setShowAuthModal(true)}
-                  className="px-5 py-2 border border-gold text-gold font-mono text-xs tracking-widest uppercase hover:bg-gold hover:text-navy transition-all duration-300"
-                  style={{ borderRadius: '4px' }}
+                  className={`px-6 py-2.5 text-sm cursor-pointer transition-all duration-300 ${
+                    isHomePage
+                      ? 'liquid-glass rounded-full text-foreground'
+                      : 'border border-gold text-gold font-mono tracking-widest uppercase hover:bg-gold hover:text-navy'
+                  }`}
+                  style={{ borderRadius: isHomePage ? '9999px' : '4px' }}
                 >
-                  Start Preparing
+                  {isHomePage ? 'Begin Journey' : 'Start Preparing'}
                 </button>
               )}
             </div>
@@ -197,7 +225,7 @@ const Navbar: React.FC = () => {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 text-cream hover:text-gold transition-colors"
+                className={`p-2 transition-colors ${isHomePage ? 'text-foreground hover:text-muted-foreground' : 'text-cream hover:text-gold'}`}
               >
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </button>
@@ -207,28 +235,33 @@ const Navbar: React.FC = () => {
 
         {/* ── Mobile Full-Screen Overlay ── */}
         {isMenuOpen && (
-          <div className="md:hidden fixed inset-0 top-16 bg-navy z-40 flex flex-col">
+          <div className={`md:hidden fixed inset-0 top-16 z-40 flex flex-col ${isHomePage ? 'bg-background' : 'bg-navy'}`}>
             <div className="flex-1 flex flex-col justify-center items-center gap-8 px-8">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`font-display text-3xl font-bold tracking-wide transition-colors ${isActive(item.href) ? 'text-gold' : 'text-cream/60 hover:text-cream'
-                    }`}
+                  className={`font-display text-3xl font-bold tracking-wide transition-colors ${
+                    isActive(item.href) 
+                      ? isHomePage ? 'text-foreground' : 'text-gold' 
+                      : isHomePage ? 'text-muted-foreground hover:text-foreground' : 'text-cream/60 hover:text-cream'
+                  }`}
                 >
                   {item.label}
                 </Link>
               ))}
 
-              <div className="w-16 h-px bg-gold/40 my-4" />
+              <div className={`w-16 h-px my-4 ${isHomePage ? 'bg-border' : 'bg-gold/40'}`} />
 
               {isAuthenticated ? (
                 <div className="text-center space-y-4">
-                  <p className="font-mono text-xs text-gold tracking-wide">{user?.email}</p>
+                  <p className={`font-mono text-xs tracking-wide ${isHomePage ? 'text-muted-foreground' : 'text-gold'}`}>{user?.email}</p>
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-2 text-cream/60 hover:text-cream transition-colors font-mono text-xs tracking-wide"
+                    className={`flex items-center gap-2 transition-colors font-mono text-xs tracking-wide ${
+                      isHomePage ? 'text-muted-foreground hover:text-foreground' : 'text-cream/60 hover:text-cream'
+                    }`}
                   >
                     <LogOut className="h-4 w-4" />
                     <span>Sign Out</span>
@@ -240,16 +273,20 @@ const Navbar: React.FC = () => {
                     setShowAuthModal(true);
                     setIsMenuOpen(false);
                   }}
-                  className="px-8 py-3 border border-gold text-gold font-mono text-sm tracking-widest uppercase hover:bg-gold hover:text-navy transition-all duration-300"
-                  style={{ borderRadius: '4px' }}
+                  className={`px-8 py-3 text-sm transition-all duration-300 ${
+                    isHomePage
+                      ? 'liquid-glass rounded-full text-foreground'
+                      : 'border border-gold text-gold font-mono tracking-widest uppercase hover:bg-gold hover:text-navy'
+                  }`}
+                  style={{ borderRadius: isHomePage ? '9999px' : '4px' }}
                 >
-                  Start Preparing
+                  {isHomePage ? 'Begin Journey' : 'Start Preparing'}
                 </button>
               )}
             </div>
 
             <div className="pb-8 text-center">
-              <p className="font-mono text-[10px] text-cream/30 tracking-widest uppercase">
+              <p className={`font-mono text-[10px] tracking-widest uppercase ${isHomePage ? 'text-muted-foreground/30' : 'text-cream/30'}`}>
                 CSS KRO — Master CSS with Confidence
               </p>
             </div>

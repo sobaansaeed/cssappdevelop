@@ -31,34 +31,6 @@ function AnimatedCounter({ target, suffix = '', duration = 2 }: { target: number
 }
 
 /* ──────────────────────────────────────────────
-   Floating Diamond (geometric bg element)
-   ────────────────────────────────────────────── */
-function FloatingDiamond({ size, x, y, delay, dur }: { size: number; x: string; y: string; delay: number; dur: number }) {
-  return (
-    <motion.div
-      className="absolute border border-gold/10"
-      style={{
-        width: size,
-        height: size,
-        left: x,
-        top: y,
-        rotate: 45,
-      }}
-      animate={{
-        y: [0, -20, 0],
-        opacity: [0.08, 0.2, 0.08],
-      }}
-      transition={{
-        duration: dur,
-        repeat: Infinity,
-        ease: 'easeInOut',
-        delay,
-      }}
-    />
-  );
-}
-
-/* ──────────────────────────────────────────────
    Feature Row Component
    ────────────────────────────────────────────── */
 function FeatureRow({
@@ -147,123 +119,62 @@ const HomePage: React.FC = () => {
   return (
     <div className="overflow-hidden">
 
-      {/* ─── HERO SECTION ─── */}
-      <section className="relative min-h-screen flex items-center bg-navy overflow-hidden">
-        {/* Geometric Background */}
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 geo-grid opacity-30" />
-          <FloatingDiamond size={80} x="10%" y="20%" delay={0} dur={7} />
-          <FloatingDiamond size={50} x="80%" y="15%" delay={1.5} dur={8} />
-          <FloatingDiamond size={120} x="70%" y="60%" delay={0.8} dur={9} />
-          <FloatingDiamond size={40} x="20%" y="70%" delay={2.2} dur={6} />
-          <FloatingDiamond size={60} x="50%" y="85%" delay={1} dur={7.5} />
-          <FloatingDiamond size={90} x="90%" y="40%" delay={0.5} dur={8.5} />
-          <FloatingDiamond size={35} x="5%" y="50%" delay={3} dur={6.5} />
-          {/* Vignette */}
-          <div className="absolute inset-0 bg-gradient-to-b from-navy/50 via-transparent to-navy/80" />
-        </div>
+      {/* ═══════════════════════════════════════════
+          VELORAH® CINEMATIC HERO
+          ═══════════════════════════════════════════ */}
+      <section className="relative min-h-screen flex flex-col overflow-hidden">
+        
+        {/* Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        >
+          <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4" type="video/mp4" />
+        </video>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-0 w-full">
-          <div className="max-w-4xl">
+        {/* Hero Content */}
+        <div className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-32 pb-40 flex-1 min-h-screen">
+          <div className="w-full max-w-7xl">
             {/* Eyebrow */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex items-center gap-3 mb-8"
-            >
-              <div className="w-8 h-px bg-gold" />
-              <span className="font-mono text-[11px] text-gold tracking-[0.3em] uppercase">
-                Pakistan&apos;s Premier CSS Platform
-              </span>
-            </motion.div>
+            <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground mb-8">
+              Pakistan&apos;s Premier CSS Platform
+            </p>
 
-            {/* Headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-cream leading-[0.95] mb-8"
+            {/* Main Headline */}
+            <h1 
+              className="text-5xl sm:text-7xl md:text-8xl leading-[0.95] max-w-7xl mx-auto font-normal animate-fade-rise"
+              style={{ 
+                fontFamily: "'Instrument Serif', serif",
+                letterSpacing: '-2.46px'
+              }}
             >
-              Master CSS
-              <br />
-              with{' '}
-              <span className="relative inline-block">
-                <span className="text-gold">Confidence</span>
-                <motion.span
-                  initial={{ width: 0 }}
-                  animate={{ width: '100%' }}
-                  transition={{ duration: 0.8, delay: 1.2, ease: 'easeOut' }}
-                  className="absolute bottom-1 left-0 h-[3px] bg-gold/40"
-                />
-              </span>
-            </motion.h1>
+              Master CSS <em className="not-italic text-muted-foreground">with Confidence</em>
+            </h1>
 
-            {/* Subheadline */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
-              className="font-body text-lg sm:text-xl text-cream/60 leading-relaxed max-w-2xl mb-12"
-            >
+            {/* Subtext */}
+            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto mt-8 leading-relaxed animate-fade-rise-delay">
               Comprehensive exam preparation with daily newspapers, curated resources,
               past papers, and expert guidance — everything you need to clear the Central
               Superior Services examination.
-            </motion.p>
+            </p>
 
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.9 }}
-              className="flex flex-col sm:flex-row gap-4"
+            {/* CTA Button */}
+            <Link
+              href="/resources"
+              className="inline-block liquid-glass rounded-full px-14 py-5 text-base text-foreground mt-12 cursor-pointer animate-fade-rise-delay-2"
             >
-              <Link
-                href="/resources"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gold text-navy font-mono text-sm tracking-widest uppercase hover:bg-gold-light transition-all duration-300"
-                style={{ borderRadius: '4px' }}
-              >
-                Start Preparing
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/newspapers"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-cream/20 text-cream font-mono text-sm tracking-widest uppercase hover:border-gold hover:text-gold transition-all duration-300"
-                style={{ borderRadius: '4px' }}
-              >
-                Explore Resources
-              </Link>
-            </motion.div>
+              Start Preparing
+            </Link>
           </div>
-
-          {/* Large Decorative Numeral */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1.5, delay: 1 }}
-            className="hidden lg:block absolute right-8 bottom-8 select-none"
-          >
-            <span className="font-display text-[200px] font-bold text-cream/[0.03] leading-none">
-              CSS
-            </span>
-          </motion.div>
         </div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        >
-          <span className="font-mono text-[9px] text-cream/30 tracking-[0.4em] uppercase">Scroll</span>
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            className="w-px h-6 bg-gradient-to-b from-gold/50 to-transparent"
-          />
-        </motion.div>
       </section>
+
+      {/* ═══════════════════════════════════════════
+          WHITE BACKGROUND SECTIONS (Legacy Style)
+          ═══════════════════════════════════════════ */}
 
       {/* ─── STATS BAR ─── */}
       <section className="relative bg-cream py-20 lg:py-24">

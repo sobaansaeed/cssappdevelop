@@ -1,7 +1,21 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Source_Serif_4, DM_Mono } from "next/font/google";
+import { Playfair_Display, Source_Serif_4, DM_Mono, Instrument_Serif, Inter } from "next/font/google";
 import "./globals.css";
 import Layout from "@/components/layout/Layout";
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  variable: "--font-instrument-serif",
+  display: "swap",
+  weight: ["400"],
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  weight: ["400", "500", "600"],
+});
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -50,7 +64,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfair.variable} ${sourceSerif.variable} ${dmMono.variable} font-body antialiased`}
+        className={`${instrumentSerif.variable} ${inter.variable} ${playfair.variable} ${sourceSerif.variable} ${dmMono.variable} font-body antialiased`}
       >
         <Layout>{children}</Layout>
       </body>
