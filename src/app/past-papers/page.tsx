@@ -428,13 +428,13 @@ export default function PastPapersPage() {
                     <div className="flex-1 h-px bg-accent-gold/30" />
                   </div>
                   <p className="font-body text-sm text-text-muted">
-                    {groupedPapers[group].length} papers available
+                    {(groupedPapers as Record<string, Paper[]>)[group].length} papers available
                   </p>
                 </div>
 
                 {/* Papers Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {groupedPapers[group].map((paper) => (
+                  {(groupedPapers as Record<string, Paper[]>)[group].map((paper) => (
                     <PaperCard 
                       key={paper.id} 
                       paper={paper} 
