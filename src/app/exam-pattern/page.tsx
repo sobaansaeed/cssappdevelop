@@ -1,366 +1,512 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Target, Clock, Star, FileText, CheckCircle, AlertCircle, Calendar, TrendingUp } from 'lucide-react';
+import React, { useRef, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { motion, useInView, useAnimation } from 'framer-motion';
+import {
+  FileText,
+  PenTool,
+  BookOpen,
+  Clock,
+  AlertCircle,
+  CheckSquare,
+  BookText,
+  Calendar,
+  ArrowRight,
+  Users,
+  ClipboardCheck,
+  MessageSquare,
+  PenLine,
+  X,
+  Check
+} from 'lucide-react';
 
-const ExamPatternPage: React.FC = () => {
-  const [activeSection, setActiveSection] = useState('overview');
+// ═══════════════════════════════════════════
+// TYPES & DATA
+// ═══════════════════════════════════════════
 
-  const examStructure = [
-    {
-      phase: 'Written Examination',
-      duration: '3 months',
-      subjects: 11,
-      totalMarks: 1100,
-      description: 'Main examination consisting of compulsory and optional subjects',
-      status: 'primary'
-    },
-    {
-      phase: 'Interview/Viva',
-      duration: '1 day',
-      subjects: 1,
-      totalMarks: 300,
-      description: 'Personality assessment and general knowledge interview',
-      status: 'secondary'
-    }
-  ];
+interface Paper {
+  number: string;
+  subject: string;
+  type: 'compulsory' | 'optional';
+  marks: number;
+  duration: string;
+  questionType: 'Essay-type' | 'MCQs' | 'Both';
+  passMarkPercent: number;
+}
 
-  const examSchedule = [
-    { day: 'Day 1', subject: 'English Essay & Composition', time: '9:00 AM - 12:00 PM' },
-    { day: 'Day 2', subject: 'General Knowledge', time: '9:00 AM - 12:00 PM' },
-    { day: 'Day 3', subject: 'Pakistan Affairs', time: '9:00 AM - 12:00 PM' },
-    { day: 'Day 4', subject: 'Current Affairs', time: '9:00 AM - 12:00 PM' },
-    { day: 'Day 5', subject: 'Islamic Studies/Ethics', time: '9:00 AM - 12:00 PM' },
-    { day: 'Day 6', subject: 'Optional Subject 1', time: '9:00 AM - 12:00 PM' },
-    { day: 'Day 7', subject: 'Optional Subject 2', time: '9:00 AM - 12:00 PM' },
-    { day: 'Day 8', subject: 'Optional Subject 3', time: '9:00 AM - 12:00 PM' },
-    { day: 'Day 9', subject: 'Optional Subject 4', time: '9:00 AM - 12:00 PM' },
-    { day: 'Day 10', subject: 'Optional Subject 5', time: '9:00 AM - 12:00 PM' },
-    { day: 'Day 11', subject: 'Optional Subject 6', time: '9:00 AM - 12:00 PM' }
-  ];
+const papers: Paper[] = [
+  { number: '01', subject: 'English Essay', type: 'compulsory', marks: 100, duration: '3 hrs', questionType: 'Essay-type', passMarkPercent: 33 },
+  { number: '02', subject: 'English Précis & Composition', type: 'compulsory', marks: 100, duration: '3 hrs', questionType: 'Both', passMarkPercent: 33 },
+  { number: '03', subject: 'General Science & Ability', type: 'compulsory', marks: 100, duration: '2 hrs', questionType: 'MCQs', passMarkPercent: 33 },
+  { number: '04', subject: 'Current Affairs', type: 'compulsory', marks: 100, duration: '3 hrs', questionType: 'Essay-type', passMarkPercent: 33 },
+  { number: '05', subject: 'Pakistan Affairs', type: 'compulsory', marks: 100, duration: '3 hrs', questionType: 'Essay-type', passMarkPercent: 33 },
+  { number: '06', subject: 'Islamiat', type: 'compulsory', marks: 100, duration: '2 hrs', questionType: 'Both', passMarkPercent: 33 },
+  { number: '07', subject: 'Optional I', type: 'optional', marks: 100, duration: '3 hrs', questionType: 'Essay-type', passMarkPercent: 40 },
+  { number: '08', subject: 'Optional II', type: 'optional', marks: 100, duration: '3 hrs', questionType: 'Essay-type', passMarkPercent: 40 },
+  { number: '09', subject: 'Optional III', type: 'optional', marks: 100, duration: '3 hrs', questionType: 'Essay-type', passMarkPercent: 40 },
+  { number: '10', subject: 'Optional IV', type: 'optional', marks: 100, duration: '3 hrs', questionType: 'Essay-type', passMarkPercent: 40 },
+];
 
-  const markingScheme = [
-    {
-      category: 'Essay Writing',
-      marks: '50-60',
-      criteria: ['Content Quality', 'Language & Style', 'Organization', 'Grammar']
-    },
-    {
-      category: 'Objective Questions',
-      marks: '40-50',
-      criteria: ['Factual Knowledge', 'Understanding', 'Application', 'Analysis']
-    }
-  ];
-
-  const importantDates = [
-    { event: 'Application Start', date: 'October 2024', status: 'upcoming' },
-    { event: 'Application Deadline', date: 'November 2024', status: 'upcoming' },
-    { event: 'Written Examination', date: 'February 2025', status: 'upcoming' },
-    { event: 'Result Declaration', date: 'May 2025', status: 'upcoming' },
-    { event: 'Interview Phase', date: 'June 2025', status: 'upcoming' }
-  ];
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center">
-            <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 w-20 h-20 mx-auto mb-6 flex items-center justify-center">
-              <Target className="h-10 w-10 text-white" />
-            </div>
-            <h1 className="text-4xl font-bold mb-4">CSS Exam Pattern</h1>
-            <p className="text-xl text-purple-100 max-w-2xl mx-auto">
-              Detailed exam pattern, marking scheme, and guidelines for CSS examination 2024.
-            </p>
-            <div className="flex justify-center space-x-8 mt-8 text-purple-100">
-              <div className="text-center">
-                <div className="text-2xl font-bold">1100+300</div>
-                <div className="text-sm">Total Marks</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">11</div>
-                <div className="text-sm">Written Papers</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">3</div>
-                <div className="text-sm">Hours Each</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        
-        {/* Navigation */}
-        <div className="bg-white rounded-lg shadow-sm mb-8">
-          <div className="border-b border-gray-200">
-            <nav className="overflow-x-auto scrollbar-hide">
-              <div className="flex space-x-8 px-6 min-w-max">
-                {[
-                  { id: 'overview', label: 'Exam Overview', icon: Target },
-                  { id: 'schedule', label: 'Exam Schedule', icon: Calendar },
-                  { id: 'marking', label: 'Marking Scheme', icon: Star },
-                  { id: 'guidelines', label: 'Guidelines', icon: FileText }
-                ].map((tab) => {
-                  const Icon = tab.icon;
-                  return (
-                    <button
-                      key={tab.id}
-                      onClick={() => setActiveSection(tab.id)}
-                      className={`flex items-center space-x-2 py-4 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
-                        activeSection === tab.id
-                          ? 'border-purple-500 text-purple-600'
-                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                      }`}
-                    >
-                      <Icon className="h-5 w-5" />
-                      <span>{tab.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </nav>
-          </div>
-        </div>
-
-        {/* Content Sections */}
-        <div className="bg-white rounded-lg shadow-sm">
-          {activeSection === 'overview' && (
-            <div className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Examination Overview</h2>
-              
-              {/* Exam Structure */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                {examStructure.map((phase, index) => (
-                  <div key={index} className={`border-2 rounded-lg p-6 ${
-                    phase.status === 'primary' 
-                      ? 'border-purple-200 bg-purple-50' 
-                      : 'border-blue-200 bg-blue-50'
-                  }`}>
-                    <h3 className={`text-lg font-semibold mb-3 ${
-                      phase.status === 'primary' ? 'text-purple-900' : 'text-blue-900'
-                    }`}>
-                      {phase.phase}
-                    </h3>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Duration:</span>
-                        <span className="font-medium">{phase.duration}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Subjects:</span>
-                        <span className="font-medium">{phase.subjects}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Total Marks:</span>
-                        <span className="font-medium">{phase.totalMarks}</span>
-                      </div>
-                    </div>
-                    <p className="text-gray-700 text-sm mt-3">{phase.description}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Important Dates */}
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Important Dates 2024-25</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {importantDates.map((item, index) => (
-                    <div key={index} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-medium text-gray-900">{item.event}</h4>
-                        <Calendar className="h-4 w-4 text-purple-500" />
-                      </div>
-                      <p className="text-purple-600 font-semibold">{item.date}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeSection === 'schedule' && (
-            <div className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Examination Schedule</h2>
-              <p className="text-gray-600 mb-8">Daily examination schedule for CSS written examination.</p>
-              
-              <div className="space-y-4">
-                {examSchedule.map((exam, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex items-center space-x-4 mb-2 sm:mb-0">
-                        <div className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
-                          {exam.day}
-                        </div>
-                        <h3 className="font-semibold text-gray-900">{exam.subject}</h3>
-                      </div>
-                      <div className="flex items-center space-x-2 text-gray-600">
-                        <Clock className="h-4 w-4" />
-                        <span className="text-sm">{exam.time}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-                <div className="flex items-start space-x-3">
-                  <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5" />
-                  <div>
-                    <h4 className="font-medium text-blue-900 mb-2">Important Notes</h4>
-                    <ul className="text-blue-800 text-sm space-y-1">
-                      <li>• All examinations start at 9:00 AM sharp</li>
-                      <li>• Duration of each paper is 3 hours</li>
-                      <li>• Candidates must report 30 minutes before exam time</li>
-                      <li>• No extra time will be given for any reason</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeSection === 'marking' && (
-            <div className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Marking Scheme</h2>
-              <p className="text-gray-600 mb-8">Understanding how CSS papers are evaluated and marked.</p>
-              
-              {/* Marking Breakdown */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                {markingScheme.map((scheme, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">{scheme.category}</h3>
-                    <div className="mb-4">
-                      <span className="text-2xl font-bold text-purple-600">{scheme.marks}</span>
-                      <span className="text-gray-600 ml-2">marks</span>
-                    </div>
-                    <h4 className="font-medium text-gray-900 mb-2">Evaluation Criteria:</h4>
-                    <ul className="space-y-2">
-                      {scheme.criteria.map((criterion, i) => (
-                        <li key={i} className="flex items-center space-x-2">
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                          <span className="text-gray-700 text-sm">{criterion}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-
-              {/* Grade Distribution */}
-              <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Grade Distribution</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center p-4 bg-green-100 rounded-lg">
-                    <div className="text-lg font-bold text-green-800">80-100</div>
-                    <div className="text-green-600 text-sm">Grade A</div>
-                  </div>
-                  <div className="text-center p-4 bg-blue-100 rounded-lg">
-                    <div className="text-lg font-bold text-blue-800">70-79</div>
-                    <div className="text-blue-600 text-sm">Grade B</div>
-                  </div>
-                  <div className="text-center p-4 bg-yellow-100 rounded-lg">
-                    <div className="text-lg font-bold text-yellow-800">60-69</div>
-                    <div className="text-yellow-600 text-sm">Grade C</div>
-                  </div>
-                  <div className="text-center p-4 bg-red-100 rounded-lg">
-                    <div className="text-lg font-bold text-red-800">50-59</div>
-                    <div className="text-red-600 text-sm">Grade D</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {activeSection === 'guidelines' && (
-            <div className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Examination Guidelines</h2>
-              
-              <div className="space-y-8">
-                {/* Before Exam */}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Before the Examination</h3>
-                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-                    <ul className="space-y-2">
-                      <li className="flex items-start space-x-2">
-                        <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
-                        <span className="text-gray-700">Reach the examination center 30 minutes before the exam</span>
-                      </li>
-                      <li className="flex items-start space-x-2">
-                        <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
-                        <span className="text-gray-700">Bring original CNIC and admit card</span>
-                      </li>
-                      <li className="flex items-start space-x-2">
-                        <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
-                        <span className="text-gray-700">Use only blue or black ink pen</span>
-                      </li>
-                      <li className="flex items-start space-x-2">
-                        <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
-                        <span className="text-gray-700">Mobile phones and electronic devices are not allowed</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                {/* During Exam */}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">During the Examination</h3>
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                    <ul className="space-y-2">
-                      <li className="flex items-start space-x-2">
-                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                        <span className="text-gray-700">Read all questions carefully before attempting</span>
-                      </li>
-                      <li className="flex items-start space-x-2">
-                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                        <span className="text-gray-700">Attempt all compulsory questions</span>
-                      </li>
-                      <li className="flex items-start space-x-2">
-                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                        <span className="text-gray-700">Manage your time effectively (3 hours per paper)</span>
-                      </li>
-                      <li className="flex items-start space-x-2">
-                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                        <span className="text-gray-700">Write clearly and legibly</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Answer Writing Tips */}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Answer Writing Tips</h3>
-                  <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
-                    <ul className="space-y-2">
-                      <li className="flex items-start space-x-2">
-                        <TrendingUp className="h-5 w-5 text-purple-600 mt-0.5" />
-                        <span className="text-gray-700">Structure your answers with clear introduction, body, and conclusion</span>
-                      </li>
-                      <li className="flex items-start space-x-2">
-                        <TrendingUp className="h-5 w-5 text-purple-600 mt-0.5" />
-                        <span className="text-gray-700">Use relevant examples and case studies</span>
-                      </li>
-                      <li className="flex items-start space-x-2">
-                        <TrendingUp className="h-5 w-5 text-purple-600 mt-0.5" />
-                        <span className="text-gray-700">Maintain word limits for essay questions</span>
-                      </li>
-                      <li className="flex items-start space-x-2">
-                        <TrendingUp className="h-5 w-5 text-purple-600 mt-0.5" />
-                        <span className="text-gray-700">Review your answers if time permits</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+const questionTypePillColors = {
+  'Essay-type': 'bg-teal-600 text-white',
+  'MCQs': 'bg-rust text-white',
+  'Both': 'bg-purple-600 text-white',
 };
 
-export default ExamPatternPage;
+// ═══════════════════════════════════════════
+// COUNT-UP ANIMATION HOOK
+// ═══════════════════════════════════════════
+
+const useCountUp = (end: number, duration: number = 2000) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (!isInView) return;
+
+    let startTime: number;
+    let animationFrame: number;
+
+    const animate = (currentTime: number) => {
+      if (!startTime) startTime = currentTime;
+      const progress = Math.min((currentTime - startTime) / duration, 1);
+      
+      setCount(Math.floor(progress * end));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(animate);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(animate);
+
+    return () => cancelAnimationFrame(animationFrame);
+  }, [isInView, end, duration]);
+
+  return { count, ref };
+};
+
+// ═══════════════════════════════════════════
+// MAIN PAGE COMPONENT
+// ═══════════════════════════════════════════
+
+export default function ExamPatternPage() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="min-h-screen"
+      style={{ background: '#F5F0E8' }}
+    >
+      {/* ═══════════════════════════════════════════
+          1. PAGE HERO
+          ═══════════════════════════════════════════ */}
+      <section
+        className="relative py-20"
+        style={{
+          background: '#0B1E3D',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.12'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          {/* Eyebrow */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="eyebrow text-accent-gold mb-6"
+          >
+            CSS EXAM STRUCTURE
+          </motion.p>
+
+          {/* Heading */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="font-display text-5xl lg:text-7xl font-semibold text-white mb-4"
+          >
+            Crack the <span className="text-accent-primary">Code</span>
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="font-body text-base text-text-on-dark/70 max-w-2xl mx-auto mb-8"
+          >
+            Every stage, every paper, every mark — the complete CSS exam structure decoded for serious aspirants.
+          </motion.p>
+
+          {/* Stat Pills */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="flex flex-wrap justify-center gap-4"
+          >
+            {[
+              '3 Stages',
+              '1000 Written Marks',
+              '300 Viva Marks',
+              '~200 Seats'
+            ].map((stat, idx) => (
+              <div
+                key={idx}
+                className="px-6 py-3 text-cream font-body text-sm"
+                style={{
+                  background: 'rgba(255,255,255,0.10)',
+                  backdropFilter: 'blur(16px)',
+                  border: '1px solid rgba(200,150,46,0.30)',
+                  borderRadius: '999px',
+                }}
+              >
+                {stat}
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          2. EXAM STAGES OVERVIEW
+          ═══════════════════════════════════════════ */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <p className="eyebrow text-accent-primary mb-4">THE THREE STAGES</p>
+            <h2 className="font-display text-4xl lg:text-5xl font-semibold text-text-primary mb-4">
+              A Three-Stage Elimination
+            </h2>
+            <p className="font-body text-base text-text-muted">
+              Clear all three to earn your CSS badge.
+            </p>
+          </div>
+
+          {/* Stages Flow */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6 relative">
+            {[
+              {
+                number: '01',
+                icon: <FileText className="h-8 w-8" />,
+                title: 'Written Exam',
+                marks: '1000 Marks',
+                description: '~6,000–10,000 candidates compete across 10 papers over 2 weeks',
+                status: 'Competitive',
+                delay: 0.1,
+              },
+              {
+                number: '02',
+                icon: <ClipboardCheck className="h-8 w-8" />,
+                title: 'Psychological Assessment',
+                marks: 'Pass / Fail',
+                description: 'Medical fitness check included. Qualifying in nature.',
+                status: 'Qualifying',
+                delay: 0.2,
+              },
+              {
+                number: '03',
+                icon: <MessageSquare className="h-8 w-8" />,
+                title: 'Viva Voce',
+                marks: '300 Marks',
+                description: 'Personality test by CSS Board panel. Final merit determination.',
+                status: 'Final',
+                delay: 0.3,
+              },
+            ].map((stage, idx) => (
+              <React.Fragment key={idx}>
+                <motion.div
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: stage.delay, duration: 0.5 }}
+                  className="relative p-8"
+                  style={{
+                    background: 'rgba(255,255,255,0.75)',
+                    backdropFilter: 'blur(8px)',
+                    border: '1px solid rgba(200,150,46,0.20)',
+                    borderRadius: '12px',
+                    boxShadow: '0 4px 24px rgba(26,18,7,0.08)',
+                  }}
+                >
+                  {/* Stage Number */}
+                  <div className="absolute top-6 right-6 font-display text-6xl font-semibold text-accent-primary/20">
+                    {stage.number}
+                  </div>
+
+                  {/* Icon */}
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent-primary/10 text-accent-primary mb-4">
+                    {stage.icon}
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="font-display text-3xl font-medium text-text-primary mb-3">
+                    {stage.title}
+                  </h3>
+
+                  {/* Marks */}
+                  <p className="font-display text-4xl font-semibold text-accent-primary mb-4">
+                    {stage.marks}
+                  </p>
+
+                  {/* Description */}
+                  <p className="font-body text-sm text-text-muted mb-6">
+                    {stage.description}
+                  </p>
+
+                  {/* Status Pill */}
+                  <span className="inline-block px-4 py-1.5 bg-navy text-cream text-xs font-body rounded-full">
+                    {stage.status}
+                  </span>
+                </motion.div>
+
+                {/* Arrow (desktop only) */}
+                {idx < 2 && (
+                  <div className="hidden lg:flex items-center justify-center">
+                    <ArrowRight className="h-8 w-8 text-accent-primary" />
+                  </div>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          3. WRITTEN EXAM DEEP DIVE
+          ═══════════════════════════════════════════ */}
+      <section className="py-16" style={{ background: '#EDE6D6' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <p className="eyebrow text-accent-primary mb-4">WRITTEN EXAMINATION</p>
+            <h2 className="font-display text-4xl lg:text-5xl font-semibold text-text-primary mb-4">
+              Stage 1 — The Written Battle
+            </h2>
+            <p className="font-body text-base text-text-muted">
+              10 papers over approximately 2 weeks. Every mark counts.
+            </p>
+          </div>
+
+          {/* Table Container */}
+          <div className="overflow-x-auto mb-6">
+            <div
+              className="min-w-full"
+              style={{
+                background: 'rgba(255,255,255,0.75)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(200,150,46,0.20)',
+                borderRadius: '12px',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Table Header */}
+              <div className="grid grid-cols-6 gap-4 px-6 py-4 border-b border-accent-gold/30" style={{ background: '#F5F0E8' }}>
+                <div className="font-body text-xs uppercase tracking-wide text-text-muted">Paper</div>
+                <div className="font-body text-xs uppercase tracking-wide text-text-muted">Subject</div>
+                <div className="font-body text-xs uppercase tracking-wide text-text-muted">Marks</div>
+                <div className="font-body text-xs uppercase tracking-wide text-text-muted">Duration</div>
+                <div className="font-body text-xs uppercase tracking-wide text-text-muted">Question Type</div>
+                <div className="font-body text-xs uppercase tracking-wide text-text-muted">Pass Mark</div>
+              </div>
+
+              {/* Table Rows */}
+              {papers.map((paper, idx) => (
+                <div
+                  key={idx}
+                  className="grid grid-cols-6 gap-4 px-6 py-4 border-l-4 border-transparent hover:border-accent-primary hover:bg-accent-primary/5 transition-all duration-200"
+                  style={{
+                    background: idx % 2 === 0 ? 'rgba(255,255,255,0.7)' : 'rgba(245,240,232,0.5)',
+                  }}
+                >
+                  {/* Paper Number */}
+                  <div className="font-display text-xl font-medium text-accent-primary">
+                    {paper.number}
+                  </div>
+
+                  {/* Subject */}
+                  <div>
+                    <div className="font-display text-lg font-medium text-text-primary">
+                      {paper.subject}
+                    </div>
+                    <div className="font-body text-xs text-text-muted italic">
+                      ({paper.type === 'compulsory' ? 'Compulsory' : 'Optional'})
+                    </div>
+                  </div>
+
+                  {/* Marks */}
+                  <div>
+                    <span className="font-body text-lg font-semibold text-text-primary">{paper.marks}</span>
+                    <span className="ml-2 px-2 py-0.5 bg-accent-primary text-white text-xs rounded-full">
+                      marks
+                    </span>
+                  </div>
+
+                  {/* Duration */}
+                  <div className="flex items-center gap-2 text-text-primary">
+                    <Clock className="h-4 w-4" />
+                    <span className="font-body text-sm">{paper.duration}</span>
+                  </div>
+
+                  {/* Question Type */}
+                  <div>
+                    <span className={`px-3 py-1 text-xs font-body rounded-full ${questionTypePillColors[paper.questionType]}`}>
+                      {paper.questionType}
+                    </span>
+                  </div>
+
+                  {/* Pass Mark */}
+                  <div>
+                    <div className="font-body text-sm font-semibold text-text-primary mb-1">
+                      {paper.passMarkPercent}%
+                    </div>
+                    <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-accent-primary"
+                        style={{ width: `${paper.passMarkPercent}%` }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Important Note */}
+          <div
+            className="p-6 border-l-4 border-accent-primary flex items-start gap-4"
+            style={{
+              background: 'rgba(255,255,255,0.75)',
+              backdropFilter: 'blur(8px)',
+              borderRadius: '12px',
+            }}
+          >
+            <AlertCircle className="h-6 w-6 text-accent-primary flex-shrink-0 mt-0.5" />
+            <p className="font-body text-sm text-text-primary">
+              <span className="font-semibold">Aggregate rule:</span> Candidates must score 40% overall AND 33% in each
+              compulsory paper. Failing any single compulsory paper = disqualification, regardless of total aggregate.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          4. MARKS ANATOMY SECTION
+          ═══════════════════════════════════════════ */}
+      <MarksAnatomySection />
+
+      {/* ═══════════════════════════════════════════
+          5. QUESTION TYPES EXPLAINED
+          ═══════════════════════════════════════════ */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <p className="eyebrow text-accent-primary mb-4">QUESTION FORMAT</p>
+            <h2 className="font-display text-4xl lg:text-5xl font-semibold text-text-primary mb-4">
+              What You&apos;ll Actually Face
+            </h2>
+          </div>
+
+          {/* Question Type Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <PenLine className="h-8 w-8" />,
+                title: 'Essay-Type Questions',
+                badge: 'Majority of papers',
+                body: 'Long-form written answers. CSS examiners assess depth of knowledge, argument quality, and writing clarity.',
+                specs: [
+                  'Typically 5–6 questions, attempt 3–4',
+                  '20–25 marks per question',
+                  'No word limit specified — but quality over quantity',
+                  'Marks deducted for irrelevance',
+                ],
+                tip: 'Tip: Open with a definition or thesis. Structure each answer in 3 parts: context, analysis, recommendation.',
+              },
+              {
+                icon: <CheckSquare className="h-8 w-8" />,
+                title: 'Multiple Choice Questions',
+                badge: 'General Science & Ability, Islamiat',
+                body: 'Objective questions with 4 options. No negative marking in most papers — but confirm per year&apos;s instructions.',
+                specs: [
+                  '100 MCQs in some papers',
+                  '1 mark each',
+                  'Time-pressured — ~1 minute per question',
+                  'Mix of factual recall and application',
+                ],
+                tip: 'Tip: Eliminate obviously wrong options first. Don&apos;t leave blanks — there is typically no penalty for guessing.',
+              },
+              {
+                icon: <BookText className="h-8 w-8" />,
+                title: 'Précis & Composition',
+                badge: 'English Précis paper',
+                body: 'Condensing a passage to 1/3 of its length while retaining all key points. Tests language command and comprehension.',
+                specs: [
+                  'Précis: usually 30–40 marks',
+                  'Comprehension passage: 20 marks',
+                  'Grammar/translation: 20–30 marks',
+                  'Strict word count enforcement',
+                ],
+                tip: 'Tip: Use indirect speech and your own words. Preserve all key arguments. Title the précis.',
+              },
+            ].map((card, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1, duration: 0.5 }}
+                className="p-8"
+                style={{
+                  background: 'rgba(255,255,255,0.75)',
+                  backdropFilter: 'blur(8px)',
+                  border: '1px solid rgba(200,150,46,0.20)',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 24px rgba(26,18,7,0.08)',
+                }}
+              >
+                {/* Icon */}
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent-primary/10 text-accent-primary mb-4">
+                  {card.icon}
+                </div>
+
+                {/* Title & Badge */}
+                <h3 className="font-display text-2xl font-medium text-text-primary mb-2">
+                  {card.title}
+                </h3>
+                <span className="inline-block px-3 py-1 bg-accent-primary/10 text-accent-primary text-xs font-body rounded-full mb-4">
+                  {card.badge}
+                </span>
+
+                {/* Body */}
+                <p className="font-body text-sm text-text-muted mb-4">
+                  {card.body}
+                </p>
+
+                {/* Specs */}
+                <ul className="space-y-2 mb-4">
+                  {card.specs.map((spec, i) => (
+                    <li key={i} className="font-body text-sm text-text-primary flex items-start gap-2">
+                      <span className="text-accent-primary mt-1">·</span>
+                      <span>{spec}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Tip Box */}
+                <div className="p-4 bg-accent-primary/5 border-l-4 border-accent-primary rounded">
+                  <p className="font-body text-sm text-text-primary italic">
+                    {card.tip}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
