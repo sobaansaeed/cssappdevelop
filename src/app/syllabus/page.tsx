@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronDown, 
@@ -391,7 +392,7 @@ const PaperAccordionRow: React.FC<{ paper: CompulsoryPaper }> = ({ paper }) => {
               {/* Examiner's Note */}
               <div className="mb-4 p-4 bg-accent-primary/10 border-l-2 border-accent-primary rounded">
                 <p className="font-body text-sm text-text-primary">
-                  <span className="font-semibold">Examiner's Note:</span> {paper.examinerNote}
+                  <span className="font-semibold">Examiner&apos;s Note:</span> {paper.examinerNote}
                 </p>
               </div>
 
@@ -490,9 +491,9 @@ const OptionalSubjectCard: React.FC<{ subject: OptionalSubject }> = ({ subject }
         <button className="text-accent-primary text-sm font-body hover:underline text-left flex items-center gap-1">
           {isExpanded ? 'Hide Topics ↑' : 'View Full Topics ↓'}
         </button>
-        <a href="/past-papers" className="text-accent-primary text-sm font-body hover:underline flex items-center gap-1">
+        <Link href="/past-papers" className="text-accent-primary text-sm font-body hover:underline flex items-center gap-1">
           Related Past Papers →
-        </a>
+        </Link>
       </div>
     </motion.div>
   );
@@ -899,24 +900,24 @@ export default function SyllabusPage() {
 
                   {/* Quick Links */}
                   <div className="flex flex-wrap gap-3">
-                    <a
+                    <Link
                       href="/past-papers"
                       className="px-4 py-2 border border-accent-primary text-accent-primary text-sm font-body rounded-full hover:bg-accent-primary/10 transition-colors flex items-center gap-2"
                     >
                       Past Papers →
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       href="/resources"
                       className="px-4 py-2 border border-accent-primary text-accent-primary text-sm font-body rounded-full hover:bg-accent-primary/10 transition-colors flex items-center gap-2"
                     >
                       Study Notes →
-                    </a>
-                    <a
+                    </Link>
+                    <Link
                       href="/essay-checker"
                       className="px-4 py-2 border border-accent-primary text-accent-primary text-sm font-body rounded-full hover:bg-accent-primary/10 transition-colors flex items-center gap-2"
                     >
                       Practice Essay →
-                    </a>
+                    </Link>
                   </div>
                 </>
               )}
@@ -992,7 +993,7 @@ export default function SyllabusPage() {
                 link: '/essay-checker',
               },
             ].map((card, idx) => (
-              <a
+              <Link
                 key={idx}
                 href={card.link}
                 className="p-8 text-center transition-all duration-300 hover:-translate-y-1 hover:border-l-4 hover:border-accent-primary group"
@@ -1016,7 +1017,7 @@ export default function SyllabusPage() {
                 <span className="inline-flex items-center gap-2 text-accent-primary text-sm font-body group-hover:underline">
                   Go to {card.title} <ArrowRight className="h-4 w-4" />
                 </span>
-              </a>
+              </Link>
             ))}
           </div>
         </div>
