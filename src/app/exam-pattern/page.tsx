@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { motion, useInView, useAnimation } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import {
   FileText,
   PenTool,
@@ -510,3 +510,479 @@ export default function ExamPatternPage() {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════
+          6. EXAM TIMELINE & SCHEDULE
+          ═══════════════════════════════════════════ */}
+      <section className="py-16" style={{ background: '#EDE6D6' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <p className="eyebrow text-accent-primary mb-4">ANNUAL CYCLE</p>
+            <h2 className="font-display text-4xl lg:text-5xl font-semibold text-text-primary mb-4">
+              When Does It All Happen?
+            </h2>
+          </div>
+
+          {/* Timeline */}
+          <div className="relative">
+            {/* Timeline Line (desktop) */}
+            <div className="hidden md:block absolute top-12 left-0 right-0 h-0.5 border-t-2 border-dashed border-accent-gold" />
+
+            {/* Timeline Nodes */}
+            <div className="grid grid-cols-1 md:grid-cols-6 gap-8 md:gap-4">
+              {[
+                { date: 'OCT–NOV', title: 'FPSC Notification', desc: 'Official announcement published', icon: <Calendar className="h-5 w-5" /> },
+                { date: 'DEC–JAN', title: 'Applications Open', desc: 'Online registration period', icon: <FileText className="h-5 w-5" /> },
+                { date: 'FEB', title: 'Written Exam', desc: '10 papers over 2 weeks', icon: <PenTool className="h-5 w-5" /> },
+                { date: 'APR–MAY', title: 'Results Announced', desc: 'Written exam results', icon: <CheckSquare className="h-5 w-5" /> },
+                { date: 'JUN–AUG', title: 'Psychological Assessment', desc: 'Medical & psych tests', icon: <ClipboardCheck className="h-5 w-5" /> },
+                { date: 'SEP–OCT', title: 'Viva Voce & Final Merit', desc: 'Interview & final list', icon: <Users className="h-5 w-5" /> },
+              ].map((node, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1, duration: 0.5 }}
+                  className="relative flex flex-col items-center text-center"
+                >
+                  {/* Node Circle */}
+                  <div className="relative z-10 w-12 h-12 rounded-full bg-accent-primary flex items-center justify-center text-white mb-4">
+                    {node.icon}
+                  </div>
+
+                  {/* Date */}
+                  <p className="font-body text-xs uppercase tracking-wide text-text-muted mb-2">
+                    {node.date}
+                  </p>
+
+                  {/* Title */}
+                  <h4 className="font-display text-lg font-medium text-text-primary mb-2">
+                    {node.title}
+                  </h4>
+
+                  {/* Description */}
+                  <p className="font-body text-sm text-text-muted">
+                    {node.desc}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Important Note */}
+          <div
+            className="mt-12 p-6 border-l-4 border-accent-primary flex items-start gap-4"
+            style={{
+              background: 'rgba(255,255,255,0.75)',
+              backdropFilter: 'blur(8px)',
+              borderRadius: '12px',
+            }}
+          >
+            <Calendar className="h-6 w-6 text-accent-primary flex-shrink-0 mt-0.5" />
+            <p className="font-body text-sm text-text-primary">
+              Dates shift year to year. Always verify the official schedule at fpsc.gov.pk before planning your prep timeline.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          7. PASSING CRITERIA EXPLAINER
+          ═══════════════════════════════════════════ */}
+      <PassingCriteriaSection />
+
+      {/* ═══════════════════════════════════════════
+          8. MYTH-BUSTING SECTION
+          ═══════════════════════════════════════════ */}
+      <section className="py-16" style={{ background: '#EDE6D6' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <p className="eyebrow text-accent-primary mb-4">SET THE RECORD STRAIGHT</p>
+            <h2 className="font-display text-4xl lg:text-5xl font-semibold text-text-primary mb-4">
+              What People Get Wrong About CSS
+            </h2>
+          </div>
+
+          {/* Myth Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              {
+                myth: 'You can pass CSS by memorising past papers.',
+                reality: 'CSS tests understanding and analytical ability. Memorisation rarely survives the essay and viva stages.',
+              },
+              {
+                myth: 'MCQ-only prep is enough.',
+                reality: 'Most papers are essay-type. MCQs are only in 2-3 papers. Essay writing skills are critical.',
+              },
+              {
+                myth: 'You need to study 12+ hours daily.',
+                reality: 'Consistency over volume. 6-8 focused hours with proper revision beats marathon sessions.',
+              },
+              {
+                myth: 'Viva is just a formality.',
+                reality: '300 marks — it has changed final merit lists. Personality, confidence, and current affairs matter.',
+              },
+            ].map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1, duration: 0.5 }}
+                className="overflow-hidden"
+                style={{
+                  background: 'white',
+                  border: '1px solid rgba(200,150,46,0.20)',
+                  borderRadius: '12px',
+                }}
+              >
+                {/* Myth (Top Half) */}
+                <div className="p-6 bg-red-50/60 border-b border-dashed border-gray-300">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center">
+                      <X className="h-4 w-4 text-red-600" />
+                    </div>
+                    <div>
+                      <p className="font-body text-xs uppercase tracking-wide text-red-600 mb-2">MYTH</p>
+                      <p className="font-body text-base text-text-primary">
+                        {item.myth}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Reality (Bottom Half) */}
+                <div className="p-6 bg-green-50/40">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+                      <Check className="h-4 w-4 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="font-body text-xs uppercase tracking-wide text-green-600 mb-2">REALITY</p>
+                      <p className="font-body text-sm text-text-primary">
+                        {item.reality}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          9. STRATEGY CALLOUT
+          ═══════════════════════════════════════════ */}
+      <section className="py-16" style={{ background: '#0B1E3D' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
+            {/* Left Content */}
+            <div className="lg:col-span-3">
+              <p className="eyebrow text-accent-gold mb-4">THE SMART APPROACH</p>
+              <h3 className="font-display text-3xl lg:text-4xl font-semibold text-white mb-4">
+                Now That You Know the Pattern — Prepare For It
+              </h3>
+              <p className="font-body text-base text-text-on-dark/70">
+                Browse past papers by subject, test your essays with AI feedback, and follow a structured study plan.
+              </p>
+            </div>
+
+            {/* Right CTAs */}
+            <div className="lg:col-span-2 flex flex-col gap-4">
+              <Link
+                href="/past-papers"
+                className="px-6 py-3 border-2 border-white text-white text-center font-body text-sm rounded-full hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
+              >
+                <FileText className="h-4 w-4" />
+                Browse Past Papers
+              </Link>
+              <Link
+                href="/essay-checker"
+                className="px-6 py-3 text-center font-body text-sm rounded-full transition-colors flex items-center justify-center gap-2"
+                style={{
+                  background: 'linear-gradient(135deg, #E8650A 0%, #C8962E 100%)',
+                  color: 'white',
+                }}
+              >
+                <PenTool className="h-4 w-4" />
+                Check an Essay
+              </Link>
+              <Link
+                href="/resources"
+                className="px-6 py-3 border-2 border-white text-white text-center font-body text-sm rounded-full hover:bg-white/10 transition-colors flex items-center justify-center gap-2"
+              >
+                <BookOpen className="h-4 w-4" />
+                View Resources
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </motion.div>
+  );
+}
+
+// ═══════════════════════════════════════════
+// MARKS ANATOMY SECTION COMPONENT
+// ═══════════════════════════════════════════
+
+function MarksAnatomySection() {
+  const { count: count1000, ref: ref1000 } = useCountUp(1000);
+  const { count: count300, ref: ref300 } = useCountUp(300);
+  const { count: count1300, ref: ref1300 } = useCountUp(1300);
+
+  return (
+    <section className="py-20" style={{ background: '#0B1E3D' }}>
+      <div className="max-w-6xl mx-auto px-6">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <p className="eyebrow text-accent-gold mb-4">WHERE MARKS COME FROM</p>
+          <h2 className="font-display text-4xl lg:text-5xl font-semibold text-white mb-8">
+            Anatomy of 1300 Marks
+          </h2>
+        </div>
+
+        {/* Three Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* Card 1 - Written */}
+          <div
+            ref={ref1000}
+            className="p-8 text-center"
+            style={{
+              background: 'rgba(255,255,255,0.10)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(255,255,255,0.18)',
+              borderRadius: '12px',
+            }}
+          >
+            <p className="font-display text-6xl font-semibold text-accent-primary mb-2">
+              {count1000}
+            </p>
+            <p className="font-body text-sm uppercase tracking-wide text-text-on-dark/70 mb-4">
+              Written Marks
+            </p>
+            <div className="h-3 bg-white/10 rounded-full overflow-hidden mb-4">
+              <div className="h-full flex">
+                <div className="w-3/5 bg-accent-primary" />
+                <div className="w-2/5 bg-teal-600" />
+              </div>
+            </div>
+            <p className="font-body text-sm text-text-on-dark/70">
+              10 papers × 100 marks each
+            </p>
+          </div>
+
+          {/* Card 2 - Psychological */}
+          <div
+            className="p-8 text-center"
+            style={{
+              background: 'rgba(255,255,255,0.10)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(255,255,255,0.18)',
+              borderRadius: '12px',
+            }}
+          >
+            <p className="font-display text-4xl font-semibold text-white mb-2">
+              PASS / FAIL
+            </p>
+            <p className="font-body text-sm uppercase tracking-wide text-text-on-dark/70 mb-4">
+              Psychological Assessment
+            </p>
+            <p className="font-body text-sm text-text-on-dark/70">
+              Qualifying in nature. Does not add to marks. Failure = elimination before Viva.
+            </p>
+          </div>
+
+          {/* Card 3 - Viva */}
+          <div
+            ref={ref300}
+            className="p-8 text-center"
+            style={{
+              background: 'rgba(255,255,255,0.10)',
+              backdropFilter: 'blur(16px)',
+              border: '1px solid rgba(255,255,255,0.18)',
+              borderRadius: '12px',
+            }}
+          >
+            <p className="font-display text-6xl font-semibold text-accent-gold mb-2">
+              {count300}
+            </p>
+            <p className="font-body text-sm uppercase tracking-wide text-text-on-dark/70 mb-4">
+              Viva Voce (Personality Test)
+            </p>
+            <p className="font-body text-sm text-text-on-dark/70">
+              Conducted by CSS Board panel. Covers personality, current affairs, subject knowledge.
+            </p>
+          </div>
+        </div>
+
+        {/* Grand Total Bar */}
+        <div ref={ref1300} className="text-center">
+          <p className="font-display text-4xl font-semibold text-white mb-4">
+            GRAND TOTAL: {count1300} MARKS
+          </p>
+          <div className="h-16 rounded-lg overflow-hidden flex max-w-4xl mx-auto">
+            <div
+              className="flex items-center justify-center text-white font-body text-lg font-semibold"
+              style={{
+                width: '76.9%',
+                background: 'linear-gradient(135deg, #E8650A 0%, #C8962E 100%)',
+              }}
+            >
+              Written: 1000
+            </div>
+            <div
+              className="flex items-center justify-center text-white font-body text-lg font-semibold"
+              style={{
+                width: '23.1%',
+                background: '#C8962E',
+              }}
+            >
+              Viva: 300
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ═══════════════════════════════════════════
+// PASSING CRITERIA SECTION COMPONENT
+// ═══════════════════════════════════════════
+
+function PassingCriteriaSection() {
+  const { count: count33, ref: ref33 } = useCountUp(33);
+  const { count: count40a, ref: ref40a } = useCountUp(40);
+  const { count: count40b, ref: ref40b } = useCountUp(40);
+
+  return (
+    <section className="py-16">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <p className="eyebrow text-accent-primary mb-4">PASSING RULES</p>
+          <h2 className="font-display text-4xl lg:text-5xl font-semibold text-text-primary mb-4">
+            The Rules That Matter Most
+          </h2>
+        </div>
+
+        {/* Three Rule Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {/* Card 1 */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="p-8 border-t-4 border-accent-primary"
+            style={{
+              background: 'rgba(255,255,255,0.75)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(200,150,46,0.20)',
+              borderRadius: '12px',
+              boxShadow: '0 4px 24px rgba(26,18,7,0.08)',
+              borderTop: '4px solid #E8650A',
+            }}
+          >
+            <div ref={ref33} className="font-display text-6xl font-semibold text-accent-primary mb-4">
+              {count33}%
+            </div>
+            <h3 className="font-display text-2xl font-medium text-text-primary mb-4">
+              Per Compulsory Paper
+            </h3>
+            <p className="font-body text-sm text-text-muted mb-4">
+              You must score at least 33 marks out of 100 in each compulsory paper. Scoring below this in any single
+              paper = disqualification, even if your aggregate is high.
+            </p>
+            <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-accent-primary" style={{ width: '33%' }} />
+            </div>
+            <p className="font-body text-xs text-text-muted mt-2">33% minimum mark</p>
+          </motion.div>
+
+          {/* Card 2 */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 0.5 }}
+            className="p-8 border-t-4 border-accent-primary"
+            style={{
+              background: 'rgba(255,255,255,0.75)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(200,150,46,0.20)',
+              borderRadius: '12px',
+              boxShadow: '0 4px 24px rgba(26,18,7,0.08)',
+              borderTop: '4px solid #E8650A',
+            }}
+          >
+            <div ref={ref40a} className="font-display text-6xl font-semibold text-accent-primary mb-4">
+              {count40a}%
+            </div>
+            <h3 className="font-display text-2xl font-medium text-text-primary mb-4">
+              Per Optional Paper
+            </h3>
+            <p className="font-body text-sm text-text-muted mb-4">
+              Optional papers have a higher minimum — 40 marks per paper. A weak optional subject can disqualify you.
+            </p>
+            <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-accent-primary" style={{ width: '40%' }} />
+            </div>
+            <p className="font-body text-xs text-text-muted mt-2">40% minimum mark</p>
+          </motion.div>
+
+          {/* Card 3 */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="p-8 border-t-4 border-accent-primary"
+            style={{
+              background: 'rgba(255,255,255,0.75)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(200,150,46,0.20)',
+              borderRadius: '12px',
+              boxShadow: '0 4px 24px rgba(26,18,7,0.08)',
+              borderTop: '4px solid #E8650A',
+            }}
+          >
+            <div ref={ref40b} className="font-display text-6xl font-semibold text-accent-primary mb-4">
+              {count40b}%
+            </div>
+            <h3 className="font-display text-2xl font-medium text-text-primary mb-4">
+              Overall Aggregate
+            </h3>
+            <p className="font-body text-sm text-text-muted mb-4">
+              Even after clearing individual papers, your total score must meet the aggregate cut-off, which varies
+              by year. Typically ranges from 42–47%.
+            </p>
+            <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden relative">
+              <div className="h-full bg-accent-primary" style={{ width: '40%' }} />
+              <div className="absolute top-0 left-[42%] right-0 h-full bg-accent-primary/30" />
+            </div>
+            <p className="font-body text-xs text-text-muted mt-2">Cut-off zone (varies)</p>
+          </motion.div>
+        </div>
+
+        {/* Bottom Callout */}
+        <div
+          className="py-12 px-8 text-center"
+          style={{
+            background: '#0B1E3D',
+            borderRadius: '12px',
+          }}
+        >
+          <p className="font-display text-2xl italic text-cream">
+            &quot;In summary: Clear every paper minimum + clear overall aggregate + pass Psychological + impress in Viva.&quot;
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
