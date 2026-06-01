@@ -1,593 +1,858 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
-import { 
-  FileText, 
-  Upload, 
-  CheckCircle, 
-  AlertCircle, 
-  Loader2, 
-  Trash2,
-  Lightbulb,
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Sparkles,
   BookOpen,
-  FileUp,
-  X,
-  Download,
+  ChevronDown,
   Copy,
-  Brain,
-  Clock
+  Share2,
+  RotateCcw,
+  PenTool,
+  BrainCircuit,
+  AlignLeft,
+  Pen,
+  GraduationCap,
+  ArrowRight,
+  ArrowDown,
+  FileText,
+  Bot,
+  BarChart3
 } from 'lucide-react';
-import ProgressModal from '@/components/ProgressModal';
 
-interface EssayAnalysisResult {
-  essay_id: string;
-  task_id?: string;
-  overall_score: number;
-  category_scores: {
-    [key: string]: {
-      score: number;
-      feedback: string;
-    };
-  };
-  summary_feedback: string;
-  submission_type: string;
-  word_count: number;
-  examiner_remarks: {
-    strengths: string[];
-    weaknesses: string[];
-    suggestions: string[];
-  };
+// ═══════════════════════════════════════════
+// TYPES
+// ═══════════════════════════════════════════
+
+interface EssayFeedback {
+  score: number;
+  grade: string;
+  summary: string;
+  contentScore: number;
+  structureScore: number;
+  languageScore: number;
+  strengths: string[];
+  improvements: string[];
+  contentFeedback: string[];
+  structureFeedback: string[];
+  languageFeedback: string[];
+  examinerNotes: string[];
+  paragraphFeedback: Array<{
+    preview: string;
+    rating: number;
+    note: string;
+  }>;
 }
 
-const EssayCheckerPage: React.FC = () => {
-  const [inputType, setInputType] = useState<'text' | 'pdf'>('text');
-  const [essayText, setEssayText] = useState('');
-  const [pdfFile, setPdfFile] = useState<File | null>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [isProcessingPdf, setIsProcessingPdf] = useState(false);
-  const [analysisResult, setAnalysisResult] = useState<EssayAnalysisResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [wordCount, setWordCount] = useState(0);
-  const [charCount, setCharCount] = useState(0);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  
-  // Progress modal state
-  const [showProgressModal, setShowProgressModal] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [progressStatus, setProgressStatus] = useState<'processing' | 'completed' | 'error'>('processing');
-  const [progressError, setProgressError] = useState<string>('');
-  // const [currentTaskId, setCurrentTaskId] = useState<string>('');
+type LoadingState = 'idle' | 'loading' | 'success' | 'error';
 
-  const handleTextChange = (text: string) => {
-    setEssayText(text);
-    setWordCount(text.trim() ? text.trim().split(/\s+/).length : 0);
-    setCharCount(text.length);
-  };
+// ═══════════════════════════════════════════
+// SAMPLE ESSAY DATA
+// ═══════════════════════════════════════════
 
-  // Progress tracking function
-  const trackProgress = async (taskId: string) => {
-    const interval = setInterval(async () => {
-      try {
-        const response = await fetch(`/api/check-essay/progress?taskId=${encodeURIComponent(taskId)}`);
-        if (response.ok) {
-          const progressData = await response.json();
-          setProgress(progressData.progress);
-          setProgressStatus(progressData.status);
-          
-          if (progressData.status === 'completed' || progressData.status === 'error') {
-            clearInterval(interval);
-            if (progressData.status === 'error') {
-              setProgressError(progressData.message);
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Error tracking progress:', error);
-        clearInterval(interval);
-      }
-    }, 500); // Check every 500ms
+const SAMPLE_ESSAY = `Climate Change: A Global Challenge Requiring Immediate Action
 
-    // Cleanup interval after 5 minutes (timeout)
-    setTimeout(() => {
-      clearInterval(interval);
-    }, 300000);
-  };
+Climate change represents one of the most pressing challenges facing humanity in the 21st century. Rising global temperatures, extreme weather events, and environmental degradation threaten not only our ecosystems but also economic stability and social cohesion. This essay argues that immediate, coordinated international action is essential to mitigate the worst effects of climate change and secure a sustainable future for coming generations.
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      if (file.type !== 'application/pdf') {
-        setError('Please upload a PDF file');
-        return;
-      }
-      if (file.size > 10 * 1024 * 1024) { // 10MB limit
-        setError('File size must be less than 10MB');
-        return;
-      }
-      setPdfFile(file);
-      setError(null);
+The scientific consensus on climate change is overwhelming. According to the Intergovernmental Panel on Climate Change (IPCC), human activities have unequivocally caused global warming, with temperatures rising approximately 1.1°C above pre-industrial levels. This warming has triggered cascading effects: melting polar ice caps, rising sea levels, and increasingly frequent natural disasters. Developing nations, despite contributing least to emissions, bear the brunt of these impacts through droughts, floods, and agricultural disruption.
+
+However, critics argue that aggressive climate policies could harm economic growth, particularly in developing countries that rely on fossil fuels for industrialization. While this concern merits consideration, it overlooks the economic opportunities presented by green technology and renewable energy sectors. Countries like Denmark and Costa Rica demonstrate that economic prosperity and environmental sustainability are not mutually exclusive.
+
+To address this crisis effectively, a multi-pronged approach is necessary. First, nations must honor and strengthen commitments made under the Paris Agreement, ensuring that global temperature rise remains below 2°C. Second, developed countries should provide financial and technological support to developing nations for climate adaptation and mitigation. Third, investment in renewable energy infrastructure must be accelerated to phase out fossil fuel dependence.
+
+In conclusion, climate change demands urgent, collective action. The window for preventing catastrophic warming is narrowing, and delay will only compound the crisis. Policymakers must prioritize long-term sustainability over short-term economic gains, recognizing that a habitable planet is the foundation of all prosperity.`;
+
+export default function EssayCheckerPage() {
+  const [essay, setEssay] = useState('');
+  const [topic, setTopic] = useState('');
+  const [loadingState, setLoadingState] = useState<LoadingState>('idle');
+  const [feedback, setFeedback] = useState<EssayFeedback | null>(null);
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
+  const [expandedFAQs, setExpandedFAQs] = useState<Set<number>>(new Set());
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const toolRef = useRef<HTMLDivElement>(null);
+
+  // Auto-grow textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  };
+  }, [essay]);
 
-  const removePdfFile = () => {
-    setPdfFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  };
+  // Word and sentence count
+  const wordCount = essay.trim() ? essay.trim().split(/\s+/).length : 0;
+  const sentenceCount = essay.trim() ? essay.split(/[.!?]+/).filter(s => s.trim()).length : 0;
+  const readTime = Math.ceil(wordCount / 200);
 
-  const analyzeEssay = async () => {
-    setIsAnalyzing(true);
-    setError(null);
-    setAnalysisResult(null);
-    
-    // Initialize progress modal
-    setShowProgressModal(true);
-    setProgress(0);
-    setProgressStatus('processing');
-    setProgressError('');
+  const handleSubmit = async () => {
+    if (!essay.trim() || wordCount < 50) return;
+
+    setLoadingState('loading');
+    setFeedback(null);
 
     try {
-      let essayContent = '';
-      
-      if (inputType === 'text') {
-        if (!essayText.trim()) {
-          throw new Error('Please enter your essay text');
-        }
-        essayContent = essayText;
-      } else {
-        if (!pdfFile) {
-          throw new Error('Please upload a PDF file');
-        }
-        // Extract text from PDF
-        setIsProcessingPdf(true);
-        try {
-          essayContent = await extractTextFromPDF(pdfFile);
-          
-          // Debug: Log the extracted text length
-          console.log('Extracted PDF text length:', essayContent.length);
-          console.log('First 200 characters:', essayContent.substring(0, 200));
-        } finally {
-          setIsProcessingPdf(false);
-        }
-      }
-
-      if (essayContent.length < 100) {
-        throw new Error(`Essay must be at least 100 characters long. Current length: ${essayContent.length} characters`);
-      }
-
-      if (essayContent.length > 25000) {
-        throw new Error('Essay must be less than 25,000 characters');
-      }
-
-      // Call Next.js proxy API which forwards to FastAPI
       const response = await fetch('/api/check-essay', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          essay_text: essayContent
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ essay, topic }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Failed to analyze essay');
-      }
+      if (!response.ok) throw new Error('Failed to analyze essay');
 
-      const result = await response.json();
-      setAnalysisResult(result);
-      
-                     // Start progress tracking if task_id is available
-               if (result.task_id) {
-                 trackProgress(result.task_id);
-               }
-
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'An error occurred';
-      setError(errorMessage);
-      setProgressStatus('error');
-      setProgressError(errorMessage);
-    } finally {
-      setIsAnalyzing(false);
+      const data = await response.json();
+      setFeedback(data);
+      setLoadingState('success');
+    } catch (error) {
+      console.error('Error:', error);
+      setLoadingState('error');
     }
   };
 
-  const extractTextFromPDF = async (file: File): Promise<string> => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        // Import PDF.js dynamically to avoid SSR issues
-        const pdfjsLib = await import('pdfjs-dist');
-        
-        // Set up the worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
-
-        // Read the file as ArrayBuffer
-        const reader = new FileReader();
-        reader.onload = async () => {
-          try {
-            const arrayBuffer = reader.result as ArrayBuffer;
-            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-            
-            let fullText = '';
-            
-            // Extract text from all pages
-            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-              const page = await pdf.getPage(pageNum);
-              const textContent = await page.getTextContent();
-              const pageText = textContent.items
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                .map((item) => (item as any).str || '')
-                .join(' ');
-              fullText += pageText + '\n';
-            }
-            
-            const trimmedText = fullText.trim();
-            if (!trimmedText) {
-              reject(new Error('No text could be extracted from the PDF. The PDF might be image-based or corrupted.'));
-            }
-            
-            resolve(trimmedText);
-          } catch (error) {
-            console.error('PDF extraction error:', error);
-                          reject(new Error('Failed to extract text from PDF. The system tried enhanced extraction methods including tables and forms. Please ensure the PDF is readable and not corrupted.'));
-          }
-        };
-        
-        reader.onerror = () => reject(new Error('Failed to read PDF file'));
-        reader.readAsArrayBuffer(file);
-      } catch (error) {
-        console.error('PDF.js loading error:', error);
-        reject(new Error('Failed to load PDF processing library. Please try again.'));
-      }
-    });
+  const handleTryAgain = () => {
+    setFeedback(null);
+    setLoadingState('idle');
+    setExpandedSections(new Set());
   };
 
-  const downloadPDF = async () => {
-    if (!analysisResult) return;
-    
-    try {
-      const response = await fetch(`http://localhost:8000/results/${analysisResult.essay_id}`);
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `essay-analysis-${analysisResult.essay_id}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        window.URL.revokeObjectURL(url);
-        document.body.removeChild(a);
-      }
-    } catch (_err) {
-      setError('Failed to download PDF');
+  const handleLoadSample = () => {
+    setEssay(SAMPLE_ESSAY);
+    setTopic('Climate Change: A Global Challenge');
+    if (toolRef.current) {
+      toolRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
+  const toggleSection = (section: string) => {
+    const newExpanded = new Set(expandedSections);
+    if (newExpanded.has(section)) {
+      newExpanded.delete(section);
+    } else {
+      newExpanded.add(section);
+    }
+    setExpandedSections(newExpanded);
   };
 
-  const resetForm = () => {
-    setEssayText('');
-    setPdfFile(null);
-    setAnalysisResult(null);
-    setError(null);
-    setWordCount(0);
-    setCharCount(0);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+  const toggleFAQ = (index: number) => {
+    const newExpanded = new Set(expandedFAQs);
+    if (newExpanded.has(index)) {
+      newExpanded.delete(index);
+    } else {
+      newExpanded.add(index);
     }
+    setExpandedFAQs(newExpanded);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-              CSS Essay Checker
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Professional AI-powered essay analysis using the official CSS FPSC Pakistan rubric
-            </p>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="min-h-screen"
+      style={{ background: '#F5F0E8' }}
+    >
+      {/* ═══════════════════════════════════════════
+          1. PAGE HERO
+          ═══════════════════════════════════════════ */}
+      <section
+        className="relative py-16"
+        style={{
+          background: '#0B1E3D',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.10'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="eyebrow text-accent-gold mb-6"
+          >
+            AI-POWERED FEEDBACK
+          </motion.p>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="font-display text-4xl lg:text-6xl font-semibold text-white mb-4"
+          >
+            Know Exactly Where You Stand
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="font-body text-base text-text-on-dark/70 max-w-xl mx-auto"
+          >
+            Paste your CSS essay. Get a score, structure analysis, and examiner-style feedback in seconds.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          2. HOW IT WORKS
+          ═══════════════════════════════════════════ */}
+      <section className="py-12">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-4">
+            {[
+              { icon: <PenTool className="h-6 w-6" />, title: 'Write or Paste', subtitle: 'Your essay' },
+              { icon: <Bot className="h-6 w-6" />, title: 'AI Analyzes', subtitle: 'Your text' },
+              { icon: <BarChart3 className="h-6 w-6" />, title: 'Get Feedback', subtitle: 'Scored & detailed' },
+            ].map((step, idx) => (
+              <React.Fragment key={idx}>
+                <div className="flex flex-col items-center text-center">
+                  <div
+                    className="w-12 h-12 rounded-full flex items-center justify-center text-accent-primary mb-3"
+                    style={{ background: 'rgba(232,101,10,0.10)' }}
+                  >
+                    {step.icon}
+                  </div>
+                  <h3 className="font-body text-sm font-semibold text-text-primary mb-1">
+                    {step.title}
+                  </h3>
+                  <p className="font-body text-xs text-text-muted">
+                    {step.subtitle}
+                  </p>
+                </div>
+                {idx < 2 && (
+                  <div className="hidden md:block text-text-muted">
+                    <ArrowRight className="h-5 w-5" />
+                  </div>
+                )}
+                {idx < 2 && (
+                  <div className="md:hidden text-text-muted">
+                    <ArrowDown className="h-5 w-5" />
+                  </div>
+                )}
+              </React.Fragment>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {!analysisResult ? (
-          /* Input Section */
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 mb-8">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Upload Your Essay</h2>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500">AI Powered</span>
-                <Brain className="h-5 w-5 text-purple-500" />
+      {/* ═══════════════════════════════════════════
+          3. MAIN ESSAY CHECKER TOOL
+          ═══════════════════════════════════════════ */}
+      <section ref={toolRef} className="py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* LEFT PANEL - Essay Input */}
+            <div
+              className="p-8"
+              style={{
+                background: 'rgba(255,255,255,0.90)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(200,150,46,0.20)',
+                borderRadius: '12px',
+                boxShadow: '0 4px 24px rgba(26,18,7,0.08)',
+              }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-display text-2xl font-medium text-text-primary">
+                  Your Essay
+                </h2>
+                <span className="font-body text-sm text-text-muted">
+                  {wordCount} words
+                </span>
               </div>
-            </div>
 
-            {/* Input Type Toggle */}
-            <div className="flex space-x-2 mb-6">
+              {/* Topic Input */}
+              <input
+                type="text"
+                value={topic}
+                onChange={(e) => setTopic(e.target.value)}
+                placeholder="Essay topic or question (optional)"
+                className="w-full mb-4 pb-2 font-body text-sm text-text-primary placeholder:text-text-muted border-b border-gray-300 focus:border-accent-primary focus:outline-none transition-colors"
+              />
+
+              {/* Textarea */}
+              <textarea
+                ref={textareaRef}
+                value={essay}
+                onChange={(e) => setEssay(e.target.value)}
+                placeholder="Begin writing your essay here...
+
+Tip: A strong CSS essay opens with a clear thesis, develops arguments with evidence, and closes with a policy recommendation."
+                className="w-full min-h-[400px] font-body text-base text-text-primary placeholder:text-text-muted placeholder:italic leading-relaxed focus:outline-none resize-none"
+                style={{ lineHeight: '1.75' }}
+              />
+
+              {/* Stats Bar */}
+              <div className="flex items-center gap-4 text-text-muted font-body text-xs mb-6">
+                <span>{wordCount} words</span>
+                <span>·</span>
+                <span>{sentenceCount} sentences</span>
+                <span>·</span>
+                <span>~{readTime} min read</span>
+              </div>
+
+              {/* Submit Button */}
               <button
-                onClick={() => setInputType('text')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  inputType === 'text'
-                    ? 'bg-blue-100 text-blue-700 border-2 border-blue-300'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
+                onClick={handleSubmit}
+                disabled={loadingState === 'loading' || wordCount < 50}
+                className="w-full h-14 rounded-full font-body text-base font-medium text-white flex items-center justify-center gap-3 transition-all disabled:opacity-60 disabled:cursor-not-allowed hover:scale-[1.02]"
+                style={{
+                  background: loadingState === 'loading' || wordCount < 50
+                    ? '#ccc'
+                    : 'linear-gradient(135deg, #E8650A 0%, #C8962E 100%)',
+                }}
               >
-                <FileText className="h-4 w-4 inline mr-2" />
-                Text Input
-              </button>
-              <button
-                onClick={() => setInputType('pdf')}
-                className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                  inputType === 'pdf'
-                    ? 'bg-blue-100 text-blue-700 border-2 border-blue-300'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                <FileUp className="h-4 w-4 inline mr-2" />
-                PDF Upload
-              </button>
-            </div>
-
-            {/* Text Input */}
-            {inputType === 'text' && (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Essay Text
-                  </label>
-                  <textarea
-                    value={essayText}
-                    onChange={(e) => handleTextChange(e.target.value)}
-                    placeholder="Paste your essay here... (Minimum 100 characters, Maximum 25,000 characters)"
-                    className="w-full h-64 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                    disabled={isAnalyzing}
-                  />
-                </div>
-                <div className="flex justify-between text-sm text-gray-500">
-                  <span>Words: {wordCount}</span>
-                  <span>Characters: {charCount}</span>
-                </div>
-              </div>
-            )}
-
-            {/* PDF Upload */}
-            {inputType === 'pdf' && (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Upload PDF
-                  </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    {pdfFile ? (
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-center space-x-2">
-                          <FileText className="h-8 w-8 text-blue-500" />
-                          <span className="font-medium">{pdfFile.name}</span>
-                        </div>
-                        <button
-                          onClick={removePdfFile}
-                          className="inline-flex items-center px-3 py-1 text-sm text-red-600 hover:text-red-700"
-                        >
-                          <Trash2 className="h-4 w-4 mr-1" />
-                          Remove
-                        </button>
-                      </div>
-                    ) : (
-                      <div>
-                        <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-600 mb-2">
-                          Click to upload or drag and drop
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          PDF files only, max 10MB
-                        </p>
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept=".pdf"
-                          onChange={handleFileUpload}
-                          className="hidden"
-                        />
-                        <button
-                          onClick={() => fileInputRef.current?.click()}
-                          className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                        >
-                          <Upload className="h-4 w-4 mr-2" />
-                          Choose File
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Error Display */}
-            {error && (
-              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
-                <div className="flex items-center">
-                  <AlertCircle className="h-5 w-5 text-red-500 mr-2" />
-                  <span className="text-red-700">{error}</span>
-                </div>
-              </div>
-            )}
-
-            {/* Analyze Button */}
-            <div className="mt-6">
-              <button
-                onClick={analyzeEssay}
-                disabled={isAnalyzing || isProcessingPdf || (!essayText.trim() && !pdfFile)}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-              >
-                {isProcessingPdf ? (
+                {loadingState === 'loading' ? (
                   <>
-                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                    Processing PDF...
-                  </>
-                ) : isAnalyzing ? (
-                  <>
-                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                    Analyzing Essay...
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+                    <span>Analyzing your essay...</span>
                   </>
                 ) : (
                   <>
-                    <CheckCircle className="h-5 w-5 mr-2" />
-                    Analyze Essay
+                    <Sparkles className="h-5 w-5" />
+                    <span>Check My Essay</span>
                   </>
                 )}
               </button>
+
+              {/* Below Button Text */}
+              <p className="text-center font-body text-xs text-text-muted mt-4">
+                Free to use · No account needed · Powered by AI
+              </p>
+            </div>
+
+            {/* RIGHT PANEL - Feedback Results */}
+            <FeedbackPanel
+              loadingState={loadingState}
+              feedback={feedback}
+              expandedSections={expandedSections}
+              toggleSection={toggleSection}
+              onTryAgain={handleTryAgain}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          4. WRITING TIPS
+          ═══════════════════════════════════════════ */}
+      <section className="py-16" style={{ background: '#EDE6D6' }}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <p className="eyebrow text-accent-primary mb-4">CSS WRITING TIPS</p>
+            <h2 className="font-display text-4xl lg:text-5xl font-semibold text-text-primary">
+              Write Like an Examiner Expects
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { num: '01', title: 'Start With a Thesis', body: 'Your opening paragraph must state your position clearly.' },
+              { num: '02', title: 'Structure in Threes', body: 'Introduction, 3–5 body paragraphs, conclusion. CSS examiners value logical flow.' },
+              { num: '03', title: 'Evidence Every Claim', body: 'Back arguments with statistics, examples, or expert opinion.' },
+              { num: '04', title: 'Address Counter-Arguments', body: 'Show intellectual depth by acknowledging opposing views.' },
+              { num: '05', title: 'Conclude With Policy', body: 'CSS essays should end with actionable recommendations.' },
+              { num: '06', title: 'Edit for Concision', body: 'Remove filler sentences. Clarity over complexity.' },
+            ].map((tip, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1, duration: 0.5 }}
+                className="relative p-6"
+                style={{
+                  background: 'rgba(255,255,255,0.75)',
+                  backdropFilter: 'blur(8px)',
+                  border: '1px solid rgba(200,150,46,0.20)',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 24px rgba(26,18,7,0.08)',
+                }}
+              >
+                <div className="absolute top-4 left-4 font-display text-5xl font-semibold text-accent-primary/20">
+                  {tip.num}
+                </div>
+                <div className="mt-12">
+                  <h3 className="font-body text-base font-semibold text-text-primary mb-2">
+                    {tip.title}
+                  </h3>
+                  <p className="font-body text-sm text-text-muted">
+                    {tip.body}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          5. SAMPLE ESSAY PREVIEW
+          ═══════════════════════════════════════════ */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <p className="eyebrow text-accent-primary mb-4">SEE IT IN ACTION</p>
+            <h2 className="font-display text-4xl lg:text-5xl font-semibold text-text-primary mb-4">
+              Sample Essay & Feedback
+            </h2>
+            <p className="font-body text-base text-text-muted">
+              See how the Essay Checker works on a real example.
+            </p>
+          </div>
+
+          <div className="text-center">
+            <button
+              onClick={handleLoadSample}
+              className="px-8 py-4 border-2 border-accent-primary text-accent-primary font-body text-base rounded-full hover:bg-accent-primary/10 transition-colors inline-flex items-center gap-2"
+            >
+              <FileText className="h-5 w-5" />
+              Load Sample Essay
+            </button>
+            <p className="font-body text-sm text-text-muted mt-4">
+              This will populate the essay checker above with a sample essay
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          6. FAQ SECTION
+          ═══════════════════════════════════════════ */}
+      <section className="py-16" style={{ background: '#EDE6D6' }}>
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 className="font-display text-4xl lg:text-5xl font-semibold text-text-primary">
+              Common Questions
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: 'How does the AI score my essay?',
+                a: 'Our AI analyzes your essay across multiple dimensions: content quality, structural coherence, language proficiency, and CSS-specific requirements. It uses advanced natural language processing to evaluate argument strength, evidence usage, and writing clarity.'
+              },
+              {
+                q: 'Is my essay stored or saved anywhere?',
+                a: 'No. Your essay is processed in real-time and not stored on our servers. We prioritize your privacy and do not retain any submitted content after analysis.'
+              },
+              {
+                q: 'What subjects and topics does it support?',
+                a: 'The Essay Checker works with any CSS-relevant topic including current affairs, governance, international relations, economics, and social issues. It evaluates essay structure and argumentation regardless of specific subject matter.'
+              },
+              {
+                q: 'How accurate is the AI feedback compared to a real examiner?',
+                a: 'While AI provides valuable insights on structure, language, and argumentation, it should complement—not replace—human feedback. Use it as a practice tool to identify areas for improvement before seeking expert review.'
+              },
+              {
+                q: 'Can I check the same essay multiple times?',
+                a: 'Yes! You can revise your essay based on feedback and resubmit it as many times as you like. This iterative process helps you refine your writing skills.'
+              },
+              {
+                q: 'Is this free to use?',
+                a: 'Yes, the Essay Checker is completely free to use. No account or payment required. We believe quality CSS preparation resources should be accessible to all aspirants.'
+              },
+            ].map((faq, idx) => (
+              <div
+                key={idx}
+                className="border-b border-gray-300 last:border-b-0"
+              >
+                <button
+                  onClick={() => toggleFAQ(idx)}
+                  className="w-full py-4 flex items-center justify-between text-left hover:text-accent-primary transition-colors"
+                >
+                  <span className="font-body text-base font-medium text-text-primary pr-4">
+                    {faq.q}
+                  </span>
+                  <motion.div
+                    animate={{ rotate: expandedFAQs.has(idx) ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown className="h-5 w-5 text-text-muted flex-shrink-0" />
+                  </motion.div>
+                </button>
+                <AnimatePresence>
+                  {expandedFAQs.has(idx) && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <p className="font-body text-sm text-text-muted pb-4">
+                        {faq.a}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </motion.div>
+  );
+}
+
+// ═══════════════════════════════════════════
+// FEEDBACK PANEL COMPONENT
+// ═══════════════════════════════════════════
+
+interface FeedbackPanelProps {
+  loadingState: LoadingState;
+  feedback: EssayFeedback | null;
+  expandedSections: Set<string>;
+  toggleSection: (section: string) => void;
+  onTryAgain: () => void;
+}
+
+function FeedbackPanel({ loadingState, feedback, expandedSections, toggleSection, onTryAgain }: FeedbackPanelProps) {
+  const scoreRef = useRef<HTMLDivElement>(null);
+  const [displayScore, setDisplayScore] = useState(0);
+
+  // Animate score counter
+  useEffect(() => {
+    if (feedback && loadingState === 'success') {
+      let startTime: number;
+      const duration = 1500;
+      const targetScore = feedback.score;
+
+      const animate = (currentTime: number) => {
+        if (!startTime) startTime = currentTime;
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        setDisplayScore(Math.floor(progress * targetScore));
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+
+      requestAnimationFrame(animate);
+    }
+  }, [feedback, loadingState]);
+
+  return (
+    <div
+      className="p-8 min-h-[600px]"
+      style={{
+        background: 'rgba(255,255,255,0.90)',
+        backdropFilter: 'blur(8px)',
+        border: '1px solid rgba(200,150,46,0.20)',
+        borderRadius: '12px',
+        boxShadow: '0 4px 24px rgba(26,18,7,0.08)',
+      }}
+    >
+      {/* IDLE STATE */}
+      {loadingState === 'idle' && (
+        <div className="flex flex-col items-center justify-center h-full text-center">
+          <BookOpen className="h-16 w-16 text-accent-primary/40 mb-4" />
+          <p className="font-body text-base text-text-muted mb-2">
+            Your feedback will appear here
+          </p>
+          <p className="font-body text-sm text-text-muted max-w-sm">
+            Submit your essay to receive a detailed score and examiner-style analysis.
+          </p>
+        </div>
+      )}
+
+      {/* LOADING STATE */}
+      {loadingState === 'loading' && (
+        <div className="space-y-6">
+          {[80, 60, 100, 80, 60].map((width, idx) => (
+            <div
+              key={idx}
+              className="h-4 rounded animate-pulse"
+              style={{
+                background: 'linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%)',
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 1.5s infinite',
+                width: `${width}%`,
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* ERROR STATE */}
+      {loadingState === 'error' && (
+        <div className="flex flex-col items-center justify-center h-full text-center">
+          <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mb-4">
+            <span className="text-3xl">⚠️</span>
+          </div>
+          <p className="font-body text-base text-text-primary mb-2">
+            Analysis failed
+          </p>
+          <p className="font-body text-sm text-text-muted mb-6">
+            Please try again or check your internet connection.
+          </p>
+          <button
+            onClick={onTryAgain}
+            className="px-6 py-2 border-2 border-accent-primary text-accent-primary font-body text-sm rounded-full hover:bg-accent-primary/10 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      )}
+
+      {/* SUCCESS STATE */}
+      {loadingState === 'success' && feedback && (
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, type: 'spring' }}
+        >
+          {/* Score Banner */}
+          <div
+            className="p-6 rounded-t-lg mb-6 -mx-8 -mt-8"
+            style={{
+              background: 'linear-gradient(135deg, #E8650A 0%, #C8962E 100%)',
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <div ref={scoreRef}>
+                <span className="font-display text-7xl font-semibold text-white">
+                  {displayScore}
+                </span>
+                <span className="font-display text-3xl font-light text-white/70">
+                  /100
+                </span>
+              </div>
+              <div className="px-4 py-2 bg-white rounded-full">
+                <span className="font-body text-2xl font-bold text-accent-primary">
+                  {feedback.grade}
+                </span>
+              </div>
+              <div className="text-right space-y-1">
+                <div className="flex items-center justify-end gap-2">
+                  <span className="font-body text-xs text-white/70">Content:</span>
+                  <span className="font-body text-sm font-semibold text-white">{feedback.contentScore}/35</span>
+                </div>
+                <div className="flex items-center justify-end gap-2">
+                  <span className="font-body text-xs text-white/70">Structure:</span>
+                  <span className="font-body text-sm font-semibold text-white">{feedback.structureScore}/30</span>
+                </div>
+                <div className="flex items-center justify-end gap-2">
+                  <span className="font-body text-xs text-white/70">Language:</span>
+                  <span className="font-body text-sm font-semibold text-white">{feedback.languageScore}/25</span>
+                </div>
+              </div>
             </div>
           </div>
-        ) : (
-          /* Results Section */
-          <div className="space-y-8">
-            {/* Header Actions */}
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-gray-900">Analysis Results</h2>
-              <div className="flex space-x-3">
-                <button
-                  onClick={downloadPDF}
-                  className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Download PDF
-                </button>
-                <button
-                  onClick={resetForm}
-                  className="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
-                >
-                  <X className="h-4 w-4 mr-2" />
-                  New Essay
-                </button>
-              </div>
-            </div>
 
-            {/* Overall Score */}
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Overall Score</h3>
-                <div className="text-6xl font-bold text-blue-600 mb-2">
-                  {analysisResult.overall_score}/100
-                </div>
-                <div className="flex items-center justify-center space-x-4 text-sm text-gray-600">
-                  <div className="flex items-center">
-                    <Clock className="h-4 w-4 mr-1" />
-                    <span>Submission Type: {analysisResult.submission_type}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <BookOpen className="h-4 w-4 mr-1" />
-                    <span>Word Count: {analysisResult.word_count}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Quick Summary */}
+          <p className="font-body text-base text-text-primary mb-6 leading-relaxed">
+            {feedback.summary}
+          </p>
 
-            {/* Category Scores */}
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Detailed Analysis</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {Object.entries(analysisResult.category_scores).map(([category, data]) => (
-                  <div key={category} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <h4 className="font-semibold text-gray-900">{category}</h4>
-                      <span className="text-lg font-bold text-blue-600">
-                        {data.score}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-600">{data.feedback}</p>
-                  </div>
+          {/* Strengths & Improvements */}
+          <div className="mb-6 space-y-4">
+            <div>
+              <p className="font-body text-xs uppercase tracking-wide text-green-600 mb-2">Strengths</p>
+              <div className="flex flex-wrap gap-2">
+                {feedback.strengths.map((strength, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3 py-1 bg-green-50 text-green-700 text-xs font-body rounded-full border border-green-200"
+                  >
+                    {strength}
+                  </span>
                 ))}
               </div>
             </div>
-
-            {/* Examiner Remarks */}
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Examiner Remarks</h3>
-              
-              {/* Strengths */}
-              <div className="mb-6">
-                <h4 className="text-lg font-semibold text-green-700 mb-3 flex items-center">
-                  <CheckCircle className="h-5 w-5 mr-2" />
-                  Strengths
-                </h4>
-                <ul className="space-y-2">
-                  {analysisResult.examiner_remarks.strengths.map((strength, index) => (
-                    <li key={index} className="flex items-start">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                      <span className="text-gray-700">{strength}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Weaknesses */}
-              <div className="mb-6">
-                <h4 className="text-lg font-semibold text-red-700 mb-3 flex items-center">
-                  <AlertCircle className="h-5 w-5 mr-2" />
-                  Areas for Improvement
-                </h4>
-                <ul className="space-y-2">
-                  {analysisResult.examiner_remarks.weaknesses.map((weakness, index) => (
-                    <li key={index} className="flex items-start">
-                      <div className="w-2 h-2 bg-red-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                      <span className="text-gray-700">{weakness}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Suggestions */}
-              <div>
-                <h4 className="text-lg font-semibold text-blue-700 mb-3 flex items-center">
-                  <Lightbulb className="h-5 w-5 mr-2" />
-                  Suggestions
-                </h4>
-                <ul className="space-y-2">
-                  {analysisResult.examiner_remarks.suggestions.map((suggestion, index) => (
-                    <li key={index} className="flex items-start">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
-                      <span className="text-gray-700">{suggestion}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Summary Feedback */}
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Summary Feedback</h3>
-              <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-gray-700 leading-relaxed">{analysisResult.summary_feedback}</p>
-                <button
-                  onClick={() => copyToClipboard(analysisResult.summary_feedback)}
-                  className="mt-3 inline-flex items-center px-3 py-1 text-sm text-blue-600 hover:text-blue-700"
-                >
-                  <Copy className="h-4 w-4 mr-1" />
-                  Copy to Clipboard
-                </button>
+            <div>
+              <p className="font-body text-xs uppercase tracking-wide text-amber-600 mb-2">Areas to Improve</p>
+              <div className="flex flex-wrap gap-2">
+                {feedback.improvements.map((improvement, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3 py-1 bg-amber-50 text-amber-700 text-xs font-body rounded-full border border-amber-200"
+                  >
+                    {improvement}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
-        )}
-      </div>
-      
-      {/* Progress Modal */}
-      <ProgressModal
-        isOpen={showProgressModal}
-        onClose={() => setShowProgressModal(false)}
-        progress={progress}
-        status={progressStatus}
-        errorMessage={progressError}
-      />
+
+          {/* Detailed Breakdown Accordions */}
+          <DetailedBreakdown
+            feedback={feedback}
+            expandedSections={expandedSections}
+            toggleSection={toggleSection}
+          />
+
+          {/* Action Buttons */}
+          <div className="mt-6 space-y-3">
+            <button
+              onClick={onTryAgain}
+              className="w-full px-6 py-3 border-2 border-accent-primary text-accent-primary font-body text-sm rounded-full hover:bg-accent-primary/10 transition-colors flex items-center justify-center gap-2"
+            >
+              <RotateCcw className="h-4 w-4" />
+              Try Again
+            </button>
+            <div className="grid grid-cols-2 gap-3">
+              <button className="px-4 py-2 border border-gray-300 text-text-primary font-body text-sm rounded-full hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+                <Copy className="h-4 w-4" />
+                Copy
+              </button>
+              <button className="px-4 py-2 border border-gray-300 text-text-primary font-body text-sm rounded-full hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+                <Share2 className="h-4 w-4" />
+                Share
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
-};
+}
 
-export default EssayCheckerPage;
+// ═══════════════════════════════════════════
+// DETAILED BREAKDOWN COMPONENT
+// ═══════════════════════════════════════════
+
+interface DetailedBreakdownProps {
+  feedback: EssayFeedback;
+  expandedSections: Set<string>;
+  toggleSection: (section: string) => void;
+}
+
+function DetailedBreakdown({ feedback, expandedSections, toggleSection }: DetailedBreakdownProps) {
+  const sections = [
+    {
+      id: 'content',
+      icon: <BrainCircuit className="h-5 w-5" />,
+      title: 'Content & Arguments',
+      score: feedback.contentScore,
+      maxScore: 35,
+      items: feedback.contentFeedback,
+    },
+    {
+      id: 'structure',
+      icon: <AlignLeft className="h-5 w-5" />,
+      title: 'Structure & Flow',
+      score: feedback.structureScore,
+      maxScore: 30,
+      items: feedback.structureFeedback,
+    },
+    {
+      id: 'language',
+      icon: <Pen className="h-5 w-5" />,
+      title: 'Language & Style',
+      score: feedback.languageScore,
+      maxScore: 25,
+      items: feedback.languageFeedback,
+    },
+    {
+      id: 'examiner',
+      icon: <GraduationCap className="h-5 w-5" />,
+      title: 'CSS Examiner Notes',
+      score: null,
+      maxScore: null,
+      items: feedback.examinerNotes,
+    },
+  ];
+
+  return (
+    <div className="space-y-3 mb-6">
+      {sections.map((section) => (
+        <div
+          key={section.id}
+          className="border border-gray-200 rounded-lg overflow-hidden"
+        >
+          <button
+            onClick={() => toggleSection(section.id)}
+            className="w-full px-4 py-3 flex items-center justify-between hover:bg-accent-primary/5 transition-colors"
+            style={{
+              background: expandedSections.has(section.id) ? 'rgba(232,101,10,0.06)' : 'white',
+            }}
+          >
+            <div className="flex items-center gap-3">
+              <div className="text-accent-primary">
+                {section.icon}
+              </div>
+              <span className="font-body text-sm font-medium text-text-primary">
+                {section.title}
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              {section.score !== null && (
+                <span className="px-3 py-1 bg-accent-primary text-white text-xs font-body rounded-full">
+                  {section.score}/{section.maxScore}
+                </span>
+              )}
+              <motion.div
+                animate={{ rotate: expandedSections.has(section.id) ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <ChevronDown className="h-4 w-4 text-text-muted" />
+              </motion.div>
+            </div>
+          </button>
+
+          <AnimatePresence>
+            {expandedSections.has(section.id) && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="overflow-hidden"
+              >
+                <div className="px-4 py-4 bg-white border-t border-gray-200">
+                  <ul className="space-y-2">
+                    {section.items.map((item, idx) => (
+                      <li key={idx} className="font-body text-sm text-text-primary flex items-start gap-2">
+                        <span className="text-accent-primary mt-1">·</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      ))}
+
+      {/* Paragraph Breakdown */}
+      {feedback.paragraphFeedback && feedback.paragraphFeedback.length > 0 && (
+        <div className="mt-6">
+          <h4 className="font-body text-sm font-semibold text-text-primary mb-3">
+            Paragraph Breakdown
+          </h4>
+          <div className="space-y-2">
+            {feedback.paragraphFeedback.map((para, idx) => (
+              <div
+                key={idx}
+                className="p-3 bg-gray-50 rounded border border-gray-200"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-body text-xs text-text-muted">
+                    Para {idx + 1}: {para.preview.substring(0, 50)}...
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-accent-primary"
+                        style={{ width: `${para.rating * 10}%` }}
+                      />
+                    </div>
+                    <span className="font-body text-xs text-text-muted">
+                      {para.rating}/10
+                    </span>
+                  </div>
+                </div>
+                <p className="font-body text-xs text-text-muted">
+                  {para.note}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
