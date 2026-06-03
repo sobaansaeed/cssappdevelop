@@ -16,10 +16,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <AuthProvider>
-      <div className={`min-h-screen ${isHomePage ? 'bg-background' : 'bg-cream paper-texture'}`}>
+      <div className="min-h-screen">
         {/* New navbar on all pages */}
         <Navbar />
-        <main className="pt-16">
+        <main>
           {children}
         </main>
         <Footer />
