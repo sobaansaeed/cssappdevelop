@@ -1,14 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Mail, ArrowLeft, FileText, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/lib/auth-context';
 
 const ForgotPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const { resetPassword } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,14 +24,12 @@ const ForgotPasswordPage: React.FC = () => {
     }
 
     try {
-      // Here you would integrate with your authentication system
-      // For now, we'll simulate a successful password reset request
-      console.log('Password reset requested for:', email);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setSuccess(true);
+      const { error } = await resetPassword(email);
+      if (error) {
+        setError(error.message || 'An error occurred. Please try again.');
+      } else {
+        setSuccess(true);
+      }
     } catch {
       setError('An error occurred. Please try again.');
     } finally {
@@ -37,22 +37,41 @@ const ForgotPasswordPage: React.FC = () => {
     }
   };
 
+  const bgStyle = {
+    background: '#0B1E3D',
+    backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+  };
+
+  const cardStyle = {
+    background: 'rgba(255,255,255,0.06)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    border: '1px solid rgba(255,255,255,0.12)',
+  };
+
   if (success) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-4">
-        <div className="w-full max-w-md text-center">
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="h-8 w-8 text-green-600" />
+      <div className="min-h-screen flex items-center justify-center px-4" style={bgStyle}>
+        <div className="w-full max-w-sm text-center">
+          <div className="rounded-2xl p-10" style={cardStyle}>
+            <div
+              className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5"
+              style={{ background: 'rgba(255,255,255,0.08)' }}
+            >
+              <CheckCircle className="w-7 h-7 text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Check Your Email</h1>
-            <p className="text-gray-600 mb-4">
-              We&apos;ve sent a password reset link to <strong>{email}</strong>. 
-              Please check your email and follow the instructions to reset your password.
+            <h2
+              className="text-white text-xl font-semibold mb-2"
+              style={{ fontFamily: "'Instrument Serif', serif" }}
+            >
+              Check Your Inbox
+            </h2>
+            <p className="text-white/50 text-sm mb-6">
+              A reset link has been sent to <span className="text-white/80">{email}</span>
             </p>
             <Link
               href="/auth/signin"
-              className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              className="inline-flex h-11 px-8 rounded-full bg-white text-black text-sm font-semibold hover:bg-white/90 transition-all items-center justify-center"
             >
               Back to Sign In
             </Link>
@@ -63,92 +82,71 @@ const ForgotPasswordPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Back to Sign In */}
-        <div className="text-center mb-8">
-          <Link 
-            href="/auth/signin" 
-            className="inline-flex items-center text-blue-600 hover:text-blue-700 transition-colors mb-4"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Sign In
-          </Link>
-          
-          <div className="flex items-center justify-center mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
-              <FileText className="h-6 w-6 text-white" />
-            </div>
+    <div className="min-h-screen flex items-center justify-center px-4" style={bgStyle}>
+      <div className="w-full max-w-sm">
+        {/* Card */}
+        <div className="rounded-2xl p-8" style={cardStyle}>
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <Link href="/">
+              <div
+                className="text-2xl tracking-tight text-white mb-1 inline-block"
+                style={{ fontFamily: "'Instrument Serif', serif" }}
+              >
+                CSS KRO<sup className="text-xs">®</sup>
+              </div>
+            </Link>
+            <p className="text-white/50 text-sm mt-1">Reset your password</p>
           </div>
-          
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Forgot Password?</h1>
-          <p className="text-gray-600">Enter your email and we&apos;ll send you a reset link</p>
-        </div>
 
-        {/* Forgot Password Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <p className="text-red-700 text-sm">{error}</p>
+              <div className="text-red-400 text-sm text-center bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3">
+                {error}
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+              <label htmlFor="email" className="block text-xs text-white/50 uppercase tracking-widest mb-2">
+                Email
               </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="w-full bg-transparent border-b border-white/20 text-white placeholder:text-white/30 text-sm py-2 focus:outline-none focus:border-white/60 transition-colors"
+                required
+              />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 px-6 rounded-lg font-medium transition-all duration-200 flex items-center justify-center space-x-2"
+              id="forgot-password-submit-btn"
+              className="w-full mt-2 h-12 rounded-full bg-white text-black text-sm font-semibold hover:bg-white/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {isLoading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  <span>Sending Reset Link...</span>
-                </>
+                <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
               ) : (
-                <>
-                  <Mail className="h-5 w-5" />
-                  <span>Send Reset Link</span>
-                </>
+                'Send Reset Link'
               )}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-gray-600">
-              Remember your password?{' '}
-              <Link
-                href="/auth/signin"
-                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
-              >
-                Sign in here
-              </Link>
-            </p>
-          </div>
+          <p className="text-center text-white/40 text-xs mt-6">
+            Remember it?{' '}
+            <Link href="/auth/signin" className="text-white/70 hover:text-white transition-colors">
+              Sign in
+            </Link>
+          </p>
         </div>
 
-        {/* Trust Indicators */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500">
-            Secure password reset powered by advanced technology
-          </p>
+        <div className="text-center mt-6">
+          <Link href="/" className="text-white/30 text-xs hover:text-white/60 transition-colors">
+            ← Back to home
+          </Link>
         </div>
       </div>
     </div>

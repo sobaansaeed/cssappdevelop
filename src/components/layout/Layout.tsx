@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { usePathname } from 'next/navigation';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { AuthProvider } from '@/lib/auth-context';
@@ -11,8 +10,6 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const pathname = usePathname();
-  const isHomePage = pathname === '/';
 
   return (
     <AuthProvider>
