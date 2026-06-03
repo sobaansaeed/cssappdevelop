@@ -11,7 +11,6 @@ import {
   Calendar,
   Clock,
   ArrowRight,
-  Lightbulb,
   Star,
   BookOpen
 } from 'lucide-react';
@@ -254,22 +253,16 @@ export default function NewspapersPage() {
 
   // Filter articles
   const filteredArticles = MOCK_ARTICLES.filter(article => {
-    // Newspaper filter
     if (selectedNewspaper !== 'All' && article.newspaper !== selectedNewspaper) {
       return false;
     }
-
-    // Tag filter
     if (!selectedTags.includes('All Topics')) {
       const hasMatchingTag = article.tags.some(tag => selectedTags.includes(tag));
       if (!hasMatchingTag) return false;
     }
-
-    // CSS relevance filter
     if (showCSSOnly && article.cssRelevance !== 'high') {
       return false;
     }
-
     return true;
   });
 
@@ -499,47 +492,7 @@ export default function NewspapersPage() {
           </div>
         )}
 
-        {/* ═══════════════════════════════════════════
-            5. CSS RELEVANCE CALLOUT
-            ═══════════════════════════════════════════ */}
-        <div 
-          className="mb-12 p-6 rounded-lg border-l-4"
-          style={{ 
-            background: 'rgba(232, 101, 10, 0.06)',
-            borderColor: '#E8650A'
-          }}
-        >
-          <div className="flex items-center justify-between gap-6 flex-wrap">
-            <div className="flex items-start gap-4 flex-1">
-              <Lightbulb className="w-9 h-9 text-accent-primary flex-shrink-0" />
-              <div>
-                <h3 className="font-display text-2xl font-medium text-text-primary mb-2">
-                  CSS Relevance Filter
-                </h3>
-                <p className="font-body text-sm text-text-muted">
-                  Each article is tagged with its CSS relevance score. Look for the orange star ★ on cards — those are high-priority reads.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="font-body text-sm text-text-primary">
-                Show CSS-priority only
-              </span>
-              <button
-                onClick={() => setShowCSSOnly(!showCSSOnly)}
-                className={`relative w-12 h-6 rounded-full transition-colors ${
-                  showCSSOnly ? 'bg-accent-primary' : 'bg-gray-300'
-                }`}
-              >
-                <div
-                  className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full transition-transform ${
-                    showCSSOnly ? 'transform translate-x-6' : ''
-                  }`}
-                />
-              </button>
-            </div>
-          </div>
-        </div>
+
 
         {/* ═══════════════════════════════════════════
             6. ARTICLES GRID

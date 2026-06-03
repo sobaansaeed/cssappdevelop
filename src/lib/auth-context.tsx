@@ -1,14 +1,17 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from './supabase';
+import { getOrCreateCredits } from './credits';
 
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  credits: number;
+  refreshCredits: () => Promise<void>;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
@@ -34,43 +37,55 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [credits, setCredits] = useState<number>(-1); // -1 = not loaded yet
+
+  const loadCredits = useCallback(async (userId: string) => {
+    try {
+      const { credits } = await getOrCreateCredits(userId);
+      setCredits(credits);
+    } catch {
+      setCredits(0);
+    }
+  }, []);
+
+  const refreshCredits = useCallback(async () => {
+    if (user) await loadCredits(user.id);
+  }, [user, loadCredits]);
 
   useEffect(() => {
-    // Get initial session
     const getInitialSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       setSession(session);
       setUser(session?.user ?? null);
+      if (session?.user) await loadCredits(session.user.id);
       setIsLoading(false);
     };
 
     getInitialSession();
 
-    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
+        if (session?.user) {
+          await loadCredits(session.user.id);
+        } else {
+          setCredits(-1);
+        }
         setIsLoading(false);
       }
     );
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [loadCredits]);
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    const { error } = await supabase.auth.signUp({ email, password });
     return { error };
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     return { error };
   };
 
@@ -79,31 +94,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          // Remove custom redirectTo to use Supabase's default
-          // redirectTo: `${window.location.origin}/auth/callback`,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
-          },
+          queryParams: { access_type: 'offline', prompt: 'consent' },
         },
       });
-      
-      if (error) {
-        console.error('Google OAuth error:', error);
-        return { error };
-      }
-      
-      // The OAuth flow will redirect the user to Google
-      // Supabase will handle the callback automatically
+      if (error) return { error };
       return { error: null };
     } catch (err) {
-      console.error('Google OAuth exception:', err);
       return { error: err as Error };
     }
   };
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    setCredits(-1);
   };
 
   const resetPassword = async (email: string) => {
@@ -118,6 +121,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     session,
     isAuthenticated: !!user,
     isLoading,
+    credits,
+    refreshCredits,
     signUp,
     signIn,
     signInWithGoogle,

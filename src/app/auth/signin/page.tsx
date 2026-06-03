@@ -62,25 +62,20 @@ const SignInPage: React.FC = () => {
       <div className="w-full max-w-sm">
         {/* Card */}
         <div
-          className="rounded-2xl p-8"
-          style={{
-            background: 'rgba(255,255,255,0.06)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255,255,255,0.12)',
-          }}
+          className="rounded-2xl p-8 bg-white"
+          style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.25)' }}
         >
           {/* Logo */}
           <div className="text-center mb-8">
             <Link href="/">
               <div
-                className="text-2xl tracking-tight text-white mb-1 inline-block"
+                className="text-2xl tracking-tight text-[#0B1E3D] mb-1 inline-block"
                 style={{ fontFamily: "'Instrument Serif', serif" }}
               >
                 CSS KRO<sup className="text-xs">®</sup>
               </div>
             </Link>
-            <p className="text-white/50 text-sm mt-1">Sign in to continue</p>
+            <p className="text-[#0B1E3D]/50 text-sm mt-1">Sign in to continue</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -93,7 +88,7 @@ const SignInPage: React.FC = () => {
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-xs text-white/50 uppercase tracking-widest mb-2">
+              <label htmlFor="email" className="block text-xs text-[#0B1E3D]/50 uppercase tracking-widest mb-2">
                 Email
               </label>
               <input
@@ -102,7 +97,7 @@ const SignInPage: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full bg-transparent border-b border-white/20 text-white placeholder:text-white/30 text-sm py-2 focus:outline-none focus:border-white/60 transition-colors"
+                className="w-full bg-transparent border-b border-[#0B1E3D]/20 text-[#0B1E3D] placeholder:text-[#0B1E3D]/30 text-sm py-2 focus:outline-none focus:border-[#0B1E3D]/60 transition-colors"
                 required
               />
             </div>
@@ -110,12 +105,12 @@ const SignInPage: React.FC = () => {
             {/* Password */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label htmlFor="password" className="block text-xs text-white/50 uppercase tracking-widest">
+                <label htmlFor="password" className="block text-xs text-[#0B1E3D]/50 uppercase tracking-widest">
                   Password
                 </label>
                 <Link
                   href="/auth/forgot-password"
-                  className="text-xs text-white/40 hover:text-white/70 transition-colors"
+                  className="text-xs text-[#0B1E3D]/40 hover:text-[#0B1E3D]/70 transition-colors"
                 >
                   Forgot?
                 </Link>
@@ -127,13 +122,13 @@ const SignInPage: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-transparent border-b border-white/20 text-white placeholder:text-white/30 text-sm py-2 pr-8 focus:outline-none focus:border-white/60 transition-colors"
+                  className="w-full bg-transparent border-b border-[#0B1E3D]/20 text-[#0B1E3D] placeholder:text-[#0B1E3D]/30 text-sm py-2 pr-8 focus:outline-none focus:border-[#0B1E3D]/60 transition-colors"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-[#0B1E3D]/30 hover:text-[#0B1E3D]/60 transition-colors"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -145,10 +140,10 @@ const SignInPage: React.FC = () => {
               type="submit"
               disabled={isLoading}
               id="signin-submit-btn"
-              className="w-full mt-2 h-12 rounded-full bg-white text-black text-sm font-semibold hover:bg-white/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full mt-2 h-12 rounded-full bg-[#0B1E3D] text-white text-sm font-semibold hover:bg-[#0B1E3D]/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (
-                <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 'Sign In'
               )}
@@ -157,9 +152,9 @@ const SignInPage: React.FC = () => {
 
           {/* Divider */}
           <div className="flex items-center gap-3 my-5">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-white/30 text-xs">or</span>
-            <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px bg-[#0B1E3D]/10" />
+            <span className="text-[#0B1E3D]/30 text-xs">or</span>
+            <div className="flex-1 h-px bg-[#0B1E3D]/10" />
           </div>
 
           {/* Google */}
@@ -168,7 +163,7 @@ const SignInPage: React.FC = () => {
             onClick={handleGoogle}
             disabled={isLoading}
             id="signin-google-btn"
-            className="w-full h-12 rounded-full border border-white/20 text-white text-sm font-medium hover:bg-white/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+            className="w-full h-12 rounded-full border border-[#0B1E3D]/20 text-[#0B1E3D] text-sm font-medium hover:bg-[#0B1E3D]/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -180,9 +175,9 @@ const SignInPage: React.FC = () => {
           </button>
 
           {/* Footer link */}
-          <p className="text-center text-white/40 text-xs mt-6">
+          <p className="text-center text-[#0B1E3D]/40 text-xs mt-6">
             No account?{' '}
-            <Link href="/auth/signup" className="text-white/70 hover:text-white transition-colors">
+            <Link href="/auth/signup" className="text-[#0B1E3D]/70 hover:text-[#0B1E3D] transition-colors">
               Create one
             </Link>
           </p>

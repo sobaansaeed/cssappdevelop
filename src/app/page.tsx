@@ -194,264 +194,7 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════
-          3. FEATURES SECTION
-          ═══════════════════════════════════════════ */}
-      <section 
-        className="py-20 lg:py-32"
-        style={{ background: '#F5F0E8' }}
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Section Header */}
-          <div className="text-center mb-16">
-            <p className="eyebrow text-accent-primary mb-4">
-              EVERYTHING YOU NEED
-            </p>
-            <h2 className="font-display text-4xl lg:text-5xl font-medium text-text-primary mb-4">
-              Your Complete CSS Arsenal
-            </h2>
-          </div>
-
-          {/* Feature Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              {
-                icon: Newspaper,
-                title: 'Daily Newspapers',
-                description: 'Curated editorials from Dawn, The News, Express Tribune — summarized for CSS relevance',
-                link: '/newspapers',
-                linkText: 'Explore'
-              },
-              {
-                icon: FileText,
-                title: 'Past Papers',
-                description: '20+ years of CSS past papers, organized by year and subject',
-                link: '/past-papers',
-                linkText: 'Explore'
-              },
-              {
-                icon: BookOpen,
-                title: 'Study Resources',
-                description: 'Topic-wise notes, recommended books, syllabus breakdowns',
-                link: '/resources',
-                linkText: 'Explore'
-              },
-              {
-                icon: PenTool,
-                title: 'Essay Checker',
-                description: 'AI-powered feedback on your essays — score, structure, and improvement tips',
-                link: '/essay-checker',
-                linkText: 'Explore'
-              },
-            ].map((feature, i) => (
-              <motion.div
-                key={i}
-                className="light-card p-8"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-              >
-                <div 
-                  className="w-16 h-16 rounded-full flex items-center justify-center mb-6"
-                  style={{ background: 'rgba(232, 101, 10, 0.1)' }}
-                >
-                  <feature.icon className="w-8 h-8 text-accent-primary" />
-                </div>
-                <h3 className="font-display text-2xl font-medium text-text-primary mb-3">
-                  {feature.title}
-                </h3>
-                <p className="font-body text-base text-text-muted mb-4" style={{ lineHeight: 1.65 }}>
-                  {feature.description}
-                </p>
-                <Link 
-                  href={feature.link}
-                  className="inline-flex items-center gap-2 font-body text-sm font-medium text-accent-primary hover:text-accent-hover transition-colors"
-                >
-                  {feature.linkText} <ArrowRight className="w-4 h-4" />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════
-          4. DAILY NEWSPAPER PREVIEW
-          ═══════════════════════════════════════════ */}
-      <section 
-        className="py-20 lg:py-32"
-        style={{ background: '#EDE6D6' }}
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left: Text Content */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.8 }}
-            >
-              <p className="eyebrow text-accent-primary mb-4">
-                DAILY UPDATES
-              </p>
-              <h2 className="font-display text-4xl lg:text-5xl font-medium text-text-primary mb-6">
-                Stay Current, Stay Ahead
-              </h2>
-              <p className="font-body text-lg text-text-muted mb-8" style={{ lineHeight: 1.7 }}>
-                Fresh newspaper summaries every morning — Dawn, Express Tribune, The News. 
-                Highlighted for CSS exam relevance so you never miss what matters.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/newspapers" className="btn-primary inline-block">
-                  Read Today&apos;s Papers
-                </Link>
-                <Link href="/newspapers" className="btn-ghost inline-block">
-                  View Archive
-                </Link>
-              </div>
-            </motion.div>
-
-            {/* Right: Preview Cards */}
-            <motion.div
-              className="space-y-4"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.8 }}
-            >
-              {[
-                { paper: 'Dawn', headline: 'Economic Reforms: A Path Forward', date: 'Today' },
-                { paper: 'The News', headline: 'Foreign Policy Challenges in 2025', date: 'Today' },
-                { paper: 'Express Tribune', headline: 'Education System Overhaul Proposed', date: 'Today' },
-              ].map((article, i) => (
-                <motion.div
-                  key={i}
-                  className="glass-card p-6"
-                  style={{ 
-                    background: 'rgba(11, 30, 61, 0.95)',
-                    transform: `rotate(${i === 0 ? -1 : i === 1 ? 0 : 1}deg)`
-                  }}
-                  whileHover={{ transform: 'rotate(0deg) scale(1.02)' }}
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="font-body text-sm font-semibold text-accent-gold">
-                      {article.paper}
-                    </span>
-                    <span className="font-body text-xs text-text-on-dark/60">
-                      {article.date}
-                    </span>
-                  </div>
-                  <h4 className="font-display text-xl font-medium text-white mb-2">
-                    {article.headline}
-                  </h4>
-                  <p className="font-body text-sm text-text-on-dark/70 mb-4">
-                    Key insights and analysis relevant to CSS current affairs...
-                  </p>
-                  <Link 
-                    href="/newspapers"
-                    className="font-body text-sm font-medium text-accent-gold hover:text-accent-primary transition-colors"
-                  >
-                    Read More →
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════
-          5. PAST PAPERS SHOWCASE
-          ═══════════════════════════════════════════ */}
-      <section 
-        className="py-20 lg:py-32"
-        style={{ background: '#0B1E3D' }}
-      >
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <p className="eyebrow text-accent-gold mb-4">
-              COMPREHENSIVE ARCHIVE
-            </p>
-            <h2 className="font-display text-4xl lg:text-5xl font-medium text-white mb-4">
-              Every Paper. Every Year.
-            </h2>
-            <p className="font-body text-lg text-text-on-dark/75 max-w-3xl mx-auto">
-              Access the complete CSS past papers library — from 2000 to present. 
-              Filter by subject, year, or topic.
-            </p>
-          </div>
-
-          {/* Subject Pills */}
-          <div className="flex flex-wrap justify-center gap-3 mb-12">
-            {[
-              'English Essay',
-              'Current Affairs',
-              'Pakistan Affairs',
-              'Islamiat',
-              'General Science',
-              'Political Science',
-              'History'
-            ].map((subject, i) => (
-              <motion.button
-                key={i}
-                className="px-6 py-2 rounded-full border border-accent-gold/30 text-accent-gold font-body text-sm hover:bg-accent-primary hover:text-white hover:border-accent-primary transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {subject}
-              </motion.button>
-            ))}
-          </div>
-
-          {/* Year Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {[2024, 2023, 2022, 2021, 2020, 2019].map((year, i) => (
-              <motion.div
-                key={year}
-                className="glass-card p-6"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-              >
-                <div className="font-display text-4xl font-semibold text-white mb-2">
-                  {year}
-                </div>
-                <p className="font-body text-sm text-text-on-dark/60 mb-4">
-                  25+ papers available
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {['Essay', 'Current Affairs', 'Islamiat'].map((subject, j) => (
-                    <span 
-                      key={j}
-                      className="px-2 py-1 text-xs font-body bg-white/10 text-text-on-dark/80 rounded"
-                    >
-                      {subject}
-                    </span>
-                  ))}
-                </div>
-                <Link 
-                  href="/past-papers"
-                  className="inline-flex items-center gap-2 font-body text-sm font-medium text-accent-gold hover:text-accent-primary transition-colors"
-                >
-                  Download <ArrowRight className="w-4 h-4" />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* CTA */}
-          <div className="text-center">
-            <Link href="/past-papers" className="btn-ghost inline-block text-white border-white hover:bg-white/10">
-              Browse Full Archive
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════
-          6. ESSAY CHECKER CTA
+          3. ESSAY CHECKER CTA  ← MAIN HIGHLIGHT
           ═══════════════════════════════════════════ */}
       <section 
         className="py-20 lg:py-32 relative overflow-hidden"
@@ -557,6 +300,263 @@ export default function HomePage() {
                 </div>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          4. FEATURES SECTION
+          ═══════════════════════════════════════════ */}
+      <section 
+        className="py-20 lg:py-32"
+        style={{ background: '#EDE6D6' }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <p className="eyebrow text-accent-primary mb-4">
+              EVERYTHING YOU NEED
+            </p>
+            <h2 className="font-display text-4xl lg:text-5xl font-medium text-text-primary mb-4">
+              Your Complete CSS Arsenal
+            </h2>
+          </div>
+
+          {/* Feature Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              {
+                icon: Newspaper,
+                title: 'Daily Newspapers',
+                description: 'Curated editorials from Dawn, The News, Express Tribune — summarized for CSS relevance',
+                link: '/newspapers',
+                linkText: 'Explore'
+              },
+              {
+                icon: FileText,
+                title: 'Past Papers',
+                description: '20+ years of CSS past papers, organized by year and subject',
+                link: '/past-papers',
+                linkText: 'Explore'
+              },
+              {
+                icon: BookOpen,
+                title: 'Study Resources',
+                description: 'Topic-wise notes, recommended books, syllabus breakdowns',
+                link: '/resources',
+                linkText: 'Explore'
+              },
+              {
+                icon: PenTool,
+                title: 'Essay Checker',
+                description: 'AI-powered feedback on your essays — score, structure, and improvement tips',
+                link: '/essay-checker',
+                linkText: 'Explore'
+              },
+            ].map((feature, i) => (
+              <motion.div
+                key={i}
+                className="light-card p-8"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+              >
+                <div 
+                  className="w-16 h-16 rounded-full flex items-center justify-center mb-6"
+                  style={{ background: 'rgba(232, 101, 10, 0.1)' }}
+                >
+                  <feature.icon className="w-8 h-8 text-accent-primary" />
+                </div>
+                <h3 className="font-display text-2xl font-medium text-text-primary mb-3">
+                  {feature.title}
+                </h3>
+                <p className="font-body text-base text-text-muted mb-4" style={{ lineHeight: 1.65 }}>
+                  {feature.description}
+                </p>
+                <Link 
+                  href={feature.link}
+                  className="inline-flex items-center gap-2 font-body text-sm font-medium text-accent-primary hover:text-accent-hover transition-colors"
+                >
+                  {feature.linkText} <ArrowRight className="w-4 h-4" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          5. DAILY NEWSPAPER PREVIEW
+          ═══════════════════════════════════════════ */}
+      <section 
+        className="py-20 lg:py-32"
+        style={{ background: '#0B1E3D' }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Text Content */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8 }}
+            >
+              <p className="eyebrow text-accent-gold mb-4">
+                DAILY UPDATES
+              </p>
+              <h2 className="font-display text-4xl lg:text-5xl font-medium text-white mb-6">
+                Stay Current, Stay Ahead
+              </h2>
+              <p className="font-body text-lg text-text-on-dark/70 mb-8" style={{ lineHeight: 1.7 }}>
+                Fresh newspaper summaries every morning — Dawn, Express Tribune, The News. 
+                Highlighted for CSS exam relevance so you never miss what matters.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link href="/newspapers" className="btn-primary inline-block">
+                  Read Today&apos;s Papers
+                </Link>
+                <Link href="/newspapers" className="btn-ghost inline-block text-white border-white hover:bg-white/10">
+                  View Archive
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Right: Preview Cards */}
+            <motion.div
+              className="space-y-4"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.8 }}
+            >
+              {[
+                { paper: 'Dawn', headline: 'Economic Reforms: A Path Forward', date: 'Today' },
+                { paper: 'The News', headline: 'Foreign Policy Challenges in 2025', date: 'Today' },
+                { paper: 'Express Tribune', headline: 'Education System Overhaul Proposed', date: 'Today' },
+              ].map((article, i) => (
+                <motion.div
+                  key={i}
+                  className="glass-card p-6"
+                  style={{ 
+                    background: 'rgba(255,255,255,0.06)',
+                    transform: `rotate(${i === 0 ? -1 : i === 1 ? 0 : 1}deg)`
+                  }}
+                  whileHover={{ transform: 'rotate(0deg) scale(1.02)' }}
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-body text-sm font-semibold text-accent-gold">
+                      {article.paper}
+                    </span>
+                    <span className="font-body text-xs text-text-on-dark/60">
+                      {article.date}
+                    </span>
+                  </div>
+                  <h4 className="font-display text-xl font-medium text-white mb-2">
+                    {article.headline}
+                  </h4>
+                  <p className="font-body text-sm text-text-on-dark/70 mb-4">
+                    Key insights and analysis relevant to CSS current affairs...
+                  </p>
+                  <Link 
+                    href="/newspapers"
+                    className="font-body text-sm font-medium text-accent-gold hover:text-accent-primary transition-colors"
+                  >
+                    Read More →
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════
+          6. PAST PAPERS SHOWCASE
+          ═══════════════════════════════════════════ */}
+      <section 
+        className="py-20 lg:py-32"
+        style={{ background: '#F5F0E8' }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <p className="eyebrow text-accent-primary mb-4">
+              COMPREHENSIVE ARCHIVE
+            </p>
+            <h2 className="font-display text-4xl lg:text-5xl font-medium text-text-primary mb-4">
+              Every Paper. Every Year.
+            </h2>
+            <p className="font-body text-lg text-text-muted max-w-3xl mx-auto">
+              Access the complete CSS past papers library — from 2000 to present. 
+              Filter by subject, year, or topic.
+            </p>
+          </div>
+
+          {/* Subject Pills */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {[
+              'English Essay',
+              'Current Affairs',
+              'Pakistan Affairs',
+              'Islamiat',
+              'General Science',
+              'Political Science',
+              'History'
+            ].map((subject, i) => (
+              <motion.button
+                key={i}
+                className="px-6 py-2 rounded-full border border-accent-primary/30 text-accent-primary font-body text-sm hover:bg-accent-primary hover:text-white hover:border-accent-primary transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {subject}
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Year Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {[2024, 2023, 2022, 2021, 2020, 2019].map((year, i) => (
+              <motion.div
+                key={year}
+                className="light-card p-6"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+              >
+                <div className="font-display text-4xl font-semibold text-text-primary mb-2">
+                  {year}
+                </div>
+                <p className="font-body text-sm text-text-muted mb-4">
+                  25+ papers available
+                </p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {['Essay', 'Current Affairs', 'Islamiat'].map((subject, j) => (
+                    <span 
+                      key={j}
+                      className="px-2 py-1 text-xs font-body bg-accent-primary/10 text-accent-primary rounded"
+                    >
+                      {subject}
+                    </span>
+                  ))}
+                </div>
+                <Link 
+                  href="/past-papers"
+                  className="inline-flex items-center gap-2 font-body text-sm font-medium text-accent-primary hover:text-accent-hover transition-colors"
+                >
+                  Download <ArrowRight className="w-4 h-4" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="text-center">
+            <Link href="/past-papers" className="btn-ghost inline-block">
+              Browse Full Archive
+            </Link>
           </div>
         </div>
       </section>

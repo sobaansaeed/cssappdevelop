@@ -79,29 +79,22 @@ const SignUpPage: React.FC = () => {
     backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.07'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
   };
 
-  const cardStyle = {
-    background: 'rgba(255,255,255,0.06)',
-    backdropFilter: 'blur(20px)',
-    WebkitBackdropFilter: 'blur(20px)',
-    border: '1px solid rgba(255,255,255,0.12)',
-  };
-
   // Success screen
   if (success) {
     return (
       <div className="min-h-screen flex items-center justify-center px-4" style={bgStyle}>
         <div className="w-full max-w-sm text-center">
-          <div className="rounded-2xl p-10" style={cardStyle}>
-            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5" style={{ background: 'rgba(255,255,255,0.08)' }}>
-              <CheckCircle className="w-7 h-7 text-white" />
+          <div className="rounded-2xl p-10 bg-white" style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.25)' }}>
+            <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5 bg-[#0B1E3D]/5">
+              <CheckCircle className="w-7 h-7 text-[#0B1E3D]" />
             </div>
-            <h2 className="text-white text-xl font-semibold mb-2" style={{ fontFamily: "'Instrument Serif', serif" }}>
+            <h2 className="text-[#0B1E3D] text-xl font-semibold mb-2" style={{ fontFamily: "'Instrument Serif', serif" }}>
               Account Created
             </h2>
-            <p className="text-white/50 text-sm">
+            <p className="text-[#0B1E3D]/50 text-sm">
               Welcome to CSS KRO. Redirecting you home…
             </p>
-            <div className="mt-6 w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto" />
+            <div className="mt-6 w-5 h-5 border-2 border-[#0B1E3D]/20 border-t-[#0B1E3D] rounded-full animate-spin mx-auto" />
           </div>
         </div>
       </div>
@@ -112,31 +105,31 @@ const SignUpPage: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center px-4 py-12" style={bgStyle}>
       <div className="w-full max-w-sm">
         {/* Card */}
-        <div className="rounded-2xl p-8" style={cardStyle}>
+        <div className="rounded-2xl p-8 bg-white" style={{ boxShadow: '0 24px 64px rgba(0,0,0,0.25)' }}>
           {/* Logo */}
           <div className="text-center mb-8">
             <Link href="/">
               <div
-                className="text-2xl tracking-tight text-white mb-1 inline-block"
+                className="text-2xl tracking-tight text-[#0B1E3D] mb-1 inline-block"
                 style={{ fontFamily: "'Instrument Serif', serif" }}
               >
                 CSS KRO<sup className="text-xs">®</sup>
               </div>
             </Link>
-            <p className="text-white/50 text-sm mt-1">Create your account</p>
+            <p className="text-[#0B1E3D]/50 text-sm mt-1">Create your account</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Error */}
             {error && (
-              <div className="text-red-400 text-sm text-center bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-3">
+              <div className="text-red-500 text-sm text-center bg-red-50 border border-red-200 rounded-lg px-4 py-3">
                 {error}
               </div>
             )}
 
             {/* Full Name */}
             <div>
-              <label htmlFor="fullName" className="block text-xs text-white/50 uppercase tracking-widest mb-2">
+              <label htmlFor="fullName" className="block text-xs text-[#0B1E3D]/50 uppercase tracking-widest mb-2">
                 Full Name
               </label>
               <input
@@ -146,14 +139,14 @@ const SignUpPage: React.FC = () => {
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="Your name"
-                className="w-full bg-transparent border-b border-white/20 text-white placeholder:text-white/30 text-sm py-2 focus:outline-none focus:border-white/60 transition-colors"
+                className="w-full bg-transparent border-b border-[#0B1E3D]/20 text-[#0B1E3D] placeholder:text-[#0B1E3D]/30 text-sm py-2 focus:outline-none focus:border-[#0B1E3D]/60 transition-colors"
                 required
               />
             </div>
 
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-xs text-white/50 uppercase tracking-widest mb-2">
+              <label htmlFor="email" className="block text-xs text-[#0B1E3D]/50 uppercase tracking-widest mb-2">
                 Email
               </label>
               <input
@@ -163,14 +156,14 @@ const SignUpPage: React.FC = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="you@example.com"
-                className="w-full bg-transparent border-b border-white/20 text-white placeholder:text-white/30 text-sm py-2 focus:outline-none focus:border-white/60 transition-colors"
+                className="w-full bg-transparent border-b border-[#0B1E3D]/20 text-[#0B1E3D] placeholder:text-[#0B1E3D]/30 text-sm py-2 focus:outline-none focus:border-[#0B1E3D]/60 transition-colors"
                 required
               />
             </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-xs text-white/50 uppercase tracking-widest mb-2">
+              <label htmlFor="password" className="block text-xs text-[#0B1E3D]/50 uppercase tracking-widest mb-2">
                 Password
               </label>
               <div className="relative">
@@ -181,13 +174,13 @@ const SignUpPage: React.FC = () => {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Min. 6 characters"
-                  className="w-full bg-transparent border-b border-white/20 text-white placeholder:text-white/30 text-sm py-2 pr-8 focus:outline-none focus:border-white/60 transition-colors"
+                  className="w-full bg-transparent border-b border-[#0B1E3D]/20 text-[#0B1E3D] placeholder:text-[#0B1E3D]/30 text-sm py-2 pr-8 focus:outline-none focus:border-[#0B1E3D]/60 transition-colors"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-[#0B1E3D]/30 hover:text-[#0B1E3D]/60 transition-colors"
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -196,7 +189,7 @@ const SignUpPage: React.FC = () => {
 
             {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-xs text-white/50 uppercase tracking-widest mb-2">
+              <label htmlFor="confirmPassword" className="block text-xs text-[#0B1E3D]/50 uppercase tracking-widest mb-2">
                 Confirm Password
               </label>
               <div className="relative">
@@ -207,13 +200,13 @@ const SignUpPage: React.FC = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="Repeat password"
-                  className="w-full bg-transparent border-b border-white/20 text-white placeholder:text-white/30 text-sm py-2 pr-8 focus:outline-none focus:border-white/60 transition-colors"
+                  className="w-full bg-transparent border-b border-[#0B1E3D]/20 text-[#0B1E3D] placeholder:text-[#0B1E3D]/30 text-sm py-2 pr-8 focus:outline-none focus:border-[#0B1E3D]/60 transition-colors"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 text-[#0B1E3D]/30 hover:text-[#0B1E3D]/60 transition-colors"
                 >
                   {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -225,10 +218,10 @@ const SignUpPage: React.FC = () => {
               type="submit"
               disabled={isLoading}
               id="signup-submit-btn"
-              className="w-full mt-2 h-12 rounded-full bg-white text-black text-sm font-semibold hover:bg-white/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full mt-2 h-12 rounded-full bg-[#0B1E3D] text-white text-sm font-semibold hover:bg-[#0B1E3D]/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (
-                <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 'Create Account'
               )}
@@ -237,9 +230,9 @@ const SignUpPage: React.FC = () => {
 
           {/* Divider */}
           <div className="flex items-center gap-3 my-5">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-white/30 text-xs">or</span>
-            <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px bg-[#0B1E3D]/10" />
+            <span className="text-[#0B1E3D]/30 text-xs">or</span>
+            <div className="flex-1 h-px bg-[#0B1E3D]/10" />
           </div>
 
           {/* Google */}
@@ -248,7 +241,7 @@ const SignUpPage: React.FC = () => {
             onClick={handleGoogle}
             disabled={isLoading}
             id="signup-google-btn"
-            className="w-full h-12 rounded-full border border-white/20 text-white text-sm font-medium hover:bg-white/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+            className="w-full h-12 rounded-full border border-[#0B1E3D]/20 text-[#0B1E3D] text-sm font-medium hover:bg-[#0B1E3D]/5 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -260,9 +253,9 @@ const SignUpPage: React.FC = () => {
           </button>
 
           {/* Footer link */}
-          <p className="text-center text-white/40 text-xs mt-6">
+          <p className="text-center text-[#0B1E3D]/40 text-xs mt-6">
             Already have an account?{' '}
-            <Link href="/auth/signin" className="text-white/70 hover:text-white transition-colors">
+            <Link href="/auth/signin" className="text-[#0B1E3D]/70 hover:text-[#0B1E3D] transition-colors">
               Sign in
             </Link>
           </p>

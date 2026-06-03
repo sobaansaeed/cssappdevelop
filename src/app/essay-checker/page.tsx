@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import {
   Sparkles,
   BookOpen,
@@ -18,8 +19,12 @@ import {
   ArrowDown,
   FileText,
   Bot,
-  BarChart3
+  BarChart3,
+  Zap,
+  Lock
 } from 'lucide-react';
+import { useAuth } from '@/lib/auth-context';
+import { deductCredit } from '@/lib/credits';
 
 // ═══════════════════════════════════════════
 // TYPES
@@ -64,12 +69,14 @@ To address this crisis effectively, a multi-pronged approach is necessary. First
 In conclusion, climate change demands urgent, collective action. The window for preventing catastrophic warming is narrowing, and delay will only compound the crisis. Policymakers must prioritize long-term sustainability over short-term economic gains, recognizing that a habitable planet is the foundation of all prosperity.`;
 
 export default function EssayCheckerPage() {
+  const { user, isAuthenticated, isLoading: authLoading, credits, refreshCredits } = useAuth();
   const [essay, setEssay] = useState('');
   const [topic, setTopic] = useState('');
   const [loadingState, setLoadingState] = useState<LoadingState>('idle');
   const [feedback, setFeedback] = useState<EssayFeedback | null>(null);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [expandedFAQs, setExpandedFAQs] = useState<Set<number>>(new Set());
+  const [creditError, setCreditError] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const toolRef = useRef<HTMLDivElement>(null);
 
@@ -88,9 +95,24 @@ export default function EssayCheckerPage() {
 
   const handleSubmit = async () => {
     if (!essay.trim() || wordCount < 50) return;
+    if (!isAuthenticated || !user) return;
+    if (credits <= 0) {
+      setCreditError('No credits left. Credits reset on the 1st of every month.');
+      return;
+    }
 
+    setCreditError('');
     setLoadingState('loading');
     setFeedback(null);
+
+    // Deduct credit first
+    const newBalance = await deductCredit(user.id);
+    if (newBalance === -1) {
+      setCreditError('No credits left. Credits reset on the 1st of every month.');
+      setLoadingState('idle');
+      return;
+    }
+    await refreshCredits();
 
     try {
       const response = await fetch('/api/check-essay', {
@@ -291,33 +313,72 @@ Tip: A strong CSS essay opens with a clear thesis, develops arguments with evide
                 <span>~{readTime} min read</span>
               </div>
 
+              {/* Credit Badge */}
+              {isAuthenticated && !authLoading && (
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Zap size={14} className={credits > 0 ? 'text-amber-500' : 'text-red-400'} />
+                    <span className={`font-body text-sm font-medium ${credits > 0 ? 'text-text-primary' : 'text-red-500'}`}>
+                      {credits} / 5 credits remaining
+                    </span>
+                  </div>
+                  <span className="font-body text-xs text-text-muted">resets monthly</span>
+                </div>
+              )}
+
+              {/* Credit error */}
+              {creditError && (
+                <p className="text-red-500 text-sm mb-4 bg-red-50 rounded-lg px-4 py-3 border border-red-200">
+                  {creditError}
+                </p>
+              )}
+
               {/* Submit Button */}
-              <button
-                onClick={handleSubmit}
-                disabled={loadingState === 'loading' || wordCount < 50}
-                className="w-full h-14 rounded-full font-body text-base font-medium text-white flex items-center justify-center gap-3 transition-all disabled:opacity-60 disabled:cursor-not-allowed hover:scale-[1.02]"
-                style={{
-                  background: loadingState === 'loading' || wordCount < 50
-                    ? '#ccc'
-                    : 'linear-gradient(135deg, #E8650A 0%, #C8962E 100%)',
-                }}
-              >
-                {loadingState === 'loading' ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
-                    <span>Analyzing your essay...</span>
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="h-5 w-5" />
-                    <span>Check My Essay</span>
-                  </>
-                )}
-              </button>
+              {isAuthenticated ? (
+                <button
+                  onClick={handleSubmit}
+                  disabled={loadingState === 'loading' || wordCount < 50 || credits <= 0}
+                  className="w-full h-14 rounded-full font-body text-base font-medium text-white flex items-center justify-center gap-3 transition-all disabled:opacity-60 disabled:cursor-not-allowed hover:scale-[1.02]"
+                  style={{
+                    background: loadingState === 'loading' || wordCount < 50 || credits <= 0
+                      ? '#ccc'
+                      : 'linear-gradient(135deg, #E8650A 0%, #C8962E 100%)',
+                  }}
+                >
+                  {loadingState === 'loading' ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+                      <span>Analyzing your essay...</span>
+                    </>
+                  ) : credits <= 0 ? (
+                    <>
+                      <Lock className="h-5 w-5" />
+                      <span>No Credits Left</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-5 w-5" />
+                      <span>Check My Essay</span>
+                    </>
+                  )}
+                </button>
+              ) : (
+                /* Not signed in — sign in prompt button */
+                <Link
+                  href="/auth/signin"
+                  className="w-full h-14 rounded-full font-body text-base font-medium text-white flex items-center justify-center gap-3 transition-all hover:scale-[1.02]"
+                  style={{ background: 'linear-gradient(135deg, #E8650A 0%, #C8962E 100%)' }}
+                >
+                  <Lock className="h-5 w-5" />
+                  <span>Sign in to Check Essay</span>
+                </Link>
+              )}
 
               {/* Below Button Text */}
               <p className="text-center font-body text-xs text-text-muted mt-4">
-                Free to use · No account needed · Powered by AI
+                {isAuthenticated
+                  ? '1 credit used per essay check · 5 free credits per month'
+                  : 'Sign in required · 5 free credits every month · No payment needed'}
               </p>
             </div>
 
@@ -431,7 +492,11 @@ Tip: A strong CSS essay opens with a clear thesis, develops arguments with evide
             {[
               {
                 q: 'How does the AI score my essay?',
-                a: 'Our AI analyzes your essay across multiple dimensions: content quality, structural coherence, language proficiency, and CSS-specific requirements. It uses advanced natural language processing to evaluate argument strength, evidence usage, and writing clarity.'
+                a: 'Our AI analyzes your essay across multiple dimensions: content quality, structural coherence, language proficiency, and CSS-specific requirements. It evaluates argument strength, evidence usage, and writing clarity.'
+              },
+              {
+                q: 'How many essays can I check?',
+                a: 'Every account gets 5 free essay checks per month. Credits reset automatically on the 1st of each month. Additional credits will be available through our premium plans (coming soon).'
               },
               {
                 q: 'Is my essay stored or saved anywhere?',
@@ -439,19 +504,15 @@ Tip: A strong CSS essay opens with a clear thesis, develops arguments with evide
               },
               {
                 q: 'What subjects and topics does it support?',
-                a: 'The Essay Checker works with any CSS-relevant topic including current affairs, governance, international relations, economics, and social issues. It evaluates essay structure and argumentation regardless of specific subject matter.'
+                a: 'The Essay Checker works with any CSS-relevant topic including current affairs, governance, international relations, economics, and social issues.'
               },
               {
                 q: 'How accurate is the AI feedback compared to a real examiner?',
-                a: 'While AI provides valuable insights on structure, language, and argumentation, it should complement—not replace—human feedback. Use it as a practice tool to identify areas for improvement before seeking expert review.'
+                a: 'While AI provides valuable insights on structure, language, and argumentation, it should complement—not replace—human feedback. Use it as a practice tool to identify areas for improvement.'
               },
               {
                 q: 'Can I check the same essay multiple times?',
-                a: 'Yes! You can revise your essay based on feedback and resubmit it as many times as you like. This iterative process helps you refine your writing skills.'
-              },
-              {
-                q: 'Is this free to use?',
-                a: 'Yes, the Essay Checker is completely free to use. No account or payment required. We believe quality CSS preparation resources should be accessible to all aspirants.'
+                a: 'Yes — each submission uses 1 credit. You can revise and resubmit your essay to track improvement across multiple checks.'
               },
             ].map((faq, idx) => (
               <div
