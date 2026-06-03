@@ -85,65 +85,61 @@ export default function HomePage() {
     <div className="overflow-hidden">
       
       {/* ═══════════════════════════════════════════
-          1. HERO SECTION
+          1. HERO SECTION - CINEMATIC VIDEO
           ═══════════════════════════════════════════ */}
-      <section 
-        className="relative min-h-screen flex items-center justify-center overflow-hidden"
-        style={{ 
-          background: 'linear-gradient(180deg, #0B1E3D 0%, #0F2A52 60%, #1A3A2A 100%)'
-        }}
-      >
-        {/* Starfield Background */}
-        <Starfield />
-        
+      <section className="relative min-h-screen flex flex-col overflow-hidden">
+        {/* Fullscreen Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0"
+        >
+          <source
+            src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260314_131748_f2ca2a28-fed7-44c8-b9a9-bd9acdd5ec31.mp4"
+            type="video/mp4"
+          />
+        </video>
+
+        {/* Dark Overlay for Better Text Readability */}
+        <div className="absolute inset-0 bg-black/40 z-0" />
+
         {/* Hero Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-32 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            <p className="eyebrow text-accent-gold mb-6">
-              PAKISTAN&apos;S PREMIER CSS PLATFORM
-            </p>
-          </motion.div>
-
-          <motion.h1
-            className="font-display text-6xl md:text-7xl lg:text-8xl font-semibold text-white mb-6"
-            style={{ lineHeight: 1.05 }}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            Master CSS with <br />
-            <span className="text-accent-gold">Confidence</span>
-          </motion.h1>
-
+        <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 py-32">
           <motion.p
-            className="font-body text-lg md:text-xl text-text-on-dark/80 max-w-3xl mx-auto mb-10"
-            style={{ lineHeight: 1.7 }}
-            initial={{ opacity: 0, y: 30 }}
+            className="eyebrow text-accent-gold mb-6 animate-fade-rise"
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.8 }}
           >
+            PAKISTAN&apos;S PREMIER CSS PLATFORM
+          </motion.p>
+
+          <h1
+            className="text-5xl sm:text-7xl md:text-8xl font-normal max-w-7xl animate-fade-rise"
+            style={{
+              fontFamily: "'Instrument Serif', serif",
+              lineHeight: 0.95,
+              letterSpacing: '-2.46px',
+            }}
+          >
+            Master CSS with{' '}
+            <em className="not-italic text-muted-foreground">Confidence</em>
+          </h1>
+
+          <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mt-8 leading-relaxed animate-fade-rise-delay">
             Comprehensive exam preparation with daily newspapers, curated resources, 
             past papers, and expert guidance — everything you need to clear the Central 
             Superior Services examination.
-          </motion.p>
+          </p>
 
-          <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+          <Link
+            href="/resources"
+            className="liquid-glass rounded-full px-14 py-5 text-base text-foreground mt-12 hover:scale-[1.03] transition-transform cursor-pointer inline-block animate-fade-rise-delay-2"
           >
-            <Link href="/resources" className="btn-primary inline-block">
-              Start Preparing
-            </Link>
-            <Link href="/newspapers" className="btn-ghost inline-block text-white border-white hover:bg-white/10">
-              Read Today&apos;s Papers
-            </Link>
-          </motion.div>
+            Begin Journey
+          </Link>
         </div>
 
         {/* Scroll Indicator */}
