@@ -74,8 +74,8 @@ export default function Navbar() {
       <nav
         className="mx-auto mt-4 h-14 rounded-full bg-black/70 backdrop-blur-md border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] px-6"
         style={{
-          maxWidth: scrollY > 50 ? '950px' : 'calc(100% - 24px)',
-          width: '100%',
+          maxWidth: scrollY > 50 ? '850px' : '1150px',
+          width: 'calc(100% - 24px)',
           transition: 'max-width 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
