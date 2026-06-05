@@ -37,7 +37,17 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
   const { user, isAuthenticated, isLoading, credits, signOut } = useAuth();
+  const [scrollY, setScrollY] = useState(0);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Track scroll position for smooth expansion effect
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Set initial value
+    setScrollY(window.scrollY);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -60,8 +70,15 @@ export default function Navbar() {
   const firstName = user ? getFirstName(user) : '';
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 px-4 md:px-6 lg:px-10">
-      <nav className="mt-4 mx-auto max-w-5xl h-14 rounded-full bg-black/70 backdrop-blur-md border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] px-6">
+    <header className="fixed top-0 left-0 w-full z-50">
+      <nav
+        className="mt-4 h-14 rounded-full bg-black/70 backdrop-blur-md border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] px-6"
+        style={{
+          marginLeft: `${Math.min(40, 6 + (scrollY / 150) * 34)}px`,
+          marginRight: `${Math.min(40, 6 + (scrollY / 150) * 34)}px`,
+          transition: 'margin-left 0.15s ease-out, margin-right 0.15s ease-out',
+        }}
+      >
         <div className="h-full grid grid-cols-3 items-center">
           {/* Logo - Left Zone */}
           <div className="flex justify-start">
@@ -94,72 +111,68 @@ export default function Navbar() {
 
           {/* CTA + Hamburger - Right Zone */}
           <div className="flex items-center justify-end gap-4">
-            {!isLoading && (
-              <>
-                {isAuthenticated && user ? (
-                  /* ── Signed-in: avatar + name + dropdown ── */
-                  <div className="relative hidden md:block" ref={dropdownRef}>
-                    <button
-                      onClick={() => setDropdownOpen(!dropdownOpen)}
-                      className="flex items-center gap-2 rounded-full px-3 py-1.5 bg-white/10 hover:bg-white/20 transition-colors border border-white/15"
-                      aria-label="User menu"
-                    >
-                      {/* Avatar */}
-                      <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white text-xs font-bold">
-                        {initials}
-                      </div>
-                      <span className="text-white text-sm font-medium max-w-[100px] truncate">
-                        {firstName}
-                      </span>
-                      <ChevronDown
-                        size={14}
-                        className={`text-white/60 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
-                      />
-                    </button>
-
-                    {/* Dropdown */}
-                    {dropdownOpen && (
-                      <div className="absolute right-0 mt-2 w-52 rounded-2xl bg-[#0B1E3D] border border-white/10 shadow-2xl py-2 overflow-hidden">
-                        {/* Credits row */}
-                        <div className="px-4 py-3 border-b border-white/10">
-                          <p className="text-white/50 text-xs uppercase tracking-widest mb-1">Essay Credits</p>
-                          <div className="flex items-center gap-2">
-                            <Zap size={14} className="text-amber-400" />
-                            <span className="text-white font-semibold text-sm">
-                              {creditsLabel} / 5
-                            </span>
-                            <span className="text-white/40 text-xs ml-auto">resets monthly</span>
-                          </div>
-                          {/* Credits bar */}
-                          <div className="mt-2 h-1.5 rounded-full bg-white/10 overflow-hidden">
-                            <div
-                              className="h-full rounded-full bg-amber-400 transition-all"
-                              style={{ width: `${((credits === -1 ? 5 : credits) / 5) * 100}%` }}
-                            />
-                          </div>
-                        </div>
-
-                        {/* Sign out */}
-                        <button
-                          onClick={handleSignOut}
-                          className="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:text-white hover:bg-white/5 transition-colors text-sm"
-                        >
-                          <LogOut size={14} />
-                          Sign Out
-                        </button>
-                      </div>
-                    )}
+            {/* ── Auth CTA zone ── */}
+            {isAuthenticated && user ? (
+              /* Signed-in: avatar + name + dropdown (desktop only) */
+              <div className="relative hidden md:block" ref={dropdownRef}>
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="flex items-center gap-2 rounded-full px-3 py-1.5 bg-white/10 hover:bg-white/20 transition-colors border border-white/15"
+                  aria-label="User menu"
+                >
+                  <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white text-xs font-bold">
+                    {initials}
                   </div>
-                ) : (
-                  /* ── Signed-out: Begin Journey ── */
-                  <Link
-                    href="/auth/signin"
-                    className="hidden md:inline-flex text-sm font-semibold px-4 py-1.5 rounded-full bg-white text-black hover:bg-white/90 transition-all duration-200"
-                  >
-                    Begin Journey
-                  </Link>
+                  <span className="text-white text-sm font-medium max-w-[100px] truncate">
+                    {firstName}
+                  </span>
+                  <ChevronDown
+                    size={14}
+                    className={`text-white/60 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`}
+                  />
+                </button>
+
+                {/* Dropdown */}
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-52 rounded-2xl bg-[#0B1E3D] border border-white/10 shadow-2xl py-2 overflow-hidden">
+                    {/* Credits row */}
+                    <div className="px-4 py-3 border-b border-white/10">
+                      <p className="text-white/50 text-xs uppercase tracking-widest mb-1">Essay Credits</p>
+                      <div className="flex items-center gap-2">
+                        <Zap size={14} className="text-amber-400" />
+                        <span className="text-white font-semibold text-sm">
+                          {creditsLabel} / 5
+                        </span>
+                        <span className="text-white/40 text-xs ml-auto">resets monthly</span>
+                      </div>
+                      {/* Credits bar */}
+                      <div className="mt-2 h-1.5 rounded-full bg-white/10 overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-amber-400 transition-all"
+                          style={{ width: `${((credits === -1 ? 5 : credits) / 5) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Sign out */}
+                    <button
+                      onClick={handleSignOut}
+                      className="w-full flex items-center gap-3 px-4 py-3 text-white/70 hover:text-white hover:bg-white/5 transition-colors text-sm"
+                    >
+                      <LogOut size={14} />
+                      Sign Out
+                    </button>
+                  </div>
                 )}
-              </>
+              </div>
+            ) : (
+              /* Signed-out (or loading): Begin Journey — always visible on desktop */
+              <Link
+                href="/auth/signin"
+                className="hidden md:inline-flex text-sm font-semibold px-4 py-1.5 rounded-full bg-white text-black hover:bg-white/90 transition-all duration-200"
+              >
+                Begin Journey
+              </Link>
             )}
 
             {/* Hamburger */}
