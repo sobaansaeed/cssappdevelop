@@ -72,16 +72,16 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 w-full z-50">
       <nav
-        className="mt-4 h-14 rounded-full bg-black/70 backdrop-blur-md border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] px-6"
+        className="mx-auto mt-4 h-14 rounded-full bg-black/70 backdrop-blur-md border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.5)] px-6"
         style={{
-          marginLeft: `${Math.min(40, 6 + (scrollY / 150) * 34)}px`,
-          marginRight: `${Math.min(40, 6 + (scrollY / 150) * 34)}px`,
-          transition: 'margin-left 0.15s ease-out, margin-right 0.15s ease-out',
+          maxWidth: scrollY > 50 ? '950px' : 'calc(100% - 24px)',
+          width: '100%',
+          transition: 'max-width 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
         }}
       >
-        <div className="h-full grid grid-cols-3 items-center">
+        <div className="h-full flex items-center justify-between gap-4">
           {/* Logo - Left Zone */}
-          <div className="flex justify-start">
+          <div className="flex shrink-0">
             <Link href="/" className="flex items-center">
               <div
                 className="text-xl tracking-tight text-white"
@@ -93,7 +93,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Nav Links - Center Zone */}
-          <div className="hidden md:flex items-center justify-center gap-8">
+          <div className="hidden md:flex items-center justify-center gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -110,7 +110,7 @@ export default function Navbar() {
           </div>
 
           {/* CTA + Hamburger - Right Zone */}
-          <div className="flex items-center justify-end gap-4">
+          <div className="flex items-center justify-end gap-4 shrink-0">
             {/* ── Auth CTA zone ── */}
             {isAuthenticated && user ? (
               /* Signed-in: avatar + name + dropdown (desktop only) */
