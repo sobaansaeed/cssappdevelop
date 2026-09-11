@@ -12,7 +12,7 @@ interface AuthContextType {
   isLoading: boolean;
   credits: number;
   refreshCredits: () => Promise<void>;
-  signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signUp: (email: string, password: string, fullName?: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signInWithGoogle: () => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -79,14 +79,86 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return () => subscription.unsubscribe();
   }, [loadCredits]);
 
-  const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({ email, password });
-    return { error };
+  const signUp = async (email: string, password: string, fullName?: string) => {
+    try {
+      const trimmedEmail = email.trim().toLowerCase();
+
+      // 1. Create auto-confirmed account via server-side API
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: trimmedEmail, password, fullName }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        return { error: new Error(data.error || 'Failed to create account') };
+      }
+
+      // 2. Immediately sign in the user to establish a client-side session
+      const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+        email: trimmedEmail,
+        password,
+      });
+
+      if (signInError) {
+        return { error: signInError };
+      }
+
+      if (signInData.session) {
+        setSession(signInData.session);
+        setUser(signInData.user);
+        if (signInData.user) await loadCredits(signInData.user.id);
+      }
+
+      return { error: null };
+    } catch (err) {
+      return { error: err as Error };
+    }
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    return { error };
+    try {
+      const trimmedEmail = email.trim().toLowerCase();
+      let { data, error } = await supabase.auth.signInWithPassword({
+        email: trimmedEmail,
+        password,
+      });
+
+      if (error && (error.message?.toLowerCase().includes('email not confirmed') || ('status' in error && error.status === 400 && error.message?.toLowerCase().includes('not confirmed')))) {
+        try {
+          const confirmRes = await fetch('/api/auth/confirm-user', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: trimmedEmail }),
+          });
+          if (confirmRes.ok) {
+            const retry = await supabase.auth.signInWithPassword({
+              email: trimmedEmail,
+              password,
+            });
+            data = retry.data;
+            error = retry.error;
+          }
+        } catch {
+          // ignore error and return original
+        }
+      }
+
+      if (error) {
+        return { error };
+      }
+
+      if (data.session) {
+        setSession(data.session);
+        setUser(data.user);
+        if (data.user) await loadCredits(data.user.id);
+      }
+
+      return { error: null };
+    } catch (err) {
+      return { error: err as Error };
+    }
   };
 
   const signInWithGoogle = async () => {

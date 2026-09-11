@@ -47,12 +47,12 @@ const SignUpPage: React.FC = () => {
     }
 
     try {
-      const { error } = await signUp(formData.email, formData.password);
+      const { error } = await signUp(formData.email, formData.password, formData.fullName);
       if (error) {
         setError(error.message || 'An error occurred. Please try again.');
       } else {
         setSuccess(true);
-        setTimeout(() => { window.location.href = '/'; }, 2000);
+        setTimeout(() => { window.location.href = '/'; }, 1000);
       }
     } catch {
       setError('An error occurred. Please try again.');
