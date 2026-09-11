@@ -1,9 +1,43 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { Twitter, Instagram } from 'lucide-react';
+import { Twitter, Instagram, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [msg, setMsg] = useState('');
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setStatus('loading');
+    setMsg('');
+
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'manual' }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setStatus('success');
+        setMsg('Subscribed! Check your inbox.');
+        setEmail('');
+      } else {
+        setStatus('error');
+        setMsg(data.message || 'Subscription failed.');
+      }
+    } catch {
+      setStatus('error');
+      setMsg('Something went wrong. Please try again.');
+    }
+  };
 
   return (
     <footer style={{ background: '#0B1E3D' }} className="text-text-on-dark">
@@ -98,19 +132,38 @@ const Footer: React.FC = () => {
             <p className="font-body text-sm" style={{ color: 'rgba(240, 234, 214, 0.7)' }}>
               Get CSS prep tips and updates delivered to your inbox.
             </p>
-            <form className="flex gap-2">
-              <input
-                type="email"
-                placeholder="Your email"
-                className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-accent-gold transition-colors"
-              />
-              <button
-                type="submit"
-                className="px-4 py-2 bg-accent-gold hover:bg-accent-primary text-white font-body text-sm font-medium rounded-lg transition-colors"
-              >
-                Subscribe
-              </button>
+            <form onSubmit={handleSubscribe} className="space-y-2">
+              <div className="flex gap-2">
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Your email"
+                  className="flex-1 px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-sm text-white placeholder:text-white/40 focus:outline-none focus:border-accent-gold transition-colors"
+                />
+                <button
+                  type="submit"
+                  disabled={status === 'loading'}
+                  className="px-4 py-2 bg-accent-gold hover:bg-accent-primary text-white font-body text-sm font-medium rounded-lg transition-colors disabled:opacity-50"
+                >
+                  {status === 'loading' ? '...' : 'Subscribe'}
+                </button>
+              </div>
+              {status === 'success' && (
+                <p className="font-body text-xs text-green-400 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>{msg}</span>
+                </p>
+              )}
+              {status === 'error' && (
+                <p className="font-body text-xs text-red-400 flex items-center gap-1.5">
+                  <AlertCircle className="w-3.5 h-3.5" />
+                  <span>{msg}</span>
+                </p>
+              )}
             </form>
+
           </div>
         </div>
 

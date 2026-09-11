@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { deductCredit } from '@/lib/credits';
+import { useSubscription } from '@/lib/use-subscription';
 
 // ═══════════════════════════════════════════
 // TYPES
@@ -70,6 +71,7 @@ In conclusion, climate change demands urgent, collective action. The window for 
 
 export default function EssayCheckerPage() {
   const { user, isAuthenticated, isLoading: authLoading, credits, refreshCredits } = useAuth();
+  const { isPro } = useSubscription();
   const [essay, setEssay] = useState('');
   const [topic, setTopic] = useState('');
   const [loadingState, setLoadingState] = useState<LoadingState>('idle');
@@ -79,6 +81,9 @@ export default function EssayCheckerPage() {
   const [creditError, setCreditError] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const toolRef = useRef<HTMLDivElement>(null);
+
+  // Monthly limit based on plan
+  const monthlyLimit = isPro ? 50 : 5;
 
   // Auto-grow textarea
   useEffect(() => {
@@ -105,8 +110,8 @@ export default function EssayCheckerPage() {
     setLoadingState('loading');
     setFeedback(null);
 
-    // Deduct credit first
-    const newBalance = await deductCredit(user.id);
+    // Deduct credit first (pro users deduct from their 50-credit pool)
+    const newBalance = await deductCredit(user.id, isPro);
     if (newBalance === -1) {
       setCreditError('No credits left. Credits reset on the 1st of every month.');
       setLoadingState('idle');
@@ -315,14 +320,51 @@ Tip: A strong CSS essay opens with a clear thesis, develops arguments with evide
 
               {/* Credit Badge */}
               {isAuthenticated && !authLoading && (
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Zap size={14} className={credits > 0 ? 'text-amber-500' : 'text-red-400'} />
-                    <span className={`font-body text-sm font-medium ${credits > 0 ? 'text-text-primary' : 'text-red-500'}`}>
-                      {credits} / 5 credits remaining
-                    </span>
+                <div className="mb-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2">
+                      <Zap size={14} className={credits > 0 ? 'text-amber-500' : 'text-red-400'} />
+                      <span className={`font-body text-sm font-medium ${credits > 0 ? 'text-text-primary' : 'text-red-500'}`}>
+                        {credits < 0 ? '…' : credits} / {monthlyLimit} credits remaining
+                      </span>
+                      {isPro && (
+                        <span className="font-body text-xs px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 font-semibold">
+                          PRO
+                        </span>
+                      )}
+                    </div>
+                    <span className="font-body text-xs text-text-muted">resets monthly</span>
                   </div>
-                  <span className="font-body text-xs text-text-muted">resets monthly</span>
+                  {/* Progress bar */}
+                  <div className="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{
+                        width: monthlyLimit > 0 ? `${Math.max(0, (credits / monthlyLimit) * 100)}%` : '0%',
+                        background: credits > 0 ? 'linear-gradient(90deg, #E8650A, #C8962E)' : '#ef4444',
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* Out-of-credits upgrade prompt */}
+              {isAuthenticated && !authLoading && credits === 0 && !isPro && (
+                <div className="mb-4 p-4 rounded-xl border border-amber-200 bg-amber-50">
+                  <p className="font-body text-sm font-semibold text-amber-800 mb-1">
+                    🚀 You&apos;ve used all 5 free checks this month
+                  </p>
+                  <p className="font-body text-xs text-amber-700 mb-3">
+                    Upgrade to Premium to get 50 essay checks every month and unlock advanced AI feedback.
+                  </p>
+                  <Link
+                    href="/pricing"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-body text-xs font-semibold text-white transition-all hover:scale-105"
+                    style={{ background: 'linear-gradient(135deg, #E8650A 0%, #C8962E 100%)' }}
+                  >
+                    <Zap className="h-3.5 w-3.5" />
+                    Upgrade to Premium — 50 checks/month
+                  </Link>
                 </div>
               )}
 
@@ -335,33 +377,40 @@ Tip: A strong CSS essay opens with a clear thesis, develops arguments with evide
 
               {/* Submit Button */}
               {isAuthenticated ? (
-                <button
-                  onClick={handleSubmit}
-                  disabled={loadingState === 'loading' || wordCount < 50 || credits <= 0}
-                  className="w-full h-14 rounded-full font-body text-base font-medium text-white flex items-center justify-center gap-3 transition-all disabled:opacity-60 disabled:cursor-not-allowed hover:scale-[1.02]"
-                  style={{
-                    background: loadingState === 'loading' || wordCount < 50 || credits <= 0
-                      ? '#ccc'
-                      : 'linear-gradient(135deg, #E8650A 0%, #C8962E 100%)',
-                  }}
-                >
-                  {loadingState === 'loading' ? (
-                    <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
-                      <span>Analyzing your essay...</span>
-                    </>
-                  ) : credits <= 0 ? (
-                    <>
-                      <Lock className="h-5 w-5" />
-                      <span>No Credits Left</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="h-5 w-5" />
-                      <span>Check My Essay</span>
-                    </>
-                  )}
-                </button>
+                credits === 0 && !isPro ? (
+                  /* Out of free credits — direct to pricing */
+                  <Link
+                    href="/pricing"
+                    className="w-full h-14 rounded-full font-body text-base font-medium text-white flex items-center justify-center gap-3 transition-all hover:scale-[1.02]"
+                    style={{ background: 'linear-gradient(135deg, #E8650A 0%, #C8962E 100%)' }}
+                  >
+                    <Zap className="h-5 w-5" />
+                    <span>Get Premium — 50 checks/month</span>
+                  </Link>
+                ) : (
+                  <button
+                    onClick={handleSubmit}
+                    disabled={loadingState === 'loading' || wordCount < 50 || credits <= 0}
+                    className="w-full h-14 rounded-full font-body text-base font-medium text-white flex items-center justify-center gap-3 transition-all disabled:opacity-60 disabled:cursor-not-allowed hover:scale-[1.02]"
+                    style={{
+                      background: loadingState === 'loading' || wordCount < 50 || credits <= 0
+                        ? '#ccc'
+                        : 'linear-gradient(135deg, #E8650A 0%, #C8962E 100%)',
+                    }}
+                  >
+                    {loadingState === 'loading' ? (
+                      <>
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+                        <span>Analyzing your essay...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-5 w-5" />
+                        <span>Check My Essay</span>
+                      </>
+                    )}
+                  </button>
+                )
               ) : (
                 /* Not signed in — sign in prompt button */
                 <Link
@@ -377,9 +426,12 @@ Tip: A strong CSS essay opens with a clear thesis, develops arguments with evide
               {/* Below Button Text */}
               <p className="text-center font-body text-xs text-text-muted mt-4">
                 {isAuthenticated
-                  ? '1 credit used per essay check · 5 free credits per month'
+                  ? isPro
+                    ? `${credits} of ${monthlyLimit} premium checks remaining this month`
+                    : '1 credit used per essay check · 5 free credits per month · Upgrade for 50/month'
                   : 'Sign in required · 5 free credits every month · No payment needed'}
               </p>
+
             </div>
 
             {/* RIGHT PANEL - Feedback Results */}

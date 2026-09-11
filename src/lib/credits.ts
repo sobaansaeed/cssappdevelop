@@ -1,21 +1,27 @@
 import { supabase } from './supabase';
 
-const MONTHLY_CREDITS = 5;
+export const FREE_MONTHLY_CREDITS = 5;
+export const PRO_MONTHLY_CREDITS = 50;
 
 export interface UserCredits {
   credits: number;
   lastReset: string;
+  isPro: boolean;
+  monthlyLimit: number;
 }
 
 /**
  * Fetches (or creates) the credit row for a user.
- * Auto-resets to 5 if the stored last_reset is from a previous month.
+ * Auto-resets credits each month:
+ *   - Free users: 5 credits/month
+ *   - Pro subscribers: 50 credits/month
  */
-export async function getOrCreateCredits(userId: string): Promise<UserCredits> {
-  // Try to fetch existing row
+export async function getOrCreateCredits(userId: string, isPro = false): Promise<UserCredits> {
+  const monthlyLimit = isPro ? PRO_MONTHLY_CREDITS : FREE_MONTHLY_CREDITS;
+
   const { data, error } = await supabase
     .from('user_credits')
-    .select('credits, last_reset')
+    .select('credits, last_reset, is_pro')
     .eq('user_id', userId)
     .single();
 
@@ -28,11 +34,16 @@ export async function getOrCreateCredits(userId: string): Promise<UserCredits> {
   if (error || !data) {
     const { data: newRow } = await supabase
       .from('user_credits')
-      .insert({ user_id: userId, credits: MONTHLY_CREDITS, last_reset: firstOfMonth })
-      .select('credits, last_reset')
+      .insert({ user_id: userId, credits: monthlyLimit, last_reset: firstOfMonth, is_pro: isPro })
+      .select('credits, last_reset, is_pro')
       .single();
 
-    return { credits: newRow?.credits ?? MONTHLY_CREDITS, lastReset: firstOfMonth };
+    return {
+      credits: newRow?.credits ?? monthlyLimit,
+      lastReset: firstOfMonth,
+      isPro,
+      monthlyLimit,
+    };
   }
 
   // Check if we need a monthly reset
@@ -41,25 +52,42 @@ export async function getOrCreateCredits(userId: string): Promise<UserCredits> {
     lastReset.getFullYear() < today.getFullYear() ||
     lastReset.getMonth() < today.getMonth();
 
-  if (needsReset) {
+  // Also update if pro status changed
+  const proStatusChanged = data.is_pro !== isPro;
+
+  if (needsReset || proStatusChanged) {
     const { data: updated } = await supabase
       .from('user_credits')
-      .update({ credits: MONTHLY_CREDITS, last_reset: firstOfMonth })
+      .update({
+        credits: needsReset ? monthlyLimit : data.credits,
+        last_reset: needsReset ? firstOfMonth : data.last_reset,
+        is_pro: isPro,
+      })
       .eq('user_id', userId)
-      .select('credits, last_reset')
+      .select('credits, last_reset, is_pro')
       .single();
 
-    return { credits: updated?.credits ?? MONTHLY_CREDITS, lastReset: firstOfMonth };
+    return {
+      credits: updated?.credits ?? (needsReset ? monthlyLimit : data.credits),
+      lastReset: needsReset ? firstOfMonth : data.last_reset,
+      isPro,
+      monthlyLimit,
+    };
   }
 
-  return { credits: data.credits, lastReset: data.last_reset };
+  return {
+    credits: data.credits,
+    lastReset: data.last_reset,
+    isPro,
+    monthlyLimit,
+  };
 }
 
 /**
  * Deducts 1 credit. Returns the new balance, or -1 if insufficient credits.
  */
-export async function deductCredit(userId: string): Promise<number> {
-  const { credits } = await getOrCreateCredits(userId);
+export async function deductCredit(userId: string, isPro = false): Promise<number> {
+  const { credits } = await getOrCreateCredits(userId, isPro);
 
   if (credits <= 0) return -1;
 

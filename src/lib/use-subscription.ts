@@ -1,7 +1,7 @@
 // src/lib/use-subscription.ts
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/lib/auth-context';
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from '@/lib/supabase';
 
 interface UserProfile {
   id: string;
@@ -13,7 +13,7 @@ interface UserProfile {
 }
 
 export function useSubscription() {
-  const { user, session } = useAuth();
+  const { user } = useAuth();
   const [isPro, setIsPro] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -23,7 +23,7 @@ export function useSubscription() {
     let mounted = true;
 
     async function checkSubscriptionStatus() {
-      if (!user || !session?.access_token) {
+      if (!user) {
         setIsPro(false);
         setProfile(null);
         setIsLoading(false);
@@ -35,38 +35,44 @@ export function useSubscription() {
         setIsLoading(true);
         setError(null);
 
-        // NUCLEAR FIX: Just set everyone to Pro immediately and skip database check
-        if (process.env.NODE_ENV === 'development') {
-          console.log('NUCLEAR FIX: Setting user to Pro immediately', user.email);
+        const { data: profileData, error: profileError } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) {
+          // Profile may not exist yet (trigger hasn't fired), default to free
+          if (mounted) {
+            setIsPro(false);
+            setProfile(null);
+            setIsLoading(false);
+          }
+          return;
         }
-        
+
         if (mounted) {
-          setIsPro(true);
-          setProfile({
-            id: user.id,
-            email: user.email || '',
-            subscription_status: 'active',
-            subscription_expiry: null,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-          });
+          setProfile(profileData);
+
+          // Determine Pro status: active subscription that hasn't expired
+          let isProUser = false;
+          if (profileData.subscription_status === 'active') {
+            if (!profileData.subscription_expiry) {
+              // No expiry set = lifetime / manual admin grant
+              isProUser = true;
+            } else {
+              const expiryDate = new Date(profileData.subscription_expiry);
+              isProUser = expiryDate > new Date();
+            }
+          }
+
+          setIsPro(isProUser);
           setIsLoading(false);
-          setError(null);
         }
-        return;
-
-        // NUCLEAR FIX: Skip all database logic, everyone is Pro
-        if (process.env.NODE_ENV === 'development') {
-          console.log('NUCLEAR FIX: All users are Pro, skipping database check');
-        }
-
-      } catch (err) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Subscription check error:', err);
-        }
+      } catch (_err) {
         if (mounted) {
-          setError(null); // Don't show errors, just set to Pro
-          setIsPro(true);
+          setError('Failed to load subscription status');
+          setIsPro(false);
           setIsLoading(false);
         }
       }
@@ -77,24 +83,14 @@ export function useSubscription() {
     return () => {
       mounted = false;
     };
-  }, [user, session]);
+  }, [user]);
 
-  // Function to refresh subscription status
+  // Refresh subscription status on demand (e.g. after payment)
   const refreshSubscription = async () => {
-    if (!user || !session?.access_token) return;
+    if (!user) return;
 
     try {
       setIsLoading(true);
-      
-      const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      );
-
-      await supabase.auth.setSession({
-        access_token: session.access_token,
-        refresh_token: session.refresh_token || ''
-      });
 
       const { data: profileData, error: profileError } = await supabase
         .from('user_profiles')
@@ -103,24 +99,19 @@ export function useSubscription() {
         .single();
 
       if (profileError) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Error refreshing profile:', profileError);
-        }
+        setIsPro(false);
         return;
       }
 
       setProfile(profileData);
 
-      // Determine if user is pro
       let isProUser = false;
-      
       if (profileData.subscription_status === 'active') {
         if (!profileData.subscription_expiry) {
           isProUser = true;
         } else {
           const expiryDate = new Date(profileData.subscription_expiry);
-          const currentDate = new Date();
-          isProUser = expiryDate > currentDate;
+          isProUser = expiryDate > new Date();
         }
       }
 
@@ -137,6 +128,6 @@ export function useSubscription() {
     isLoading,
     profile,
     error,
-    refreshSubscription
+    refreshSubscription,
   };
 }

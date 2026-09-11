@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Anthropic from '@anthropic-ai/sdk';
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY || '',
-});
+const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 const SYSTEM_PROMPT = `You are an expert CSS (Central Superior Services Pakistan) exam evaluator with years of experience grading essays.
 
@@ -46,9 +43,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!process.env.ANTHROPIC_API_KEY) {
+    const groqApiKey = process.env.GROQ_API_KEY;
+    if (!groqApiKey) {
       return NextResponse.json(
-        { error: 'API key not configured' },
+        { error: 'AI service not configured. Please contact support.' },
         { status: 500 }
       );
     }
@@ -57,21 +55,36 @@ export async function POST(request: NextRequest) {
       ? `Topic: ${topic}\n\nEssay:\n${essay}`
       : `Essay:\n${essay}`;
 
-    const message = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 2048,
-      system: SYSTEM_PROMPT,
-      messages: [
-        {
-          role: 'user',
-          content: userMessage,
-        },
-      ],
+    const groqResponse = await fetch(GROQ_API_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${groqApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: userMessage },
+        ],
+        max_tokens: 2048,
+        temperature: 0.3,
+      }),
     });
 
-    const responseText = message.content[0].type === 'text' ? message.content[0].text : '';
-    
-    // Clean up response - remove markdown code blocks if present
+    if (!groqResponse.ok) {
+      const errText = await groqResponse.text();
+      console.error('Groq API error:', groqResponse.status, errText);
+      return NextResponse.json(
+        { error: 'AI analysis failed. Please try again.' },
+        { status: 502 }
+      );
+    }
+
+    const groqData = await groqResponse.json();
+    const responseText: string = groqData.choices?.[0]?.message?.content ?? '';
+
+    // Clean up response — remove markdown code fences if present
     let cleanedResponse = responseText.trim();
     if (cleanedResponse.startsWith('```json')) {
       cleanedResponse = cleanedResponse.replace(/```json\n?/g, '').replace(/```\n?$/g, '');
@@ -80,8 +93,8 @@ export async function POST(request: NextRequest) {
     }
 
     const feedback = JSON.parse(cleanedResponse);
-
     return NextResponse.json(feedback);
+
   } catch (error) {
     console.error('Error analyzing essay:', error);
     return NextResponse.json(

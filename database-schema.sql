@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS public.user_subscriptions CASCADE;
 DROP TABLE IF EXISTS public.payments CASCADE;
 DROP TABLE IF EXISTS public.subscription_plans CASCADE;
 DROP TABLE IF EXISTS public.email_subscribers CASCADE;
+DROP TABLE IF EXISTS public.user_credits CASCADE;
 DROP TABLE IF EXISTS public.user_profiles CASCADE;
 
 -- Drop existing triggers and functions if they exist
@@ -99,7 +100,17 @@ CREATE TABLE public.email_subscribers (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- ── 7. INDEXES ──────────────────────────────────────────────
+-- ── 7. USER CREDITS ─────────────────────────────────────────
+-- Tracks monthly essay-checker credits per user.
+-- Free users: 5 credits/month | Pro subscribers: 50 credits/month
+CREATE TABLE public.user_credits (
+    user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    credits INTEGER NOT NULL DEFAULT 5,
+    last_reset DATE NOT NULL DEFAULT CURRENT_DATE,
+    is_pro BOOLEAN NOT NULL DEFAULT false
+);
+
+-- ── 8. INDEXES ──────────────────────────────────────────────
 CREATE INDEX idx_user_profiles_email ON public.user_profiles(email);
 CREATE INDEX idx_user_profiles_subscription_status ON public.user_profiles(subscription_status);
 CREATE INDEX idx_payments_user_id ON public.payments(user_id);
@@ -109,6 +120,7 @@ CREATE INDEX idx_essay_submissions_created_at ON public.essay_submissions(create
 CREATE INDEX idx_user_subscriptions_user_id ON public.user_subscriptions(user_id);
 CREATE INDEX idx_user_subscriptions_status ON public.user_subscriptions(status);
 CREATE INDEX idx_email_subscribers_email ON public.email_subscribers(email);
+CREATE INDEX idx_user_credits_user_id ON public.user_credits(user_id);
 
 -- ── 8. AUTO-UPDATE updated_at ───────────────────────────────
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -157,6 +169,7 @@ ALTER TABLE public.user_subscriptions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.essay_submissions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.email_subscribers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.subscription_plans ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.user_credits ENABLE ROW LEVEL SECURITY;
 
 -- user_profiles: users can read/update only their own profile
 CREATE POLICY "Users can view own profile"
@@ -215,6 +228,23 @@ CREATE POLICY "Service role full access to subscription_plans"
 -- email_subscribers: service role only
 CREATE POLICY "Service role full access to email_subscribers"
     ON public.email_subscribers FOR ALL
+    USING (auth.role() = 'service_role');
+
+-- user_credits: users can read and update only their own credits
+CREATE POLICY "Users can view own credits"
+    ON public.user_credits FOR SELECT
+    USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can update own credits"
+    ON public.user_credits FOR UPDATE
+    USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert own credits"
+    ON public.user_credits FOR INSERT
+    WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Service role full access to user_credits"
+    ON public.user_credits FOR ALL
     USING (auth.role() = 'service_role');
 
 -- ── 11. SEED SUBSCRIPTION PLANS ─────────────────────────────
