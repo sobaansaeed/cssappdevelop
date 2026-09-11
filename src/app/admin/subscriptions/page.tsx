@@ -350,7 +350,7 @@ const AdminSubscriptionsPage: React.FC = () => {
                 <h4 className="font-semibold text-blue-900 mb-2">Setup Instructions:</h4>
                 <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
                   <li>Go to your <a href="https://supabase.com/dashboard" target="_blank" rel="noopener noreferrer" className="underline">Supabase Dashboard</a></li>
-                  <li>Select your project: <code className="bg-blue-100 px-1 rounded">yppffxsgtxclvbndjenm</code></li>
+                  <li>Select your project: <code className="bg-blue-100 px-1 rounded">humfuowshmgwhnfzlryb</code></li>
                   <li>Click <strong>SQL Editor</strong> in the left sidebar</li>
                   <li>Click <strong>New Query</strong></li>
                   <li>Copy and paste the contents of <code className="bg-blue-100 px-1 rounded">supabase-setup.sql</code></li>
